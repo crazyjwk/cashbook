@@ -12,6 +12,7 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script>
+	
 	let helperInit = function() {
 		$('#idHelper').text("");
 		$('#pwHelper').text("");
@@ -55,16 +56,27 @@
 				$('#myForm').submit();
 			}
 		});
+		$('#ckBtn').click(function(){
+			$('#idForm').submit();
+		});	
 	});
 </script>
 <style>
+	
 </style>
 </head>
 <body>
 	<div class="container-fluid">
+		<form id="idForm" action="/checkMemberId" method="post">
+			<div>
+				아이디 중복 확인: <input type="text" name="memberIdCk" id="memberIdCk" placeholder="아이디 입력">
+				<button id="ckBtn" class="btn btn-light" type="button">중복체크</button>
+				<span th:text="${msg}"></span>
+			</div>
+		</form>
 		<form id="myForm" action="/addMember" method="post">
 			<div>
-				아이디 : <input type="text" name="memberId" id="memberId" placeholder="아이디 입력">
+				아이디 : <input type="text" th:value="${memberIdCk}" name="memberId" id="memberId" placeholder="아이디 입력" readonly="readonly">
 				<span id="idHelper"></span>
 			</div>
 			<div>
@@ -96,4 +108,49 @@
 			</div>
 	</div>
 </body>
+<script>
+	/* const btn = document.querySelector('#btn');
+	
+	const helperInit = () => {
+	   document.getElementById('idHelper').innerText = "";
+	   document.getElementById('pwHelper').innerText = "";
+	   document.getElementById('nameHelper').innerText = "";
+	   document.getElementById('addrHelper').innerText = "";
+	   document.getElementById('phoneHelper').innerText = "";
+	   document.getElementById('emailHelper').innerText = "";
+	};
+	btn.addEventListener('click', () => {
+	    if(document.querySelector('#memberId').value.length < 4) {
+	        helperInit();
+	        document.getElementById('idHelper').innerText = "ID 4자 이상";
+	        document.getElementById('memberId').focus();
+	    } else if(document.querySelector('#memberPw').value.length < 4) {
+	        helperInit();
+	        document.getElementById('pwHelper').innerText = "PW 4자 이상";
+	        document.getElementById('memberPw').focus();
+	    } else if(document.querySelector('#memberPw').value !== document.querySelector('#memberPw2').value) {
+	        helperInit();
+	        document.getElementById('pwHelper').innerText = "PW 확인";
+	        document.getElementById('memberPw').focus();
+	    } else if(document.querySelector('#memberName').value.length === 0) {
+	        helperInit();
+	        document.getElementById('nameHelper').innerText = "이름을 입력하세요.";
+	        document.getElementById('memberName').focus();
+	    } else if(document.querySelector('#memberAddr').value.length === 0) {
+	        helperInit();
+	        document.getElementById('addrHelper').innerText = "주소를 입력하세요";
+	        document.getElementById('memberAddr').focus();
+	    } else if(document.querySelector('#memberPhone').value.length === 0) {
+	        helperInit();
+	        document.getElementById('phoneHelper').innerText = "전화번호를 입력하세요.";
+	        document.getElementById('memberPhone').focus();
+	    } else if(document.querySelector('#memberEmail').value.length === 0) {
+	        helperInit();
+	        document.getElementById('emailHelper').innerText = "이메일을 입력하세요.";
+	        document.getElementById('memberEmail').focus();
+	    } else {
+	        document.getElementById('myForm').submit();
+	    }
+	}); */
+</script>
 </html>
