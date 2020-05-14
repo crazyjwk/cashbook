@@ -5,6 +5,20 @@
 <mapper namespace="com.gdu.cashbook.mapper.MemberMapper">
 	<!-- DBMS와 VO의 컬럼명 불일치를 해결하기 위해 사용하는 태그  -->
 	<!-- <resultMap type="" id=""></resultMap> -->
+	
+	<!-- 회원정보 가지고 오는 쿼리 -->
+	<select id="selectMemberOnd" resultType="com.gdu.cashbook.vo.Member" parameterType="com.gdu.cashbook.vo.LoginMember">
+		SELECT
+			member_id memberId,
+			member_name memberName,
+			member_addr memberAddr,
+			member_phone memberPhone,
+			member_email memberEmail,
+			member_date memberDate
+		FROM member
+		WHERE member_id = #{memberId}
+	</select>
+	<!-- 중복체크를 위해 member_id를 가져오는 쿼리  -->
 	<select id="selectCheckMemberId" resultType="String" parameterType="String">
 		SELECT 
 			member_id

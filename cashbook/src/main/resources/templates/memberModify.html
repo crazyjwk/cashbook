@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$('#mdiBtn').click(function(){
+			
+		});
+	});
+
+</script>
+</head>
+<body>
+	<h1>정보수정</h1>
+		<div th:include="/include/menu::sidemenu"></div>
+		<form action="/modifyMemberInfo" method="post">
+			<table class="table">
+				<tr>
+					<td>아이디</td>
+					<td><input type="text" value="" name="memberId" id="memberId"></td>
+				</tr>
+				<tr>
+					<td>주소</td>
+					<td><input type="text" name="memberAddr" id="memberAddr"></td>
+				</tr>
+				<tr>
+					<td>전화번호</td>
+					<td><input type="text" name="memberPhone" id="memberPhone"></td>
+				</tr>
+				<tr>
+					<td>이메일</td>
+					<td><input type="text" name="memberEmail" id="memberEmail"></td>
+				</tr>
+				<tr>
+					<td>가입날짜</td>
+					<td><input type="text" value="" name="memberDate" id="memberDate"></td>
+				</tr>
+				<tr>
+					<td>비밀번호</td>
+					<td><input type="text" name="memberPw" id="memberPw"></td>
+				</tr>
+				<tr>
+					<td>비밀번호 확인</td>
+					<td><input type="text" id="memberPw2"></td>
+				</tr>
+			</table>
+		</form>
+			<button id="modiBtn" class="btn btn-primary">정보수정</button>
+</body>
+</html>

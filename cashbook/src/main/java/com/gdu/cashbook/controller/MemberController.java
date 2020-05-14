@@ -18,6 +18,16 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	@GetMapping("/memberInfo")
+	public String memberInfo(Model model, HttpSession session) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/";
+		}
+		LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
+		Member member = memberService.getMemberOne(loginMember);
+		model.addAttribute("member", member);
+		return "memberInfo";
+	}
 	
 	@PostMapping("/checkMemberId")
 	public String checkMemberId(Model model, @RequestParam("memberIdCk") String memberIdCk, HttpSession session) {
@@ -53,7 +63,7 @@ public class MemberController {
 			return "login";
 		} else {
 			session.setAttribute("loginMember", returnLoginMember);
-			return "redirect:/";
+			return "redirect:/home";
 		}	
 	}
 	
