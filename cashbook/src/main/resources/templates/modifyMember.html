@@ -13,8 +13,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script>
 	$(document).ready(function(){
-		$('#mdiBtn').click(function(){
-			
+		$('#modiBtn').click(function(){
+			$('#modifyForm').submit();			
 		});
 	});
 
@@ -23,11 +23,15 @@
 <body>
 	<h1>정보수정</h1>
 		<div th:include="/include/menu::sidemenu"></div>
-		<form action="/modifyMemberInfo" method="post">
+		<form id="modifyForm" action="/modifyMemberInfo" method="post">
 			<table class="table">
 				<tr>
 					<td>아이디</td>
-					<td><input type="text" value="" name="memberId" id="memberId"></td>
+					<td><input type="text" th:value="${member.memberId}" name="memberId" readonly="readonly"></td>
+				</tr> 
+				<tr>
+					<td>이름</td>
+					<td><input type="text" name="memberName" id="memberName"></td>
 				</tr>
 				<tr>
 					<td>주소</td>
@@ -43,15 +47,11 @@
 				</tr>
 				<tr>
 					<td>가입날짜</td>
-					<td><input type="text" value="" name="memberDate" id="memberDate"></td>
+					<td><input type="text" th:value="${member.memberDate}" readonly="readonly"></td>
 				</tr>
 				<tr>
 					<td>비밀번호</td>
-					<td><input type="text" name="memberPw" id="memberPw"></td>
-				</tr>
-				<tr>
-					<td>비밀번호 확인</td>
-					<td><input type="text" id="memberPw2"></td>
+					<td><input type="password" name="memberPw" id="memberPw"></td>
 				</tr>
 			</table>
 		</form>

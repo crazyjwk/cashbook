@@ -26,6 +26,7 @@
 <body>
 	<h1>회원정보</h1>
 		<div id="sidemenu" th:include="/include/menu::sidemenu"></div>
+		<a th:href="@{/removeMember(memberId=${loginMember.memberId})}">회원탈퇴</a>
 		<table id="table" class="table">
 			<tr>
 				<td>아이디</td>
@@ -52,5 +53,6 @@
 				<td th:text="${member.memberDate}"></td>
 			</tr>
 		</table>
+		<a th:href="@{/modifyMemberInfo(memberId=${loginMember.memberId})}">정보수정</a>
 </body>
 </html>

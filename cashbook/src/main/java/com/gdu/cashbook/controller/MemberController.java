@@ -18,6 +18,67 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	// 회원정보 수정
+	@GetMapping("/modifyMemberInfo")
+	public String modifyMember(Model model, LoginMember loginMember, HttpSession session) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		Member member = memberService.getModifyMemberOne(loginMember);
+		model.addAttribute("loginMember", loginMember);
+		model.addAttribute("member", member);
+		return "modifyMember";
+	}
+	@PostMapping("/modifyMemberInfo")
+	public String modifyMember(Model model, Member member, HttpSession session) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		System.out.println(member.getMemberAddr());
+		System.out.println(member.getMemberName());
+		System.out.println(member.getMemberEmail());
+		System.out.println(member.getMemberPhone());
+		String modifyPwCk = memberService.modifyPwCk(member.getMemberPw()); 
+		LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
+		int modifyMember = 0;
+		if(modifyPwCk != null) {
+			modifyMember = memberService.modifyMemberInfo(member);
+		} else {
+			model.addAttribute("loginMember", loginMember);
+			return "memberInfo";
+		}
+		if(modifyMember == 1) {
+			System.out.println("수정 성공");
+		} else {
+			System.out.println("수정 실패");
+		}
+		return "redirect:/memberInfo";
+		
+	}
+	
+	// 회원탈퇴
+	@GetMapping("/removeMember")
+	public String removeMember(HttpSession session, LoginMember loginMember) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		return "removeMember"; 
+	}
+	@PostMapping("/removeMember")
+	public String removeMember(HttpSession session, @RequestParam("memberPw") String memberPw) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		LoginMember loginMember = (LoginMember)session.getAttribute("loginMember"); 
+		loginMember.setMemberPw(memberPw); // removeMember.html에서 입력한 비밀번호로 변경
+		System.out.println(loginMember.getMemberId());
+		System.out.println(loginMember.getMemberPw());
+		memberService.removeMember(loginMember); // 삭제 메서드 호출
+		session.invalidate();
+		return "redirect:/";
+	}
+	
+	// 회원정보
 	@GetMapping("/memberInfo")
 	public String memberInfo(Model model, HttpSession session) {
 		if(session.getAttribute("loginMember") == null) {
@@ -26,6 +87,7 @@ public class MemberController {
 		LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
 		Member member = memberService.getMemberOne(loginMember);
 		model.addAttribute("member", member);
+		model.addAttribute("loginMember", loginMember);
 		return "memberInfo";
 	}
 	
