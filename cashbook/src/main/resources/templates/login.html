@@ -15,23 +15,45 @@
 	// 유효성 검사
 	$(document).ready(function(){
 		$('#loginBtn').click(function(){
+			
 			$('#loginForm').submit();
 		});
 	});
 </script>
+<style>
+	#box {
+		margin: auto;
+		margin-top: 100px;
+		width: 500px;
+		height: 500px;
+		padding: 50px;
+		border: 1px solid #E0E0E0;
+		text-align: center;
+	}
+	#box div {
+		margin: 20px;
+	}
+	#box input, button {
+		width: 300px;
+	}
+</style>
 </head>
 <body>
-	<h1>로그인</h1>
-	<form id="loginForm" action="/login" method="post">
-		<div><input type="text" name="memberId" id="memberId" placeholder="아이디"></div>
-		<div><input type="password" name="memberPw" id="memberPw" placeholder="비밀번호"></div>
-		<div><span th:text="${msg}"></span></div>
-		<div>
-			<a href="">아이디가 기억나지 않아요.</a> <!-- 이메일 입력 : 이메일에 ID를 보내줌 -->
-			<a href="">비밀번호가 기억나지 않아요.</a> <!-- 아이디 & 이메일 입력 : 이메일에 관리자가 변경한 PW를 보내줌 -->		
-		</div>
-	</form>
-		<div><button type="button" id="loginBtn" class="btn btn-primary">로그인</button></div>
-		<div><a href="/addMember"><button id="addMemberBtn" class="btn btn-primary">회원가입</button></a></div>
+	<div id="box">
+		<h1>로그인</h1>
+		<form id="loginForm" action="/login" method="post">
+			<div><input type="text" name="memberId" id="memberId" placeholder="아이디"></div>
+			<div><input type="password" name="memberPw" id="memberPw" placeholder="비밀번호"></div>
+			<div id="msg"><span th:text="${msg}"></span></div>
+			<div>
+				<a th:href="@{/findMemberId}">아이디가 기억나지 않아요.</a> <!-- 이메일 입력 : 이메일에 ID를 보내줌 -->
+			</div>
+			<div>
+				<a th:href="@{/findMemberPw}">비밀번호가 기억나지 않아요.</a> <!-- 아이디 & 이메일 입력 : 이메일에 관리자가 변경한 PW를 보내줌 -->		
+			</div>	
+		</form>
+			<div><button type="button" id="loginBtn" class="btn btn-primary">로그인</button></div>
+			<div><a href="/addMember"><button id="addMemberBtn" class="btn btn-primary">회원가입</button></a></div>
+	</div>
 </body>
 </html>

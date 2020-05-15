@@ -29,6 +29,10 @@
 		<a th:href="@{/removeMember(memberId=${loginMember.memberId})}">회원탈퇴</a>
 		<table id="table" class="table">
 			<tr>
+				<td>사용자 이미지</td>
+				<td><img th:src="@{${'/upload/'+member.memberPic}}"></td>
+			</tr>
+			<tr>
 				<td>아이디</td>
 				<td th:text="${member.memberId}"></td>
 			</tr>

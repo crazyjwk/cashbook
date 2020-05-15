@@ -5,21 +5,52 @@
 <mapper namespace="com.gdu.cashbook.mapper.MemberMapper">
 	<!-- DBMS와 VO의 컬럼명 불일치를 해결하기 위해 사용하는 태그  -->
 	<!-- <resultMap type="" id=""></resultMap> -->
+	<!--  
+		비밀번호 찾기 
+		1. 입력한 id와 email이 맞으면 사용자가 id의 pw를 랜덤문자열로 변경 update
+		2. 사용자가 입력한 id의 변경된 pw를 select
+		3. 2번에서 변경된 pw를 사용자의 이메일로 전송
+	 -->
+	 <update id="updateMemberPw" parameterType="com.gdu.cashbook.vo.Member">
+	 	UPDATE member 
+	 	SET
+	 		member_pw = PASSWORD(#{memberPw})
+	 	WHERE member_id = #{memberId}
+	 	AND member_email = #{memberEmail}
+	 </update>
+	<select id="selectMemberByIdAndEmail" resultType="com.gdu.cashbook.vo.Member" parameterType="com.gdu.cashbook.vo.Member">
+		SELECT
+			*
+		FROM member
+		WHERE member_id = #{memberId}
+		AND member_email = #{memberEmail}
+	</select>
+	<select id="selectMemberIdBymember" resultType="String" parameterType="com.gdu.cashbook.vo.Member">
+		SELECT 
+			CONCAT(SUBSTRING(member_id, 1, 3), '*****')
+		FROM member
+		WHERE member_name = #{memberName}
+		AND member_phone = #{memberPhone}
+		AND member_email = #{memberEmail}
+	</select>
+	<!-- 회원정보를 수정하는 쿼리 -->
 	<update id="updateMemberInfo" parameterType="com.gdu.cashbook.vo.Member">
 		UPDATE member
 		SET
-			member_addr=#{memberAddr},
-			member_name=#{memberName},
-			member_phone=#{memberPhone},
-			member_email=#{memberEmail}
+			member_addr = #{memberAddr},
+			member_name = #{memberName},
+			member_phone = #{memberPhone},
+			member_email = #{memberEmail}
 		WHERE member_id = #{memberId}
 	</update>
+	<!-- 미완성 -->
 	<select id="updatePwCk" resultType="String" parameterType="int">
 		SELECT
 			PASSWORD(member_pw)
 		FROM member
 		WHERE member_pw = PASSWORD(#{memberPw})
 	</select>
+	<!-- 회원수정을 위해 특정 memberId의 데이터를 받아오는 쿼리 -->
 	<select id="updateMemberOne" resultType="com.gdu.cashbook.vo.Member" parameterType="com.gdu.cashbook.vo.LoginMember">
 		SELECT
 			member_id memberId,
@@ -28,6 +59,7 @@
 		FROM member
 		WHERE member_id = #{memberId}
 	</select>
+	<!-- 회원 탈퇴 -->
 	<delete id="deleteMember" parameterType="com.gdu.cashbook.vo.LoginMember">
 		DELETE 
 		FROM member
@@ -42,13 +74,15 @@
 			member_addr memberAddr,
 			member_phone memberPhone,
 			member_email memberEmail,
-			member_date memberDate
+			member_date memberDate,
+			member_pic memberPic
 		FROM member
 		WHERE member_id = #{memberId}
 	</select>
 	<!-- 중복체크를 위해 member_id를 가져오는 쿼리  -->
 	<select id="selectCheckMemberId" resultType="String" parameterType="String">
-		SELECT member_id
+		SELECT 
+			member_id
 		FROM 
 		(	
 			SELECT member_id FROM member
@@ -57,6 +91,7 @@
 		) t
 		WHERE member_id=#{memberIdCk}
 	</select>
+	<!-- 로그인시 아이디 비밀번호 확인 -->
 	<select id="selectLoginMember" resultType="com.gdu.cashbook.vo.LoginMember" parameterType="com.gdu.cashbook.vo.LoginMember">
 	 	SELECT 
 	 		member_id memberId, 
@@ -65,6 +100,7 @@
 	 	WHERE member_id = #{memberId}
 	 	AND member_pw = PASSWORD(#{memberPw})
 	</select>
+	<!-- 회원가입 쿼리 -->
 	<insert id="insertMember" parameterType="com.gdu.cashbook.vo.Member">
 		INSERT INTO member
 		(

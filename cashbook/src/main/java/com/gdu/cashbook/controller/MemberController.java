@@ -18,6 +18,47 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	// 회원 비밀번호 찾기
+	@GetMapping("/findMemberPw")
+	public String findMemberPw(HttpSession session) {
+		if(session.getAttribute("loginMember") != null) {
+			return "redirect:/";
+		}
+		return "findMemberPw";
+	}
+	
+	@PostMapping("/findMemberPw")
+	public String findMemberPw(Model model, Member member, HttpSession session) {
+		if(session.getAttribute("loginMember") != null) {
+			return "redirect:/";
+		}
+		int row = memberService.getMemberPw(member);
+		String msg = "아이디와 이메일을 확인하세요.";
+		if(row == 1) {
+			msg = "비밀번호를 입력한 이메일로 전송했습니다."; 
+		}
+		model.addAttribute("msg", msg);
+		return "findMemberPwResult";
+	}
+	// 회원 아이디 찾기
+	@GetMapping("/findMemberId")
+	public String findMemberId(HttpSession session) {
+		if(session.getAttribute("loginMember") != null) {
+			return "redirect:/";
+		}
+		return "findMemberId";
+	}
+	
+	@PostMapping("/findMemberId")
+	public String findMemberId(Model model, Member member, HttpSession session) {
+		if(session.getAttribute("loginMember") != null) {
+			return "redirect:/";
+		}
+		String findMemberId = memberService.getMemberIdByMember(member);
+		
+		model.addAttribute("findMemberId", findMemberId);
+		return "findMemberIdResult";
+	}
 	// 회원정보 수정
 	@GetMapping("/modifyMemberInfo")
 	public String modifyMember(Model model, LoginMember loginMember, HttpSession session) {

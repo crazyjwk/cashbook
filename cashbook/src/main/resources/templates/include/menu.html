@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <title>Menu</title>
 <style>
-	li {
-		list-style: none;
-	}
 </style>
 </head>
 <body>
@@ -15,14 +12,8 @@
 		<div><span th:text="${session.loginMember.memberId}"></span>님</div>
 		<ul>
 			<li><a th:href="@{/home}">홈</a></li>
-		</ul>
-		<ul>
 			<li><a th:href="@{/memberInfo}">회원정보</a></li>
-		</ul>
-		<ul>
 			<li><a th:href="@{/cashbookList}">가계부 관리</a></li>
-		</ul>
-		<ul>
 			<li><a th:href="@{/logout}">로그아웃</a></li>
 		</ul>
 	</div> <!-- /include/menu::sidemenu -->

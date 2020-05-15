@@ -3,9 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <title>Home</title>
+<style>
+	html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		width: 200px;
+		float: left;
+		background-color: #3498db;
+	}
+	ul {
+		list-style: none;
+		padding: 0;
+	}
+	li {
+		margin: 50px;
+	
+	}
+	li > a {
+		text-decoration: none;
+		font-size: 18px;
+		color: black;
+	}
+</style>
 </head>
 <body>
-	<h1>홈</h1>
-		<div th:include="/include/menu::sidemenu"></div>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
 </body>
 </html>
