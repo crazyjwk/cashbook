@@ -62,20 +62,35 @@
 	});
 </script>
 <style>
-	
+	#flexContainer {
+		margin-top: 20px;
+		padding: 30px;
+		height: 850px;
+		display: inline-flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+		border: 1px solid #E0E0E0;
+		
+	}
 </style>
 </head>
 <body>
-	<div class="container-fluid">
+	<div id="flexContainer">
+		<h1>회원가입</h1>
 		<form id="idForm" action="/checkMemberId" method="post">
 			<div>
 				아이디 중복 확인: <input type="text" name="memberIdCk" id="memberIdCk" placeholder="아이디 입력">
-				
 				<button id="ckBtn" class="btn btn-light" type="button">중복체크</button>
 				<span th:text="${msg}"></span>
 			</div>
 		</form>
-		<form id="myForm" action="/addMember" method="post">
+		<form id="myForm" action="/addMember" method="post" enctype="multipart/form-data">
+			<div>
+				<div>사진</div>  
+				<div><input type="file" name="memberPic" id=""></div>
+				<span th:text="${msg1}"></span>
+			</div>
 			<div>
 				아이디 : <input type="text" th:value="${memberIdCk}" name="memberId" id="memberId" placeholder="아이디 입력" readonly="readonly">
 				<span id="idHelper"></span>

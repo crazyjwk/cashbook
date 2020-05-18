@@ -21,6 +21,10 @@
 	#table {
 		width: 700px;
 	}
+	#defaultImg {
+		width: 170px;
+		height: 100px;
+	}
 </style>
 </head>
 <body>
@@ -30,7 +34,7 @@
 		<table id="table" class="table">
 			<tr>
 				<td>사용자 이미지</td>
-				<td><img th:src="@{${'/upload/'+member.memberPic}}"></td>
+				<td><img id="defaultImg" th:src="@{${'/upload/'+member.memberPic}}"></td>
 			</tr>
 			<tr>
 				<td>아이디</td>

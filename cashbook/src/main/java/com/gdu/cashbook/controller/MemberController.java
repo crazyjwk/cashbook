@@ -8,10 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.cashbook.service.MemberService;
 import com.gdu.cashbook.vo.LoginMember;
 import com.gdu.cashbook.vo.Member;
+import com.gdu.cashbook.vo.MemberForm;
 
 @Controller
 public class MemberController {
@@ -71,31 +73,33 @@ public class MemberController {
 		return "modifyMember";
 	}
 	@PostMapping("/modifyMemberInfo")
-	public String modifyMember(Model model, Member member, HttpSession session) {
+	public String modifyMember(Model model, MemberForm memberForm, HttpSession session) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
-		System.out.println(member.getMemberAddr());
-		System.out.println(member.getMemberName());
-		System.out.println(member.getMemberEmail());
-		System.out.println(member.getMemberPhone());
-		String modifyPwCk = memberService.modifyPwCk(member.getMemberPw()); 
+		System.out.println(memberForm.getMemberAddr());
+		System.out.println(memberForm.getMemberName());
+		System.out.println(memberForm.getMemberEmail());
+		System.out.println(memberForm.getMemberPhone());
+		System.out.println(memberForm.getMemberPic());
 		LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
-		int modifyMember = 0;
-		if(modifyPwCk != null) {
-			modifyMember = memberService.modifyMemberInfo(member);
-		} else {
-			model.addAttribute("loginMember", loginMember);
-			return "memberInfo";
-		}
-		if(modifyMember == 1) {
-			System.out.println("수정 성공");
-		} else {
-			System.out.println("수정 실패");
-		}
-		return "redirect:/memberInfo";
 		
-	}
+		
+			if(memberForm.getMemberPic().getContentType().equals("image/png") || 
+					memberForm.getMemberPic().getContentType().equals("image/jpeg") ||
+					memberForm.getMemberPic().getContentType().equals("image/gif")) 
+				{ // 입력과 저장타입의 불일치로 service에서 memberForm -> member + 폴더에 파일 저장
+					int result = memberService.modifyMemberInfo(memberForm, loginMember);
+					System.out.println(result + "<-- result");
+					model.addAttribute("loginMember", loginMember);
+					return "redirect:/memberInfo";
+				}
+			memberService.modifyMemberInfo(memberForm, loginMember);
+			model.addAttribute("loginMember", loginMember);
+			return "redirect:/memberInfo";
+		}
+		
+	
 	
 	// 회원탈퇴
 	@GetMapping("/removeMember")
@@ -189,9 +193,21 @@ public class MemberController {
 		return "addMember";
 	}
 	@PostMapping("/addMember")
-	public String addMember(Member member, HttpSession session) {
-		memberService.addMember(member);
-		System.out.println(member);
-		return "redirect:/index";
+	public String addMember(Model model, MemberForm memberForm, HttpSession session) {
+		if(session.getAttribute("loginMember") != null) {
+			return "redirect:/";
+		}
+		// 이미지 파일만 업로드 할 수 있음
+		if(memberForm.getMemberPic() != null) {
+			if(memberForm.getMemberPic().getContentType().equals("image/png") || 
+				memberForm.getMemberPic().getContentType().equals("image/jpeg") ||
+				memberForm.getMemberPic().getContentType().equals("image/gif")) 
+			{ // 입력과 저장타입의 불일치로 service에서 memberForm -> member + 폴더에 파일 저장
+				memberService.addMember(memberForm);
+				return "redirect:/index";
+			}
+		}
+		System.out.println(memberForm + "<-- addMember memberForm");
+		return "redirect:/addMember";
 	}
 }

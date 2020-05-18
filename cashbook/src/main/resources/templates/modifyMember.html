@@ -23,30 +23,37 @@
 <body>
 	<h1>정보수정</h1>
 		<div th:include="/include/menu::sidemenu"></div>
-		<form id="modifyForm" th:action="@{/modifyMemberInfo}" method="post">
+		<form id="modifyForm" th:action="@{/modifyMemberInfo}" method="post" enctype="multipart/form-data">
 			<table class="table">
 				<tr>
-					<td>아이디</td>
+					<th>사진</th>
+					<td>
+						<img th:src="@{${'/upload/'+member.memberPic}}">
+						<input type="file" th:value="${member.memberPic}" name="memberPic" id="memberPic">
+					</td>
+				</tr>
+				<tr>
+					<th>아이디</th>
 					<td><input type="text" th:value="${member.memberId}" name="memberId" readonly="readonly"></td>
 				</tr> 
 				<tr>
-					<td>이름</td>
-					<td><input type="text" name="memberName" id="memberName"></td>
+					<th>이름</th>
+					<td><input type="text" th:value="${member.memberName}" name="memberName" id="memberName"></td>
 				</tr>
 				<tr>
-					<td>주소</td>
-					<td><input type="text" name="memberAddr" id="memberAddr"></td>
+					<th>주소</th>
+					<td><input type="text" th:value="${member.memberAddr}" name="memberAddr" id="memberAddr"></td>
 				</tr>
 				<tr>
-					<td>전화번호</td>
-					<td><input type="text" name="memberPhone" id="memberPhone"></td>
+					<th>전화번호</th>
+					<td><input type="text" th:value="${member.memberPhone}" name="memberPhone" id="memberPhone"></td>
 				</tr>
 				<tr>
-					<td>이메일</td>
-					<td><input type="text" name="memberEmail" id="memberEmail"></td>
+					<th>이메일</th>
+					<td><input type="text" th:value="${member.memberEmail}" name="memberEmail" id="memberEmail"></td>
 				</tr>
 				<tr>
-					<td>가입날짜</td>
+					<th>가입날짜</th>
 					<td><input type="text" th:value="${member.memberDate}" readonly="readonly"></td>
 				</tr>
 			</table>
