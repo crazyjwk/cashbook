@@ -8,5 +8,8 @@ import com.gdu.cashbook.vo.Cash;
 
 @Mapper
 public interface CashMapper {
+	public int insertCash(Cash cash);
+	public void deleteCash(int cashNo);
+	public Integer selectSumCashByDate(Cash cash);
 	public List<Cash> selectCashListByDate(Cash cash);
 }

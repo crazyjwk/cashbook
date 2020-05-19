@@ -9,14 +9,13 @@
 <body>
 	<!-- fragments1 -->
 	<div th:fragment="sidemenu">
-		<div><span th:text="${session.loginMember.memberId}"></span>님</div>
-		<ul>
-			<li><a th:href="@{/home}">홈</a></li>
-			<li><a th:href="@{/memberInfo}">회원정보</a></li>
-			<li><a th:href="@{/cashbookList}">가계부 관리</a></li>
-			<li><a th:href="@{/logout}">로그아웃</a></li>
-		</ul>
-	</div> <!-- /include/menu::sidemenu -->
+		<div id="item"><span th:text="${session.loginMember.memberId}"></span>님</div>
+		<div id="item"><a th:href="@{/home}">홈</a></div>
+		<div id="item"><a th:href="@{/memberInfo}">회원정보</a></div>
+		<div id="item"><a th:href="@{/cashbookList}">가계부 관리</a></div>
+		<div id="item"><a th:href="@{/logout}">로그아웃</a></div>
+	</div> 
+	<!-- /include/menu::sidemenu -->
 	<!-- fragments2 -->
 	
 	<!-- fragments3 -->

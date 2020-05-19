@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<style>
+	html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		width: 200px;
+		float: left;
+		background-color: #3498db;
+	}
+	#list {
+		margin-top: 20px;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+	#item {
+		font-size: 1.25em;
+	}
+	#item a {
+		color: black;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	#item a:hover {
+		color: white;
+	}
+	#sumPlus {
+		font-size: 1.25em;
+		color: #4ea7e1;
+		text-align: right;
+	}
+	#sumMinus {
+		font-size: 1.25em;
+		color: #e74c3c;
+		text-align: right;
+	}
+</style>
+</head>
+<body>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
+	<h1>2020년 가계부</h1>
+		<div>
+		<!--<h3 th:text="${day}"></h3>  -->
+		<h3 th:text="${day}"></h3>
+		<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)})}">이전</a>
+		<a th:href="@{/getCashListByDate(day=${day.plusDays(1)})}">다음</a>
+		</div>
+		<div class="container">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>카테고리</th>
+						<th>수입</th>
+						<th>지출</th>
+						<th>장소</th>
+						<th>메모</th>
+						<th>삭제</th>
+						<th>수정</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="cash : ${cashList}">
+						<td th:text="${cash.categoryName}"></td>
+						<td th:if="${cash.cashKind} == '수입'" th:text="'+' + ${cash.cashPrice}"></td>
+						<td th:unless="${cash.cashKind} == '수입'"></td>
+						<td th:if="${cash.cashKind} == '지출'" th:text="'-' + ${cash.cashPrice}"></td>
+						<td th:unless="${cash.cashKind} == '지출'"></td>
+						<td th:text="${cash.cashPlace}"></td>
+						<td th:text="${cash.cashMemo}"></td>
+						<td><a href="">수정</a></td>
+						<td><a th:href="@{/removeCash(cashNo=${cash.cashNo},memberId=${cash.memberId})}">삭제</a></td>
+					</tr>
+				</tbody>
+			</table>
+		<span><a th:href="@{/addCash}">입력</a></span>
+		<div id="sumPlus" th:if="${sumCash} > 0" th:text="'합계' + '+' + ${sumCash}"></div>
+		<div id="sumMinus" th:unless="${sumCash} > 0" th:text="'합계' + ${sumCash}"></div>
+		</div>
+</body>
+</html>

@@ -1,15 +1,17 @@
 package com.gdu.cashbook.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gdu.cashbook.service.CashService;
 import com.gdu.cashbook.vo.Cash;
@@ -20,9 +22,47 @@ public class CashController {
 	@Autowired
 	private CashService cashService;
 	
+	@GetMapping("/addCash")
+	public String addCash(Model model, HttpSession session) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		String memberId = ((LoginMember)(session.getAttribute("loginMember"))).getMemberId();
+		model.addAttribute("memberId", memberId);
+		return "addCash";
+	}
+	@PostMapping("/addCash")
+	public String addCash(HttpSession session, Cash cash) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		System.out.println(cash.getMemberId());
+		System.out.println(cash.getCategoryName());
+		System.out.println(cash.getCashKind());
+		System.out.println(cash.getCashPrice());
+		System.out.println(cash.getCashPlace());
+		System.out.println(cash.getCashMemo());
+		return "redirect:/";
+	}
 	// 수입, 지출 
+	@GetMapping("/removeCash")
+	public String removeCash(HttpSession session, Cash cash) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		System.out.println(cash.getCashNo() + "<-- cashNo");
+		System.out.println(cash.getMemberId() + "<-- cashMemberId");
+		cashService.removeCash(cash.getCashNo());
+		return "redirect:/getCashListByDate?"+cash.getMemberId();
+	}
+	Integer test = null;
 	@GetMapping("/getCashListByDate")
-	public String getCashListByDate(Model model, HttpSession session) {
+	public String getCashListByDate(Model model, HttpSession session, 
+			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
+			// RequestParam -> DateTimeFormat으로 자동 형변환
+		if(day == null) {
+			day = LocalDate.now();
+		}
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
@@ -30,27 +70,25 @@ public class CashController {
 		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
 		
 		// 오늘 날짜를 받아오는 다른 방법
-		Date today = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String strToday = sdf.format(today);
-		
-		System.out.println(sdf.format(today) + " <-- today");
-		// 오늘 날짜를 받아오는  Calendar 클래스
-		//Calendar today2 = Calendar.getInstance();
-		//String strToday = "";
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		String strToday = sdf.format(day);
+//		
+//		System.out.println(sdf.format(day) + " <-- today");
 		
 		Cash cash = new Cash();
 		cash.setMemberId(memberId);
-		cash.setCashDate(strToday); // sdf.format(today);
-		List<Cash> cashList = cashService.getCashListByDate(cash);
+		cash.setCashDate(day);
 		
-		model.addAttribute("today", strToday);
-		model.addAttribute("cashList", cashList);
+		Map<String, Object> list = cashService.getCashListByDate(cash);
 		
-		for(Cash c : cashList) {
-			System.out.println(c);
+		Integer sumCash = (Integer)list.get("sumCash");
+		if(sumCash == null) {
+			sumCash = 0;
 		}
-		
+		model.addAttribute("day", day);
+		model.addAttribute("cashList", list.get("cashList"));
+		model.addAttribute("sumCash", sumCash);
+			
 		return "getCashListByDate";
 	}
 }

@@ -12,14 +12,57 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <style>
-	#sidemenu {
+	html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		margin-top: 0;
+		width: 200px;
 		float: left;
-		max-width: 100px;
-		max-height: 600px;
-		margin: 0 auto;
+		background-color: #3498db;
+	}
+	#list {
+		margin-top: 20px;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+	#item {
+		font-size: 1.25em;
+	}
+	#item a {
+		color: black;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	#item a:hover {
+		color: white;
+	}
+	.container {
+		margin-top: 50px;
+		margin-left: 600px;
+		padding: 40px;
 	}
 	#table {
 		width: 700px;
+		border: 2px solid #cccccc;
+		text-align: center;
+	}
+	th {
+		background-color: #eaeaea;
+	}
+	
+	#outBtn {
+		display: flex;
+		flex-direction: row-reverse;
+		margin: 20px 20px 20px 0;
+		background-color: #e0e0e0;
+		color: #555755;
 	}
 	#defaultImg {
 		width: 170px;
@@ -28,39 +71,43 @@
 </style>
 </head>
 <body>
-	<h1>회원정보</h1>
-		<div id="sidemenu" th:include="/include/menu::sidemenu"></div>
-		<a th:href="@{/removeMember(memberId=${loginMember.memberId})}">회원탈퇴</a>
-		<table id="table" class="table">
-			<tr>
-				<td>사용자 이미지</td>
-				<td><img id="defaultImg" th:src="@{${'/upload/'+member.memberPic}}"></td>
-			</tr>
-			<tr>
-				<td>아이디</td>
-				<td th:text="${member.memberId}"></td>
-			</tr>
-			<tr>
-				<td>이름</td>
-				<td th:text="${member.memberName}"></td>
-			</tr>
-			<tr>
-				<td>주소</td>
-				<td th:text="${member.memberAddr}"></td>
-			</tr>
-			<tr>
-				<td>전화번호</td>
-				<td th:text="${member.memberPhone}"></td>
-			</tr>
-			<tr>
-				<td>이메일</td>
-				<td th:text="${member.memberEmail}"></td>
-			</tr>
-			<tr>
-				<td>가입날짜</td>
-				<td th:text="${member.memberDate}"></td>
-			</tr>
-		</table>
-		<a th:href="@{/modifyMemberInfo(memberId=${loginMember.memberId})}">정보수정</a>
+		<div id="box">
+			<div id="list" th:include="/include/menu::sidemenu"></div>
+		</div>
+		<div class="container">
+			<h1>회원정보</h1>
+			<a th:href="@{/removeMember(memberId=${loginMember.memberId})}"><button id="outBtn" class="btn">회원탈퇴</button></a>
+			<table id="table" class="table table-bordered">
+				<tr>
+					<th style="height:100px">사용자 이미지</th>
+					<td><img id="defaultImg" th:src="@{${'/upload/'+member.memberPic}}"></td>
+				</tr>
+				<tr>
+					<th>아이디</th>
+					<td th:text="${member.memberId}"></td>
+				</tr>
+				<tr>
+					<th>이름</th>
+					<td th:text="${member.memberName}"></td>
+				</tr>
+				<tr>
+					<th>주소</th>
+					<td th:text="${member.memberAddr}"></td>
+				</tr>
+				<tr>
+					<th>전화번호</th>
+					<td th:text="${member.memberPhone}"></td>
+				</tr>
+				<tr>
+					<th>이메일</th>
+					<td th:text="${member.memberEmail}"></td>
+				</tr>
+				<tr>
+					<th>가입날짜</th>
+					<td th:text="${member.memberDate}"></td>
+				</tr>
+			</table>
+			<a th:href="@{/modifyMemberInfo(memberId=${loginMember.memberId})}"><button class="btn btn-primary">정보수정</button></a>
+		</div>
 </body>
 </html>
