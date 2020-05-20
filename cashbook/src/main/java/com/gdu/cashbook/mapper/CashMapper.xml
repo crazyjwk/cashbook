@@ -4,9 +4,26 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gdu.cashbook.mapper.CashMapper">
 	<update id="updateCash" parameterType="com.gdu.cashbook.vo.Cash">
-		UPDATE cash SET 
-	
+		UPDATE cash 
+		SET 
+			category_name=#{categoryName}, 
+			cash_date=#{cashDate}, 
+			cash_kind=#{cashKind}, 
+			cash_price=#{cashPrice},
+			cash_place=#{cashPlace},
+			cash_memo=#{cashMemo}
+		WHERE cash_no=#{cashNo}
 	</update>
+	<select id="selectCashOne" resultType="com.gdu.cashbook.vo.Cash" parameterType="int">
+		SELECT 
+			member_id memberId,
+			cash_date cashDate,
+			cash_price cashPrice,
+			cash_place cashPlace,
+			cash_memo cashMemo
+		FROM cash
+		WHERE cash_no=#{cashNo}
+	</select>
 	<select id="selectCategoryList" resultType="com.gdu.cashbook.vo.Category" parameterType="com.gdu.cashbook.vo.Category">
 		SELECT
 			category_name categoryName

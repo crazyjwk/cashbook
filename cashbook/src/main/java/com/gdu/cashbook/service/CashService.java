@@ -1,6 +1,5 @@
 package com.gdu.cashbook.service;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,14 @@ import com.gdu.cashbook.vo.DayAndPrice;
 public class CashService {
 	@Autowired
 	private CashMapper cashMapper;
+	
+	public int modifyCash(Cash cash) {
+		return cashMapper.updateCash(cash);
+	}
+	
+	public Cash getCashOne(int cashNo) {
+		return cashMapper.selectCashOne(cashNo);
+	}
 	
 	public List<Category> getCategoryList() {
 		return cashMapper.selectCategoryList();

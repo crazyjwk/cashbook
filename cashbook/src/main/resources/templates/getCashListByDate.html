@@ -70,6 +70,9 @@
 		disPlay: flex;
 		justify-content: space-between;
 	}
+	.table {
+		text-align: center;
+	}
 	.insBtn {
 		background-color: #3498db;
 		width: 100px;
@@ -121,8 +124,8 @@
 						<td th:unless="${cash.cashKind} == '지출'"></td>
 						<td th:text="${cash.cashPlace}"></td>
 						<td th:text="${cash.cashMemo}"></td>
-						<td><a href="">수정</a></td>
-						<td><a th:href="@{/removeCash(cashNo=${cash.cashNo},memberId=${cash.memberId})}">삭제</a></td>
+						<td><a th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day})}">수정</a></td>
+						<td><a th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day})}">삭제</a></td>
 					</tr>
 				</tbody>
 			</table>

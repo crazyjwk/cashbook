@@ -26,6 +26,30 @@ public class CashController {
 	@Autowired
 	private CashService cashService;
 	
+	@GetMapping("/modifyCash")
+	public String modifyCash(Model model, HttpSession session, @RequestParam(value="cashNo") int cashNo,
+			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
+		
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		List<Category> categoryList = cashService.getCategoryList();
+		Cash cashOne = cashService.getCashOne(cashNo);
+		
+		model.addAttribute("cashNo", cashNo);
+		model.addAttribute("cashOne", cashOne);
+		model.addAttribute("day", day);
+		model.addAttribute("categoryList", categoryList);
+		return "modifyCash";
+	}
+	@PostMapping("/modifyCash")
+	public String modifyCash(Model model, HttpSession session, Cash cash,
+			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
+		cash.setCashDate(day);
+		cashService.modifyCash(cash);
+		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day;
+	}
+	
 	@GetMapping("/getCashListByMonth")
 	public String getCashListByMonth(Model model, HttpSession session, 
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
@@ -81,6 +105,8 @@ public class CashController {
 		model.addAttribute("firstDayOfWeek", firstDay.get(Calendar.DAY_OF_WEEK));
 		return "getCashListByMonth";
 	}
+	
+	// 수입/지출 입력
 	@GetMapping("/addCash")
 	public String addCash(Model model, HttpSession session,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
@@ -114,16 +140,18 @@ public class CashController {
 		cashService.addCash(cash);
 		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day;
 	}
-	// 수입, 지출 
+	
+	// 수입/지출 삭제
 	@GetMapping("/removeCash")
-	public String removeCash(HttpSession session, Cash cash) {
+	public String removeCash(HttpSession session, Cash cash,
+			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
 		System.out.println(cash.getCashNo() + "<-- cashNo");
 		System.out.println(cash.getMemberId() + "<-- cashMemberId");
 		cashService.removeCash(cash.getCashNo());
-		return "redirect:/getCashListByDate?"+cash.getMemberId();
+		return "redirect:/getCashListByDate?"+ cash.getMemberId() + "&day=" + day;
 	}
 	@GetMapping("/getCashListByDate")
 	public String getCashListByDate(Model model, HttpSession session, 

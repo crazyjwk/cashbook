@@ -11,6 +11,8 @@ import com.gdu.cashbook.vo.DayAndPrice;
 
 @Mapper
 public interface CashMapper {
+	public int updateCash(Cash cash);
+	public Cash selectCashOne(int cashNo);
 	public List<Category> selectCategoryList();
 	public List<DayAndPrice> selectDayAndPrice(Map<String, Object> day);
 	public int insertCash(Cash cash);

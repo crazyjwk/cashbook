@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<style>
+	html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		margin-top: 0;
+		width: 200px;
+		float: left;
+		background-color: #3498db;
+	}
+	#list {
+		margin-top: 20px;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+	#item {
+		font-size: 1.25em;
+	}
+	#item a {
+		color: black;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	#item a:hover {
+		color: white;
+	}
+	#container {
+		display: flex;
+		flex-direction: column;
+		margin-left: 650px;
+		
+		width:700px;
+	}
+	#cashForm {
+		width:500px;
+	}
+	.table {
+		margin-left: 100px;
+		width: 500px;
+		height: 400px;
+		
+		border: 2px solid #cccccc;
+		text-align: center;
+	}
+	.table th {
+		padding-top: 25px;
+		background-color: #eaeaea;
+	}
+	.table td {
+		padding-top: 25px;
+	}
+	h2 {
+		margin-top: 70px;
+		margin-bottom: 50px;
+		font-weight: bold;
+		text-align: center;
+	}
+	.selectBox {
+		width: 350px;
+	}
+	input {
+		width: 350px;
+	}
+	.btn {
+		margin-top: 20px;
+		width: 100px;
+	}
+</style>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#addBtn').click(function(){
+			$('#cashForm').submit();
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
+	<div id="container">
+		<div id="flexContainer">
+			<h2>수입/지출 입력</h2>
+		</div>
+		<form id="cashForm" th:action="@{/modifyCash(day=${day})}" method="post">
+			<input type="hidden" name="cashNo" th:value="${cashNo}">
+			<table class="table table-bordered">
+				<tr>
+					<th>카테고리</th>
+					<td>
+						<select class="selectBox" name="categoryName">
+							<option th:each="cl : ${categoryList}" th:text="${cl.categoryName}" th:value="${cl.categoryName}"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>수입/지출</th>
+					<td>
+						<select class="selectBox" name="cashKind">
+							<option value="수입">수입</option>
+							<option value="지출">지출</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>금액</th>
+					<td><input type="text" name="cashPrice" th:value="${cashOne.cashPrice}"></td>
+				</tr>
+				<tr>
+					<th>장소</th>
+					<td><input type="text" name="cashPlace" th:value="${cashOne.cashPlace}"></td>
+				</tr>
+				<tr>
+					<th>메모</th>
+					<td><input type="text" name="cashMemo" th:value="${cashOne.cashMemo}"></td>
+				</tr>
+			</table>
+		</form>
+			<div style="text-align: center"><button id="addBtn" class="btn btn-primary">입력</button></div>
+	</div>
+</body>
+</html>
