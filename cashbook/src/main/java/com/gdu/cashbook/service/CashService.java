@@ -1,5 +1,6 @@
 package com.gdu.cashbook.service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +11,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gdu.cashbook.mapper.CashMapper;
 import com.gdu.cashbook.vo.Cash;
+import com.gdu.cashbook.vo.Category;
+import com.gdu.cashbook.vo.DayAndPrice;
 
 @Service
 @Transactional
 public class CashService {
 	@Autowired
 	private CashMapper cashMapper;
+	
+	public List<Category> getCategoryList() {
+		return cashMapper.selectCategoryList();
+	}
+	public List<DayAndPrice> getCashAndPriceList(String memberId, int year, int month) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("year", year);
+		map.put("month", month);
+		return cashMapper.selectDayAndPrice(map);
+	}
 	
 	public int addCash(Cash cash) {
 		return cashMapper.insertCash(cash);

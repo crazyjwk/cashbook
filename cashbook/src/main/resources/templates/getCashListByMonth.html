@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>getCashListByMonth</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<style>
+	html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		width: 200px;
+		float: left;
+		background-color: #3498db;
+	}
+	#list {
+		margin-top: 20px;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+	#item {
+		font-size: 1.25em;
+	}
+	#item a {
+		color: #212121;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	#item a:hover {
+		color: white;
+	}
+	#calendarContainer {
+		float: left;
+		margin-top: 50px;
+		margin-left: 400px;
+	}
+	#calendarHeader{
+		display: flex;
+		justify-content: space-between;
+	}
+	h2 {
+		text-align: center;
+		margin-bottom: 30px;
+	}
+	.btn {
+		background-color: #e6e6e6;
+		margin: 10px;
+		width: 100px;
+		border-radius: 20px;
+		font-size: 17px;
+		font-weight: bold;
+		color: #838383;
+	}
+	.gd-left {
+		float: left;
+		margin-right: 10px;
+		margin-bottom: 10px;
+		margin-left: 10px;
+		border-radius: 5px;
+		width: 100px;
+		height: 100px;
+		border: 1px solid black;
+	}
+	div.gd-clear {
+		clear: both;
+		color: red;
+	}
+	div.gd-title {
+		height: 40px;
+		background-color: #eaeaea;
+		font-weight: bold;
+		text-align: center;
+		padding: 6px;
+	}
+	#price {
+		text-align: center;
+	}
+	.gd-blue {
+		color: #89d1f9;
+	}
+	.gd-red {
+		color: #e7524e;
+	}
+</style>
+</head>
+<body>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
+	<h1>월별 가계부 관리</h1>
+	<div id="calendarContainer">
+		<div id="calendarHeader">
+			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(-1)})}"><button class="btn">이전</button></a>
+			<h2 th:text="${year} + '년 ' + ${month} + '월'"></h2>
+			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(1)})}"><button class="btn">다음</button></a>
+		</div>
+		<div class="gd-left gd-title gd-clear">일</div>
+		<div class="gd-left gd-title">월</div>
+		<div class="gd-left gd-title">화</div>
+		<div class="gd-left gd-title">수</div>
+		<div class="gd-left gd-title">목</div>
+		<div class="gd-left gd-title">금</div>
+		<div class="gd-left gd-title">토</div>
+		<!-- 5월달 lastDay=31 -->
+		<!--  -->
+		<div th:class="${index.index%7} == 0 ? 'gd-clear gd-left' : 'gd-left'" 
+			 th:each="i, index : ${#numbers.sequence(1, lastDay+firstDayOfWeek-1)}" >
+			 <div th:text="${i-(firstDayOfWeek-1)} > 0 ? ${i-(firstDayOfWeek-1)} : ''"></div>
+			 <div id="price"  th:each="dp : ${dayAndPriceList}">
+			 	<span th:if="${i-(firstDayOfWeek-1)} == ${dp.day}">
+			 		<span th:class="${dp.price} >= 0 ? 'gd-blue' : 'gd-red'" th:text="${dp.price}"></span>
+			 	</span>
+			 </div>
+		</div>
+	</div>
+</body>
+</html>

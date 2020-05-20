@@ -35,22 +35,57 @@
 		font-size: 1.25em;
 	}
 	#item a {
-		color: black;
+		color: #212121;
 		text-decoration: none;
 		font-weight: bold;
 	}
 	#item a:hover {
 		color: white;
 	}
+	#calendarContainer {
+		margin-top: 50px;
+		margin-left: 500px;
+		width: 1000px;
+		
+	}
+	h1 {
+		margin-left: 200px;
+		padding: 30px;
+	}
+	#calendarHeader{
+		display: flex;
+		justify-content: space-between;
+	}
+	.btnPreNext {
+		background-color: #e6e6e6;
+		margin: 0;
+		margin-bottom: 10px;
+		width: 100px;
+		border-radius: 20px;
+		font-size: 17px;
+		font-weight: bold;
+		color: #838383;
+	}
+	#calendarFooter {
+		disPlay: flex;
+		justify-content: space-between;
+	}
+	.insBtn {
+		background-color: #3498db;
+		width: 100px;
+		color: white;
+		font-weight: bold;
+	}
+	.sum {
+		font-size: 1.5em;
+	}
 	#sumPlus {
-		font-size: 1.25em;
+		font-size: 2em;
 		color: #4ea7e1;
-		text-align: right;
 	}
 	#sumMinus {
-		font-size: 1.25em;
+		font-size: 2em;
 		color: #e74c3c;
-		text-align: right;
 	}
 </style>
 </head>
@@ -59,13 +94,12 @@
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
 	<h1>2020년 가계부</h1>
-		<div>
-		<!--<h3 th:text="${day}"></h3>  -->
-		<h3 th:text="${day}"></h3>
-		<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)})}">이전</a>
-		<a th:href="@{/getCashListByDate(day=${day.plusDays(1)})}">다음</a>
-		</div>
-		<div class="container">
+		<div id="calendarContainer">
+			<div id="calendarHeader">
+				<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)})}"><button class="btn btnPreNext">이전</button></a>
+				<h2 th:text="${day}"></h2>
+				<a th:href="@{/getCashListByDate(day=${day.plusDays(1)})}"><button class="btn btnPreNext">다음</button></a>
+			</div>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -92,9 +126,15 @@
 					</tr>
 				</tbody>
 			</table>
-		<span><a th:href="@{/addCash}">입력</a></span>
-		<div id="sumPlus" th:if="${sumCash} > 0" th:text="'합계' + '+' + ${sumCash}"></div>
-		<div id="sumMinus" th:unless="${sumCash} > 0" th:text="'합계' + ${sumCash}"></div>
+			<div id="calendarFooter">
+				<span><a th:href="@{/addCash(day=${day})}"><button class="btn insBtn">입력</button></a></span>
+				<div>
+					<span class="sum">합계&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<span id="sumPlus" th:if="${sumCash} > 0" th:text="'+' + ${sumCash}"></span>
+					<span id="sumMinus" th:unless="${sumCash} > 0" th:text="${sumCash}"></span>
+					<span class="sum">원</span>
+				</div>
+			</div>
 		</div>
 </body>
 </html>

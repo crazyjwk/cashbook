@@ -3,6 +3,25 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gdu.cashbook.mapper.CashMapper">
+	<update id="updateCash" parameterType="com.gdu.cashbook.vo.Cash">
+		UPDATE cash SET 
+	
+	</update>
+	<select id="selectCategoryList" resultType="com.gdu.cashbook.vo.Category" parameterType="com.gdu.cashbook.vo.Category">
+		SELECT
+			category_name categoryName
+		FROM category
+	</select>
+	<select id="selectDayAndPrice" resultType="com.gdu.cashbook.vo.DayAndPrice" parameterType="java.util.Map">
+		SELECT
+			DAY(cash_date) AS day, 
+			SUM(CASE WHEN cash_kind='지출' THEN cash_price*-1 ELSE cash_price END) AS price
+		FROM cash
+		WHERE YEAR(cash_date) = #{year}
+		AND MONTH(cash_date) = #{month}
+		AND member_id = #{memberId}
+		GROUP BY DAY(cash_date)
+	</select>
 	<!-- 수입/지출 입력 -->
 	<insert id="insertCash" parameterType="com.gdu.cashbook.vo.Cash">
 		INSERT INTO cash
@@ -15,12 +34,12 @@
 			cash_place, 
 			cash_memo
 		)
-		VALUES(#{memberId}, NOW(), #{cashKind}, #{categoryName}, #{cashPrice}, #{cashPlace}, #{cashMemo})
+		VALUES(#{memberId}, #{cashDate}, #{cashKind}, #{categoryName}, #{cashPrice}, #{cashPlace}, #{cashMemo})
 	</insert>
 	<!-- 수입/지출 삭제 -->
 	<delete id="deleteCash" parameterType="int">
 		DELETE FROM cash
-		WHERE cash_no = #{cashNO}
+		WHERE cash_no = #{cashNo}
 	</delete>
 	<!-- 특정 회원, 날짜를 통해서 그날 수입/지출의 합계를 가지고 오는 쿼리 -->
 	<select id="selectSumCashByDate" resultType="Integer" parameterType="com.gdu.cashbook.vo.Cash">
