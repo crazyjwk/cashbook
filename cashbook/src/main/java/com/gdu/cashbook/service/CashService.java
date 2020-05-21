@@ -19,6 +19,16 @@ public class CashService {
 	@Autowired
 	private CashMapper cashMapper;
 	
+	public Integer getCashMonthSum(String memberId, int month) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("month", month);
+		Integer monthSum = cashMapper.selectCashMonthSum(map);
+		if(monthSum == null) {
+			monthSum = 0;
+		}
+		return monthSum;
+	}
 	public int modifyCash(Cash cash) {
 		return cashMapper.updateCash(cash);
 	}
@@ -50,6 +60,9 @@ public class CashService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Cash> cashList = cashMapper.selectCashListByDate(cash);
 		Integer sumCash = cashMapper.selectSumCashByDate(cash);
+		if(sumCash == null) {
+			sumCash = 0;
+		}
 		map.put("cashList", cashList);
 		map.put("sumCash", sumCash);
 		return map;

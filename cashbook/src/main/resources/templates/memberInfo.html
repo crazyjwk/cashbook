@@ -58,27 +58,48 @@
 	}
 	
 	#outBtn {
-		display: flex;
-		flex-direction: row-reverse;
-		margin: 20px 20px 20px 0;
+		height: 25px;
+		width: 60px;
+		padding: 0;
 		background-color: #e0e0e0;
 		color: #555755;
+		font-size: 12px;
+		
+	}
+	#outBtn:hover {
+		color: black;
+		background-color: #D5D5D5;
 	}
 	#defaultImg {
 		width: 170px;
 		height: 100px;
 	}
+	#container {
+		margin-top: 30px;
+		margin-left: 600px;
+		width: 700px;
+	}
+	h1 {
+		margin-right: 200px;
+		text-align: center;
+	}
+	#containerFooter {
+		display: flex;
+		justify-content: space-between;
+	}
 </style>
 </head>
 <body>
-		<div id="box">
-			<div id="list" th:include="/include/menu::sidemenu"></div>
-		</div>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
+	<div id="h1">
 		<h1>회원정보</h1>
-		<a th:href="@{/removeMember(memberId=${loginMember.memberId})}"><button id="outBtn" class="btn">회원탈퇴</button></a>
+	</div>
+	<div id="container">
 		<table id="table" class="table table-bordered">
 			<tr>
-				<th style="height:100px">사용자 이미지</th>
+				<th style="height:100px; padding-top: 55px;">사용자 이미지</th>
 				<td><img id="defaultImg" th:src="@{${'/upload/'+member.memberPic}}"></td>
 			</tr>
 			<tr>
@@ -106,7 +127,10 @@
 				<td th:text="${member.memberDate}"></td>
 			</tr>
 		</table>
-		<a th:href="@{/modifyMemberInfo(memberId=${loginMember.memberId})}"><button class="btn btn-primary">정보수정</button></a>
-		
+		<div id="containerFooter">
+			<a th:href="@{/removeMember(memberId=${loginMember.memberId})}"><button id="outBtn" class="btn">회원탈퇴</button></a>
+			<a th:href="@{/modifyMemberInfo(memberId=${loginMember.memberId})}"><button class="btn btn-primary">정보수정</button></a>
+		</div>
+	</div>
 </body>
 </html>

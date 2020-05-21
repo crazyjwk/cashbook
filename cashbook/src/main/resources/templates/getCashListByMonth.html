@@ -94,6 +94,17 @@
 	.gd-red {
 		color: #e7524e;
 	}
+	.sum {
+		font-size: 1.5em;
+	}
+	#sumPlus {
+		font-size: 2em;
+		color: #4ea7e1;
+	}
+	#sumMinus {
+		font-size: 2em;
+		color: #e74c3c;
+	}
 </style>
 </head>
 <body>
@@ -103,9 +114,11 @@
 	<h1>월별 가계부 관리</h1>
 	<div id="calendarContainer">
 		<div id="calendarHeader">
-			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(-1)})}"><button class="btn">이전</button></a>
+			<a th:href="@{/getCashListByMonth(day=${day.plusYears(-1)})}"><button class="btn">&#60;&#60;</button></a>
+			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(-1)})}"><button class="btn">&#60;</button></a>
 			<h2 th:text="${year} + '년 ' + ${month} + '월'"></h2>
-			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(1)})}"><button class="btn">다음</button></a>
+			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(1)})}"><button class="btn">&#62;</button></a>
+			<a th:href="@{/getCashListByMonth(day=${day.plusYears(1)})}"><button class="btn">&#62;&#62;</button></a>
 		</div>
 		<div class="gd-left gd-title gd-clear">일</div>
 		<div class="gd-left gd-title">월</div>
@@ -126,5 +139,13 @@
 			 </div>
 		</div>
 	</div>
+		<div id="calendarFooter">
+			<div>
+				<span class="sum">합계&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span id="sumPlus" th:if="${monthSum} > 0" th:text="'+' + ${monthSum}"></span>
+				<span id="sumMinus" th:unless="${monthSum} > 0" th:text="${monthSum}"></span>
+				<span class="sum">원</span>
+			</div>
+		</div>
 </body>
 </html>

@@ -3,6 +3,23 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gdu.cashbook.mapper.CashMapper">
+	<select id="selectMonthSumList">
+		SELECT 
+			MONTH(cash_date), 
+			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END)
+		FROM cash
+		WHERE member_id='12344' 
+		AND MONTH(cash_date)
+		GROUP BY MONTH(cash_date)
+	</select>
+	<!-- 월별 합계 쿼리 -->
+	<select id="selectCashMonthSum" resultType="Integer" parameterType="HashMap">
+		SELECT 
+			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END)
+		FROM cash
+		WHERE member_id=#{memberId}
+		AND MONTH(cash_date)=#{month}
+	</select>
 	<update id="updateCash" parameterType="com.gdu.cashbook.vo.Cash">
 		UPDATE cash 
 		SET 

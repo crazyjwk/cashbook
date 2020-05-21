@@ -87,11 +87,17 @@ public class CashController {
 		
 		List<DayAndPrice> dayAndPriceList = cashService.getCashAndPriceList(memberId, year, month);
 		
+		int monthSum = cashService.getCashMonthSum(memberId, month);
+		System.out.println(monthSum + "<-- monthSum");
+		
+		
 		model.addAttribute("day", day); 
 		model.addAttribute("year", calendarDay.get(Calendar.YEAR));
 		model.addAttribute("month", calendarDay.get(Calendar.MONTH)+1); // 현재 월
 		model.addAttribute("lastDay", calendarDay.getActualMaximum(Calendar.DATE)); // 현재 월의 마지막 일
 		model.addAttribute("dayAndPriceList", dayAndPriceList);
+		model.addAttribute("monthSum", monthSum);
+		
 		
 		System.out.println(dayAndPriceList);
 		for(DayAndPrice dp : dayAndPriceList) {
@@ -171,17 +177,14 @@ public class CashController {
 //		String strToday = sdf.format(day);
 //		
 //		System.out.println(sdf.format(day) + " <-- today");
-		
 		Cash cash = new Cash();
 		cash.setMemberId(memberId);
 		cash.setCashDate(day);
 		
 		Map<String, Object> list = cashService.getCashListByDate(cash);
+		int sumCash = (Integer)list.get("sumCash");
 		
-		Integer sumCash = (Integer)list.get("sumCash");
-		if(sumCash == null) {
-			sumCash = 0;
-		}
+		model.addAttribute("year", day.getYear());
 		model.addAttribute("day", day);
 		model.addAttribute("cashList", list.get("cashList"));
 		model.addAttribute("sumCash", sumCash);

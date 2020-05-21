@@ -90,18 +90,29 @@
 		font-size: 2em;
 		color: #e74c3c;
 	}
+	.udLink:hover {
+		text-decoration: none;
+	}
+	.update:hover {
+		color: green;
+	}
+	.delete:hover {
+		color: red;
+	}
 </style>
 </head>
 <body>
 	<div id="box">
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
-	<h1>2020년 가계부</h1>
+	<h1 th:text="${year} + '년  가계부'"></h1>
 		<div id="calendarContainer">
 			<div id="calendarHeader">
-				<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)})}"><button class="btn btnPreNext">이전</button></a>
+			<a th:href="@{/getCashListByDate(day=${day.plusMonths(-1)})}"><button class="btn btnPreNext">&#60;&#60;</button></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)})}"><button class="btn btnPreNext">&#60;</button></a>
 				<h2 th:text="${day}"></h2>
-				<a th:href="@{/getCashListByDate(day=${day.plusDays(1)})}"><button class="btn btnPreNext">다음</button></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusDays(1)})}"><button class="btn btnPreNext">&#62;</button></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusMonths(1)})}"><button class="btn btnPreNext">&#62;&#62;</button></a>
 			</div>
 			<table class="table table-bordered">
 				<thead>
@@ -111,8 +122,8 @@
 						<th>지출</th>
 						<th>장소</th>
 						<th>메모</th>
-						<th>삭제</th>
 						<th>수정</th>
+						<th>삭제</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -124,8 +135,8 @@
 						<td th:unless="${cash.cashKind} == '지출'"></td>
 						<td th:text="${cash.cashPlace}"></td>
 						<td th:text="${cash.cashMemo}"></td>
-						<td><a th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day})}">수정</a></td>
-						<td><a th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day})}">삭제</a></td>
+						<td><a class="update udLink" th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day})}">수정</a></td>
+						<td><a class="delete udLink" th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day})}">삭제</a></td>
 					</tr>
 				</tbody>
 			</table>

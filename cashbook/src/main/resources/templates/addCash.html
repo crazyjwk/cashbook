@@ -101,9 +101,13 @@
 		<div id="flexContainer">
 			<h2>수입/지출 입력</h2>
 		</div>
-		<form id="cashForm" th:action="@{/addCash(day=${day})}" method="post">
+		<form id="cashForm" th:action="@{/addCash}" method="post">
 			<input type="hidden" name="memberId" th:value="${memberId}">
 			<table class="table table-bordered">
+				<tr>
+					<th>날짜</th>
+					<td><input type="date" name="day" th:value="${day}"></td>
+				</tr>
 				<tr>
 					<th>카테고리</th>
 					<td>
