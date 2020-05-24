@@ -31,15 +31,18 @@
 		flex-direction: column;
 		justify-content: space-around;
 	}
-	#item {
+	.item {
 		font-size: 1.25em;
 	}
-	#item a {
+	.item a {
 		color: #212121;
 		text-decoration: none;
 		font-weight: bold;
 	}
-	#item a:hover {
+	#cashbookDate a{
+		color: white;
+	}
+	.item a:hover {
 		color: white;
 	}
 	#calendarContainer {
@@ -60,7 +63,7 @@
 		background-color: #e6e6e6;
 		margin: 0;
 		margin-bottom: 10px;
-		width: 100px;
+		width: 60px;
 		border-radius: 20px;
 		font-size: 17px;
 		font-weight: bold;
@@ -99,6 +102,9 @@
 	.delete:hover {
 		color: red;
 	}
+	#day:hover{
+		text-decoration: none;
+	}
 </style>
 </head>
 <body>
@@ -110,7 +116,7 @@
 			<div id="calendarHeader">
 			<a th:href="@{/getCashListByDate(day=${day.plusMonths(-1)})}"><button class="btn btnPreNext">&#60;&#60;</button></a>
 				<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)})}"><button class="btn btnPreNext">&#60;</button></a>
-				<h2 th:text="${day}"></h2>
+				<a id="day" th:href="@{/getCashListByMonth(day=${day})}"><h2 th:text="${day}"></h2></a>
 				<a th:href="@{/getCashListByDate(day=${day.plusDays(1)})}"><button class="btn btnPreNext">&#62;</button></a>
 				<a th:href="@{/getCashListByDate(day=${day.plusMonths(1)})}"><button class="btn btnPreNext">&#62;&#62;</button></a>
 			</div>

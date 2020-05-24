@@ -4,7 +4,7 @@ public class Cashbook {
 	private int cashbookNo;
 	private String memberId;
 	private String cashbookTitle;
-	private String cashbookYear;
+	private String cashbookDate;
 	private String cashbookGoal;
 	private String cashbookImg;
 	public int getCashbookNo() {
@@ -26,10 +26,10 @@ public class Cashbook {
 		this.cashbookTitle = cashbookTitle;
 	}
 	public String getCashbookYear() {
-		return cashbookYear;
+		return cashbookDate;
 	}
-	public void setCashbookYear(String cashbookYear) {
-		this.cashbookYear = cashbookYear;
+	public void setCashbookYear(String cashbookDate) {
+		this.cashbookDate = cashbookDate;
 	}
 	public String getCashbookGoal() {
 		return cashbookGoal;
@@ -46,6 +46,6 @@ public class Cashbook {
 	@Override
 	public String toString() {
 		return "Cashbook [cashbookNo=" + cashbookNo + ", memberId=" + memberId + ", cashbookTitle=" + cashbookTitle
-				+ ", cashbookYear=" + cashbookYear + ", cashbookGoal=" + cashbookGoal + "]";
+				+ ", cashbookDate=" + cashbookDate + ", cashbookGoal=" + cashbookGoal + "]";
 	}
 }

@@ -11,8 +11,47 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<style>
+	html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		width: 200px;
+		float: left;
+		background-color: #3498db;
+	}
+	#list {
+		margin-top: 20px;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+	#item {
+		font-size: 1.25em;
+	}
+	#item a {
+		color: #212121;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	#item a:hover {
+		color: white;
+	}
+	h1 {
+		margin-left: 200px;
+		padding: 50px;
+	}
+</style>
 </head>
 <body>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
 	<h1>가계부 생성</h1>
 	
 </body>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Cashbook List</title>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <!-- jQuery library -->
@@ -34,15 +34,18 @@
 		flex-direction: column;
 		justify-content: space-around;
 	}
-	#item {
+	.item {
 		font-size: 1.25em;
 	}
-	#item a {
+	.item a {
 		color: #212121;
 		text-decoration: none;
 		font-weight: bold;
 	}
-	#item a:hover {
+	.item a:hover {
+		color: white;
+	}
+	#cashbook a {
 		color: white;
 	}
 	h1 {
@@ -74,10 +77,11 @@
 		<div id="container">
 			<div id="addCashbook"><a th:href="@{/addCashbook}">가계부 생성</a></div>
 			<div id="block" th:each="cbl : ${cashbookList}">
-				<img th:src="@{${'/upload/' + cbl.cashbookImg}}">
+				<a th:href="@{/getCashListByDate(day=${cbl.cashbookYear})}"><img th:src="@{${'/upload/' + cbl.cashbookImg}}"></a>
 				<div id="cashbookTitle" th:text="${cbl.cashbookTitle}"></div>
 			</div>
 		</div>
-		
+		<div th:if="${currentPage} > 1"><a th:href="@{/cashbookList(currentPage=${currentPage}-1)}">이전</a></div>
+		<div th:if="${currentPage} < ${lastPage}"><a th:href="@{/cashbookList(currentPage=${currentPage}+1)}">다음</a></div>
 </body>
 </html>

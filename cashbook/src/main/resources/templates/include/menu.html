@@ -9,13 +9,13 @@
 <body>
 	<!-- fragments1 -->
 	<div th:fragment="sidemenu">
-		<div id="item"><span th:text="${session.loginMember.memberId}"></span>님</div>
-		<div id="item"><a th:href="@{/home}">홈</a></div>
-		<div id="item"><a th:href="@{/memberInfo}">회원정보</a></div>
-		<div id="item"><a th:href="@{/cashbookList}">가계부 관리</a></div>
-		<div id="item"><a th:href="@{/getCashListByDate}">일별 가계부 관리</a></div>
-		<div id="item"><a th:href="@{/getCashListByMonth}">월별 가계부 관리</a></div>
-		<div id="item"><a th:href="@{/logout}">로그아웃</a></div>
+		<div class="item" id="member"><span th:text="${session.loginMember.memberId}"></span>님</div>
+		<div class="item" id="home"><a th:href="@{/home}">홈</a></div>
+		<div class="item" id="memberInfo"><a th:href="@{/memberInfo}">회원정보</a></div>
+		<div class="item" id="cashbook"><a th:href="@{/cashbookList}">가계부 관리</a></div>
+		<div class="item" id="cashbookDate"><a th:href="@{/getCashListByDate}">일별 가계부 관리</a></div>
+		<div class="item" id="cashbookMonth"><a th:href="@{/getCashListByMonth}">월별 가계부 관리</a></div>
+		<div class="item" id="logout"><a th:href="@{/logout}">로그아웃</a></div>
 	</div> 
 	<!-- /include/menu::sidemenu -->
 	<!-- fragments2 -->

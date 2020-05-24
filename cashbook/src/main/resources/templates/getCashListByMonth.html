@@ -31,21 +31,24 @@
 		flex-direction: column;
 		justify-content: space-around;
 	}
-	#item {
+	.item {
 		font-size: 1.25em;
 	}
-	#item a {
+	.item a {
 		color: #212121;
 		text-decoration: none;
 		font-weight: bold;
 	}
-	#item a:hover {
+	.item a:hover {
+		color: white;
+	}
+	#cashbookMonth a {
 		color: white;
 	}
 	#calendarContainer {
 		float: left;
-		margin-top: 50px;
-		margin-left: 400px;
+		margin-top: 20px;
+		margin-left: 250px;
 	}
 	#calendarHeader{
 		display: flex;
@@ -58,7 +61,7 @@
 	.btn {
 		background-color: #e6e6e6;
 		margin: 10px;
-		width: 100px;
+		width: 60px;
 		border-radius: 20px;
 		font-size: 17px;
 		font-weight: bold;
@@ -66,12 +69,12 @@
 	}
 	.gd-left {
 		float: left;
-		margin-right: 10px;
-		margin-bottom: 10px;
-		margin-left: 10px;
+		margin-right: 5px;
+		margin-bottom: 5px;
+		margin-left: 5px;
 		border-radius: 5px;
-		width: 100px;
-		height: 100px;
+		width: 80px;
+		height: 80px;
 		border: 1px solid black;
 	}
 	div.gd-clear {
@@ -105,6 +108,13 @@
 		font-size: 2em;
 		color: #e74c3c;
 	}
+	#calendarSum {
+		display: flex;
+		flex-direction: row-reverse; 
+	}
+	#day:hover {
+		text-decoration: none;
+	}
 </style>
 </head>
 <body>
@@ -120,6 +130,14 @@
 			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(1)})}"><button class="btn">&#62;</button></a>
 			<a th:href="@{/getCashListByMonth(day=${day.plusYears(1)})}"><button class="btn">&#62;&#62;</button></a>
 		</div>
+		<div id="calendarSum">
+			<div>
+				<span class="sum">합계&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span id="sumPlus" th:if="${monthSum} > 0" th:text="'+' + ${monthSum}"></span>
+				<span id="sumMinus" th:unless="${monthSum} > 0" th:text="${monthSum}"></span>
+				<span class="sum">원</span>
+			</div>
+		</div>
 		<div class="gd-left gd-title gd-clear">일</div>
 		<div class="gd-left gd-title">월</div>
 		<div class="gd-left gd-title">화</div>
@@ -134,18 +152,10 @@
 			 <div th:text="${i-(firstDayOfWeek-1)} > 0 ? ${i-(firstDayOfWeek-1)} : ''"></div>
 			 <div id="price"  th:each="dp : ${dayAndPriceList}">
 			 	<span th:if="${i-(firstDayOfWeek-1)} == ${dp.day}">
-			 		<span th:class="${dp.price} >= 0 ? 'gd-blue' : 'gd-red'" th:text="${dp.price}"></span>
+			 		<a id="day" th:href="@{/getCashListByDate(day=${dp.date})}"><span th:class="${dp.price} >= 0 ? 'gd-blue' : 'gd-red'" th:text="${dp.price}"></span></a>
 			 	</span>
 			 </div>
 		</div>
 	</div>
-		<div id="calendarFooter">
-			<div>
-				<span class="sum">합계&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				<span id="sumPlus" th:if="${monthSum} > 0" th:text="'+' + ${monthSum}"></span>
-				<span id="sumMinus" th:unless="${monthSum} > 0" th:text="${monthSum}"></span>
-				<span class="sum">원</span>
-			</div>
-		</div>
 </body>
 </html>

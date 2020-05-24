@@ -9,7 +9,7 @@
 		(
 			member_id,
 			cashbook_title,
-			cashbook_year,
+			cashbook_date,
 			cashbook_goal
 		)
 		VALUES (?, ?, ?, ?)
@@ -27,7 +27,7 @@
 			cashbook_no cashbookNo,
 			member_id memberId,
 			cashbook_title cashbookTitle,
-			cashbook_year cashbookYear,
+			cashbook_date cashbookDate,
 			cashbook_goal cashbookGoal,
 			cashbook_img cashbookImg
 		FROM cashbook
@@ -81,7 +81,8 @@
 	<select id="selectDayAndPrice" resultType="com.gdu.cashbook.vo.DayAndPrice" parameterType="java.util.Map">
 		SELECT
 			DAY(cash_date) AS day, 
-			SUM(CASE WHEN cash_kind='지출' THEN cash_price*-1 ELSE cash_price END) AS price
+			SUM(CASE WHEN cash_kind='지출' THEN cash_price*-1 ELSE cash_price END) AS price,
+			cash_date AS date
 		FROM cash
 		WHERE YEAR(cash_date) = #{year}
 		AND MONTH(cash_date) = #{month}

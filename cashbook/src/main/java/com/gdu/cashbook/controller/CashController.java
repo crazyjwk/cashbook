@@ -35,7 +35,8 @@ public class CashController {
 	
 	// 가계부 리스트
 	@GetMapping("/cashbookList")
-	public String cashbookList(Model model, HttpSession session, @RequestParam(value="currentPage", defaultValue="1" ) int currentPage) {
+	public String cashbookList(Model model, HttpSession session, @RequestParam(value="currentPage", defaultValue="1" ) int currentPage,
+			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
@@ -44,6 +45,7 @@ public class CashController {
 		int lastPage = cashService.getLastPage(memberId, rowPerPage); 
 		List<Cashbook> list = cashService.getCashbookList(memberId, currentPage, rowPerPage);
 		
+		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("cashbookList", list);
 		model.addAttribute("lastPage", lastPage);
 		return "cashbookList";
@@ -202,7 +204,7 @@ public class CashController {
 		Cash cash = new Cash();
 		cash.setMemberId(memberId);
 		cash.setCashDate(day);
-		
+
 		Map<String, Object> list = cashService.getCashListByDate(cash);
 		int sumCash = (Integer)list.get("sumCash");
 		
