@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gdu.cashbook.service.CashService;
 import com.gdu.cashbook.vo.Cash;
+import com.gdu.cashbook.vo.Cashbook;
 import com.gdu.cashbook.vo.Category;
 import com.gdu.cashbook.vo.DayAndPrice;
 import com.gdu.cashbook.vo.LoginMember;
@@ -26,6 +27,27 @@ public class CashController {
 	@Autowired
 	private CashService cashService;
 	
+	// 가계부 생성
+	@GetMapping("/addCashbook")
+	public String addCashbook(Model model, HttpSession session) {
+		return "";
+	}
+	
+	// 가계부 리스트
+	@GetMapping("/cashbookList")
+	public String cashbookList(Model model, HttpSession session, @RequestParam(value="currentPage", defaultValue="1" ) int currentPage) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		int rowPerPage = 5;
+		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
+		int lastPage = cashService.getLastPage(memberId, rowPerPage); 
+		List<Cashbook> list = cashService.getCashbookList(memberId, currentPage, rowPerPage);
+		
+		model.addAttribute("cashbookList", list);
+		model.addAttribute("lastPage", lastPage);
+		return "cashbookList";
+	}
 	@GetMapping("/modifyCash")
 	public String modifyCash(Model model, HttpSession session, @RequestParam(value="cashNo") int cashNo,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
@@ -87,7 +109,7 @@ public class CashController {
 		
 		List<DayAndPrice> dayAndPriceList = cashService.getCashAndPriceList(memberId, year, month);
 		
-		int monthSum = cashService.getCashMonthSum(memberId, month);
+		int monthSum = cashService.getCashMonthSum(memberId, year, month);
 		System.out.println(monthSum + "<-- monthSum");
 		
 		
