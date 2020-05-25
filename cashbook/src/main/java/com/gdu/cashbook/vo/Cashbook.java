@@ -25,10 +25,10 @@ public class Cashbook {
 	public void setCashbookTitle(String cashbookTitle) {
 		this.cashbookTitle = cashbookTitle;
 	}
-	public String getCashbookYear() {
+	public String getCashbookDate() {
 		return cashbookDate;
 	}
-	public void setCashbookYear(String cashbookDate) {
+	public void setCashbookDate(String cashbookDate) {
 		this.cashbookDate = cashbookDate;
 	}
 	public String getCashbookGoal() {

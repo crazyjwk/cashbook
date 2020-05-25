@@ -77,7 +77,7 @@
 		<div id="container">
 			<div id="addCashbook"><a th:href="@{/addCashbook}">가계부 생성</a></div>
 			<div id="block" th:each="cbl : ${cashbookList}">
-				<a th:href="@{/getCashListByDate(day=${cbl.cashbookYear})}"><img th:src="@{${'/upload/' + cbl.cashbookImg}}"></a>
+				<a th:href="@{/getCashListByDate(day=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')},date=${cbl.cashbookDate})}"><img th:src="@{${'/upload/' + cbl.cashbookImg}}"></a>
 				<div id="cashbookTitle" th:text="${cbl.cashbookTitle}"></div>
 			</div>
 		</div>

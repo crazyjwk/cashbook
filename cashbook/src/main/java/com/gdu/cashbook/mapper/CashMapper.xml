@@ -34,12 +34,13 @@
 		WHERE member_id=#{memberId}
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
-	<select id="selectMonthSumList">
+	<select id="selectMonthSumList" resultType="com.gdu.cashbook.vo.MonthAndPrice" parameterType="HashMap">
 		SELECT 
-			MONTH(cash_date), 
-			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END)
+			MONTH(cash_date) month, 
+			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END) price
 		FROM cash
-		WHERE member_id='12344' 
+		WHERE member_id=#{memberId} 
+		AND YEAR(cash_date)= LEFT(#{day}, 4)
 		AND MONTH(cash_date)
 		GROUP BY MONTH(cash_date)
 	</select>

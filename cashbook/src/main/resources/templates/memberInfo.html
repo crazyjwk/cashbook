@@ -76,20 +76,23 @@
 	}
 	#defaultImg {
 		width: 170px;
-		height: 100px;
+		height: 170px;
 	}
 	#container {
 		margin-top: 30px;
 		margin-left: 600px;
 		width: 700px;
+		
 	}
 	h1 {
 		margin-right: 200px;
+		padding-top: 50px;
 		text-align: center;
 	}
 	#containerFooter {
 		display: flex;
 		justify-content: space-between;
+		
 	}
 	.btn-primary {
 		background-color: #3498db;
@@ -105,10 +108,9 @@
 	<div id="box">
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
-	<div id="h1">
-		<h1>회원정보</h1>
-	</div>
-	<div id="container">
+	
+	<h1>회원정보</h1>
+	<div class="container container-fluid" id="container">
 		<table id="table" class="table table-bordered">
 			<tr>
 				<th style="height:100px; padding-top: 55px;">사용자 이미지</th>

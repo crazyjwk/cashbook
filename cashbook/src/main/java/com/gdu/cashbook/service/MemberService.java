@@ -29,11 +29,11 @@ public class MemberService {
 	@Autowired
 	private JavaMailSender javaMailSender; //bean생성 -> @Component
 	
-	@Value("C:\\java\\SPRING_WORK\\maven.1590293548484\\cashbook\\src\\main\\resources\\static\\upload")
-	private String path;
-	
-//	@Value("D:\\git-cashbook\\cashbook\\src\\main\\resources\\static\\upload\\")
+//	@Value("C:\\java\\SPRING_WORK\\maven.1590293548484\\cashbook\\src\\main\\resources\\static\\upload")
 //	private String path;
+	
+	@Value("D:\\git-cashbook\\maven.1590371000501\\cashbook\\src\\main\\resources\\static\\upload")
+	private String path;
 	
 	public int getMemberPw(Member member) { // id & pw만 들어있다.
 		// pw도 추가해주자(UUID 라이브러리 사용)

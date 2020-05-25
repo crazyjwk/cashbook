@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style>
+	html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		margin-top: 0;
+		width: 200px;
+		float: left;
+		background-color: #3498db;
+	}
+	#list {
+		margin-top: 20px;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+	.item {
+		font-size: 1.25em;
+	}
+	.item a {
+		color: black;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	.item a:hover {
+		color: white;
+	}
+</style>
+</head>
+<body>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
+	<div class="container container-fluid">
+		<h1>월별 비교</h1>
+			<table class="table table-bordered">
+				<tr>
+					<td th:each="i: ${#numbers.sequence(1, 12)}" th:text="${i +'월'}"></td>
+				</tr>
+				<tr>
+					<td th:each="mp: ${list}" th:text="${mp.month} == null ? '0' : ${mp.price}"></td>
+				</tr>
+			</table>
+	</div>
+</body>
+</html>

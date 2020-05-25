@@ -9,9 +9,11 @@ import com.gdu.cashbook.vo.Cash;
 import com.gdu.cashbook.vo.Cashbook;
 import com.gdu.cashbook.vo.Category;
 import com.gdu.cashbook.vo.DayAndPrice;
+import com.gdu.cashbook.vo.MonthAndPrice;
 
 @Mapper
 public interface CashMapper {
+	public List<MonthAndPrice> selectMonthSumList(Map<String, Object> map);
 	public int insertCashbook(Cashbook cashbook);
 	public int cashbookTotalRow(String memberId);
 	public List<Cashbook> selectCashbookList(Map<String, Object> map);

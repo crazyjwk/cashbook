@@ -21,12 +21,27 @@ import com.gdu.cashbook.vo.Cashbook;
 import com.gdu.cashbook.vo.Category;
 import com.gdu.cashbook.vo.DayAndPrice;
 import com.gdu.cashbook.vo.LoginMember;
+import com.gdu.cashbook.vo.MonthAndPrice;
 
 @Controller
 public class CashController {
 	@Autowired
 	private CashService cashService;
 	
+	
+	@GetMapping("/compareToMonth")
+	public String compareToMonth (Model model, HttpSession session, 
+			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
+		List<MonthAndPrice> list = cashService.getMonthSumList(memberId, day);
+		
+		System.out.println(list + "<-- list asdasdasd");
+		model.addAttribute("list", list);
+		return "compareToMonth";
+	}
 	// 가계부 생성
 	@GetMapping("/addCashbook")
 	public String addCashbook(Model model, HttpSession session) {
@@ -185,11 +200,15 @@ public class CashController {
 	}
 	@GetMapping("/getCashListByDate")
 	public String getCashListByDate(Model model, HttpSession session, 
-			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
+			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day,
+			@RequestParam(value="date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 			// RequestParam -> DateTimeFormat으로 자동 형변환
+		
+		System.out.println(date + " <-- year asdasdasdasd");
 		if(day == null) {
 			day = LocalDate.now();
 		}
+		
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
@@ -204,7 +223,7 @@ public class CashController {
 		Cash cash = new Cash();
 		cash.setMemberId(memberId);
 		cash.setCashDate(day);
-
+		
 		Map<String, Object> list = cashService.getCashListByDate(cash);
 		int sumCash = (Integer)list.get("sumCash");
 		

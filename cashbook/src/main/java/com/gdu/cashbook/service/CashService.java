@@ -1,5 +1,6 @@
 package com.gdu.cashbook.service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,12 +14,22 @@ import com.gdu.cashbook.vo.Cash;
 import com.gdu.cashbook.vo.Cashbook;
 import com.gdu.cashbook.vo.Category;
 import com.gdu.cashbook.vo.DayAndPrice;
+import com.gdu.cashbook.vo.MonthAndPrice;
 
 @Service
 @Transactional
 public class CashService {
 	@Autowired
 	private CashMapper cashMapper;
+	
+	public List<MonthAndPrice> getMonthSumList(String memberId, LocalDate day) {
+		String day2 = day.toString();
+		System.out.println(day2 +" <--asdasdasddddddd");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("day", day2);
+		return cashMapper.selectMonthSumList(map);
+	}
 	
 	public int addCashbook(Cashbook cashbook) {
 		return cashMapper.insertCashbook(cashbook);
