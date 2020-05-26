@@ -3,6 +3,15 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gdu.cashbook.mapper.CashMapper">
+	<!-- 월별비교 월의 총 합계 구하는 쿼리 -->
+	<select id="selectTotalMonthSum" resultType="Integer" parameterType="HashMap">
+		SELECT 
+			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END)
+		FROM cash
+		WHERE member_id=#{memberId} 
+		AND YEAR(cash_date) = YEAR(#{day})
+		GROUP BY YEAR(cash_date) = YEAR(#{day})
+	</select>
 	<!-- 가계부 생성 쿼리 -->
 	<insert id="insertCashBook" parameterType="com.gdu.cashbook.vo.Cashbook">
 		INSERT INTO cashbook
@@ -12,7 +21,7 @@
 			cashbook_date,
 			cashbook_goal
 		)
-		VALUES (?, ?, ?, ?)
+		VALUES (#{memberId}, #{cashbookTitle}, #{cashbookDate}, #{cashbookGoal})
 	</insert>
 	<!-- total row를 구하는 쿼리 -->
 	<select id="cashbookTotalRow" resultType="int" parameterType="String">
@@ -34,18 +43,19 @@
 		WHERE member_id=#{memberId}
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
-	<select id="selectMonthSumList" resultType="com.gdu.cashbook.vo.MonthAndPrice" parameterType="HashMap">
+	<!-- 월별 비교에서 월별 합계 -->
+	<select id="selectDaySum" resultType="com.gdu.cashbook.vo.dayAndMonthAndYearAndPrice" parameterType="HashMap">
 		SELECT 
 			MONTH(cash_date) month, 
 			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END) price
 		FROM cash
 		WHERE member_id=#{memberId} 
-		AND YEAR(cash_date)= LEFT(#{day}, 4)
+		AND YEAR(cash_date)= YEAR(#{day})
 		AND MONTH(cash_date)
 		GROUP BY MONTH(cash_date)
 	</select>
-	<!-- 월별 합계 쿼리 -->
-	<select id="selectCashMonthSum" resultType="Integer" parameterType="HashMap">
+	<!-- 달력에 일의 총 합계를 -->
+	<select id="selectTotalDateSum" resultType="Integer" parameterType="HashMap">
 		SELECT 
 			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END)
 		FROM cash
@@ -53,6 +63,7 @@
 		AND YEAR(cash_date)=#{year}
 		AND MONTH(cash_date)=#{month}
 	</select>
+	<!-- 수입/지출 수정 쿼리 -->
 	<update id="updateCash" parameterType="com.gdu.cashbook.vo.Cash">
 		UPDATE cash 
 		SET 
@@ -64,6 +75,7 @@
 			cash_memo=#{cashMemo}
 		WHERE cash_no=#{cashNo}
 	</update>
+	<!-- 수입/지출 수정하기 위해 가지고 오는 쿼리 -->
 	<select id="selectCashOne" resultType="com.gdu.cashbook.vo.Cash" parameterType="int">
 		SELECT 
 			member_id memberId,
@@ -79,7 +91,8 @@
 			category_name categoryName
 		FROM category
 	</select>
-	<select id="selectDayAndPrice" resultType="com.gdu.cashbook.vo.DayAndPrice" parameterType="java.util.Map">
+	<!-- 달력에 일별 합계 -->
+	<select id="selectDayAndPrice" resultType="com.gdu.cashbook.vo.dayAndMonthAndYearAndPrice" parameterType="java.util.Map">
 		SELECT
 			DAY(cash_date) AS day, 
 			SUM(CASE WHEN cash_kind='지출' THEN cash_price*-1 ELSE cash_price END) AS price,

@@ -19,9 +19,8 @@ import com.gdu.cashbook.service.CashService;
 import com.gdu.cashbook.vo.Cash;
 import com.gdu.cashbook.vo.Cashbook;
 import com.gdu.cashbook.vo.Category;
-import com.gdu.cashbook.vo.DayAndPrice;
 import com.gdu.cashbook.vo.LoginMember;
-import com.gdu.cashbook.vo.MonthAndPrice;
+import com.gdu.cashbook.vo.dayAndMonthAndYearAndPrice;
 
 @Controller
 public class CashController {
@@ -36,22 +35,37 @@ public class CashController {
 			return "redirect:/index";
 		}
 		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
-		List<MonthAndPrice> list = cashService.getMonthSumList(memberId, day);
+		Map<String, Object> map = cashService.getTotalDaySumAndTotalMonthSum(memberId, day);
 		
-		System.out.println(list + "<-- list asdasdasd");
-		model.addAttribute("list", list);
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("totalMonthSum", map.get("totalMonthSum"));
+		System.out.println(map.get("totalMonthSum") + "<--- totalMonthSum");
 		return "compareToMonth";
 	}
 	// 가계부 생성
 	@GetMapping("/addCashbook")
 	public String addCashbook(Model model, HttpSession session) {
-		return "";
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		
+		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
+		model.addAttribute("memberId", memberId);
+		return "addCashbook";
 	}
 	
+	@PostMapping("/addCashbook")
+	public String addCashbook(HttpSession session, Cashbook cashbook) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/index";
+		}
+		int result = cashService.addCashbook(cashbook);
+		System.out.println(result + "<-- 생성확인");
+		return "redirect:/cashbookList?memberId=" + cashbook.getMemberId();
+	}
 	// 가계부 리스트
 	@GetMapping("/cashbookList")
-	public String cashbookList(Model model, HttpSession session, @RequestParam(value="currentPage", defaultValue="1" ) int currentPage,
-			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
+	public String cashbookList(Model model, HttpSession session, @RequestParam(value="currentPage", defaultValue="1" ) int currentPage) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
@@ -124,7 +138,7 @@ public class CashController {
 		int month = calendarDay.get(Calendar.MONTH)+1;
 		System.out.println(year + "<--- year     "  + month + "<--- month");
 		
-		List<DayAndPrice> dayAndPriceList = cashService.getCashAndPriceList(memberId, year, month);
+		List<dayAndMonthAndYearAndPrice> dayAndPriceList = cashService.getCashAndPriceList(memberId, year, month);
 		
 		int monthSum = cashService.getCashMonthSum(memberId, year, month);
 		System.out.println(monthSum + "<-- monthSum");
@@ -139,7 +153,7 @@ public class CashController {
 		
 		
 		System.out.println(dayAndPriceList);
-		for(DayAndPrice dp : dayAndPriceList) {
+		for(dayAndMonthAndYearAndPrice dp : dayAndPriceList) {
 			System.out.println(dp);
 		}
 		
@@ -201,14 +215,16 @@ public class CashController {
 	@GetMapping("/getCashListByDate")
 	public String getCashListByDate(Model model, HttpSession session, 
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day,
-			@RequestParam(value="date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+			@RequestParam(value="year", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate year) {
 			// RequestParam -> DateTimeFormat으로 자동 형변환
 		
-		System.out.println(date + " <-- year asdasdasdasd");
+		System.out.println(year + " <-- year asdasdasdasd");
 		if(day == null) {
 			day = LocalDate.now();
 		}
-		
+		if(year != null) {
+			day= LocalDate.of(year.getYear(), day.getMonth(), day.getDayOfMonth());
+		}
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
@@ -225,7 +241,7 @@ public class CashController {
 		cash.setCashDate(day);
 		
 		Map<String, Object> list = cashService.getCashListByDate(cash);
-		int sumCash = (Integer)list.get("sumCash");
+		int sumCash = (int)list.get("sumCash");
 		
 		model.addAttribute("year", day.getYear());
 		model.addAttribute("day", day);

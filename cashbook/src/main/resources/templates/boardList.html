@@ -43,33 +43,14 @@
 	.item a:hover {
 		color: white;
 	}
-	table {
-		text-align: center;
+	#board a {
+		color: white;
 	}
 	th {
 		background-color: #eaeaea;
 	}
-	.gd-blue {
-		color: #89d1f9;
-		font-size: 17px;
-	}
-	.gd-red {
-		color: #e7524e;
-		font-size: 17px;
-	}
-	.sum {
-		font-size: 1.5em;
-	}
-	#sumPlus {
-		font-size: 2em;
-		color: #4ea7e1;
-	}
-	#sumMinus {
-		font-size: 2em;
-		color: #e74c3c;
-	}
-	#sumContainer {
-		text-align: right;
+	h1 {
+		text-align: center;
 	}
 </style>
 </head>
@@ -78,24 +59,21 @@
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
 	<div class="container container-fluid">
-		<h1>월별 비교</h1>
+		<h1>게시판</h1>
 			<table class="table table-bordered">
 				<tr>
-					<th th:each="i: ${#numbers.sequence(1, 12)}" th:text="${i +'월'}"></th>
+					<th>글번호</th>
+					<th>글제목</th>
+					<th>글쓴이</th>
+					<th>작성날짜</th>
 				</tr>
-				<tr>
-					<td th:each="index: ${#numbers.sequence(1, 12)}">
-						<span th:class="${mp.price} >= 0 ? 'gd-blue' : 'gd-red'" 
-							  th:each="mp : ${list}" th:text="${index} == ${mp.month} ? ${#numbers.formatInteger(mp.price, 0, 'COMMA')} : ''"></span>
-					</td>
+				<tr th:each="bl : ${boardList}">
+					<td th:text="${bl.boardNo}"></td>
+					<td th:text="${bl.boardTitle}"></td>
+					<td th:text="${bl.memberId}"></td>
+					<td th:text="${bl.boardDate}"></td>
 				</tr>
 			</table>
-			<div id="sumContainer">
-				<span class="sum">합계&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				<span id="sumPlus" th:if="${totalMonthSum} > 0 " th:text="'+' + ${#numbers.formatInteger(totalMonthSum, 0, 'COMMA')}"></span>
-				<span id="sumMinus" th:unless="${totalMonthSum} > 0 " th:text="${#numbers.formatInteger(totalMonthSum, 0, 'COMMA')}"></span>
-				<span class="sum">원</span>
-			</div>
 	</div>
 </body>
 </html>

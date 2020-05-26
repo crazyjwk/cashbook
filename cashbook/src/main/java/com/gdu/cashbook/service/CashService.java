@@ -13,26 +13,31 @@ import com.gdu.cashbook.mapper.CashMapper;
 import com.gdu.cashbook.vo.Cash;
 import com.gdu.cashbook.vo.Cashbook;
 import com.gdu.cashbook.vo.Category;
-import com.gdu.cashbook.vo.DayAndPrice;
-import com.gdu.cashbook.vo.MonthAndPrice;
+import com.gdu.cashbook.vo.dayAndMonthAndYearAndPrice;
 
 @Service
 @Transactional
 public class CashService {
 	@Autowired
 	private CashMapper cashMapper;
-	
-	public List<MonthAndPrice> getMonthSumList(String memberId, LocalDate day) {
-		String day2 = day.toString();
-		System.out.println(day2 +" <--asdasdasddddddd");
+
+	public Map<String, Object> getTotalDaySumAndTotalMonthSum(String memberId, LocalDate day) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("memberId", memberId);
-		map.put("day", day2);
-		return cashMapper.selectMonthSumList(map);
+		map.put("day", day);
+		List<dayAndMonthAndYearAndPrice> list = cashMapper.selectDaySum(map);
+		Integer totalMonthSum = cashMapper.selectTotalMonthSum(map);
+		if(totalMonthSum == null) {
+			totalMonthSum = 0;
+		}
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map2.put("list", list);
+		map2.put("totalMonthSum", totalMonthSum);
+		return map2;
 	}
 	
 	public int addCashbook(Cashbook cashbook) {
-		return cashMapper.insertCashbook(cashbook);
+		return cashMapper.insertCashBook(cashbook);
 	}
 	
 	public List<Cashbook> getCashbookList(String memberId, int currentPage, int rowPerPage) {
@@ -57,7 +62,7 @@ public class CashService {
 		map.put("memberId", memberId);
 		map.put("year", year);
 		map.put("month", month);
-		Integer monthSum = cashMapper.selectCashMonthSum(map);
+		Integer monthSum = cashMapper.selectTotalDateSum(map);
 		if(monthSum == null) {
 			monthSum = 0;
 		}
@@ -74,7 +79,7 @@ public class CashService {
 	public List<Category> getCategoryList() {
 		return cashMapper.selectCategoryList();
 	}
-	public List<DayAndPrice> getCashAndPriceList(String memberId, int year, int month) {
+	public List<dayAndMonthAndYearAndPrice> getCashAndPriceList(String memberId, int year, int month) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("memberId", memberId);
 		map.put("year", year);

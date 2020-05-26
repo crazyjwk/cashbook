@@ -31,20 +31,37 @@
 		flex-direction: column;
 		justify-content: space-around;
 	}
-	#item {
+	.item {
 		font-size: 1.25em;
 	}
-	#item a {
+	.item a {
 		color: #212121;
 		text-decoration: none;
 		font-weight: bold;
 	}
-	#item a:hover {
+	.item a:hover {
 		color: white;
 	}
 	h1 {
-		margin-left: 200px;
+		text-align: center;
 		padding: 50px;
+	}
+	#container {
+		margin-left: 500px;
+		width: 800px; 
+	}
+	tr th, td {
+		text-align: center;
+	}
+	th {
+		background-color: #eaeaea;
+	}
+	input {
+		width: 300px;
+	}
+	.btn {
+		margin-top: 50px;
+		width: 100px;
 	}
 </style>
 </head>
@@ -52,7 +69,30 @@
 	<div id="box">
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
+	<div id="container">
 	<h1>가계부 생성</h1>
-	
+		<form id="cashForm" th:action="@{/addCashbook}" method="post">
+			<input type="hidden" name="memberId" th:value="${memberId}">
+			<table class="table table-bordered">
+				<tr>
+					<th>가계부 제목</th>
+					<td><input type="text" name="cashbookTitle"></td>
+				</tr>
+				<tr>
+					<th>가계부 날짜</th>
+					<td>
+						<input type="date" name="cashbookDate">
+					</td>
+				</tr>
+				<tr>
+					<th>가계부 목적</th>
+					<td>
+						<input type="text" name="cashbookGoal">
+					</td>
+				</tr>
+			</table>
+			<div style="text-align: center"><button type="submit" class="btn btn-primary">생성</button></div>
+		</form>
+	</div>
 </body>
 </html>

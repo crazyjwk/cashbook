@@ -20,6 +20,22 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	
+	@GetMapping("adminMemberInfo")
+	public String adminMemberInfo(Model model, HttpSession session) {
+		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/";
+		} else if(!(memberId.equals("admin"))) {
+			LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
+			Member member = memberService.getMemberOne(loginMember);
+			model.addAttribute("member", member);
+			model.addAttribute("loginMember", loginMember);
+			return "memberInfo";
+		}
+		
+		return "adminMemberInfo";
+	}
 	// 회원 비밀번호 찾기
 	@GetMapping("/findMemberPw")
 	public String findMemberPw(HttpSession session) {
@@ -135,6 +151,8 @@ public class MemberController {
 		model.addAttribute("loginMember", loginMember);
 		return "memberInfo";
 	}
+	
+	
 	
 	@PostMapping("/checkMemberId")
 	public String checkMemberId(Model model, @RequestParam("memberIdCk") String memberIdCk, HttpSession session) {

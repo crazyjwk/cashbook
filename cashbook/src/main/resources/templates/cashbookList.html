@@ -54,15 +54,17 @@
 	}
 	#container {
 		display: flex;
+		justify-content: space-around;
+		align-items:center; 
 	}
 	#addCashbook {
+		display: inline-block;
 		text-align: right;
 		
 	}
 	#block {
 		margin: 50px;
 		margin-left: 20px;
-		display: inline-block;
 	}
 	#cashbookTitle {
 		text-align: center;
@@ -74,10 +76,10 @@
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
 	<h1>가계부 리스트</h1>
-		<div id="container">
 			<div id="addCashbook"><a th:href="@{/addCashbook}">가계부 생성</a></div>
+		<div id="container">
 			<div id="block" th:each="cbl : ${cashbookList}">
-				<a th:href="@{/getCashListByDate(day=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')},date=${cbl.cashbookDate})}"><img th:src="@{${'/upload/' + cbl.cashbookImg}}"></a>
+				<a th:href="@{/getCashListByDate(day=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')},year=${cbl.cashbookDate})}"><img th:src="@{${'/upload/' + cbl.cashbookImg}}"></a>
 				<div id="cashbookTitle" th:text="${cbl.cashbookTitle}"></div>
 			</div>
 		</div>

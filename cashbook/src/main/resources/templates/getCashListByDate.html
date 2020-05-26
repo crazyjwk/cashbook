@@ -73,6 +73,7 @@
 	}
 	.insBtn {
 		background-color: #3498db;
+		border: 0;
 		width: 100px;
 		color: white;
 		font-weight: bold;
@@ -106,6 +107,7 @@
 	<div id="box">
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
+	
 	<div class="container container-fluid">
 	<h1 th:text="${year} + '년  가계부'"></h1>
 		<div id="calendarContainer">
@@ -131,9 +133,9 @@
 				<tbody>
 					<tr th:each="cash : ${cashList}">
 						<td th:text="${cash.categoryName}"></td>
-						<td th:if="${cash.cashKind} == '수입'" th:text="'+' + ${cash.cashPrice}"></td>
+						<td th:if="${cash.cashKind} == '수입'" th:text="'+' + ${#numbers.formatInteger(cash.cashPrice, 0, 'COMMA')}"></td>
 						<td th:unless="${cash.cashKind} == '수입'"></td>
-						<td th:if="${cash.cashKind} == '지출'" th:text="'-' + ${cash.cashPrice}"></td>
+						<td th:if="${cash.cashKind} == '지출'" th:text="'-' + ${#numbers.formatInteger(cash.cashPrice, 0, 'COMMA')}"></td>
 						<td th:unless="${cash.cashKind} == '지출'"></td>
 						<td th:text="${cash.cashPlace}"></td>
 						<td th:text="${cash.cashMemo}"></td>
@@ -146,8 +148,8 @@
 				<span><a th:href="@{/addCash(day=${day})}"><button class="btn insBtn">입력</button></a></span>
 				<div>
 					<span class="sum">합계&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<span id="sumPlus" th:if="${sumCash} > 0" th:text="'+' + ${sumCash}"></span>
-					<span id="sumMinus" th:unless="${sumCash} > 0" th:text="${sumCash}"></span>
+					<span id="sumPlus" th:if="${sumCash} > 0" th:text="'+' + ${#numbers.formatInteger(sumCash, 0, 'COMMA')}"></span>
+					<span id="sumMinus" th:unless="${sumCash} > 0" th:text="${#numbers.formatInteger(sumCash, 0, 'COMMA')}"></span>
 					<span class="sum">원</span>
 				</div>
 			</div>
