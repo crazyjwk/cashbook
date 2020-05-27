@@ -8,7 +8,8 @@
 		SELECT 
 			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END)
 		FROM cash
-		WHERE member_id=#{memberId} 
+		WHERE member_id=#{memberId}
+		AND cashbook_no =#{cashbookNo}
 		AND YEAR(cash_date) = YEAR(#{day})
 		GROUP BY YEAR(cash_date) = YEAR(#{day})
 	</select>
@@ -50,6 +51,7 @@
 			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END) price
 		FROM cash
 		WHERE member_id=#{memberId} 
+		AND cashbook_no =#{cashbookNo}
 		AND YEAR(cash_date)= YEAR(#{day})
 		AND MONTH(cash_date)
 		GROUP BY MONTH(cash_date)
@@ -60,6 +62,7 @@
 			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END)
 		FROM cash
 		WHERE member_id=#{memberId}
+		AND cashbook_no =#{cashbookNo}
 		AND YEAR(cash_date)=#{year}
 		AND MONTH(cash_date)=#{month}
 	</select>
@@ -67,18 +70,20 @@
 	<update id="updateCash" parameterType="com.gdu.cashbook.vo.Cash">
 		UPDATE cash 
 		SET 
-			category_name=#{categoryName}, 
+			category_name=#{categoryName},
 			cash_date=#{cashDate}, 
 			cash_kind=#{cashKind}, 
 			cash_price=#{cashPrice},
 			cash_place=#{cashPlace},
 			cash_memo=#{cashMemo}
 		WHERE cash_no=#{cashNo}
+		AND cashbook_no=#{cashbookNo}
 	</update>
 	<!-- 수입/지출 수정하기 위해 가지고 오는 쿼리 -->
 	<select id="selectCashOne" resultType="com.gdu.cashbook.vo.Cash" parameterType="int">
 		SELECT 
 			member_id memberId,
+			cashbook_no cashbookNo,
 			cash_date cashDate,
 			cash_price cashPrice,
 			cash_place cashPlace,
@@ -101,6 +106,7 @@
 		WHERE YEAR(cash_date) = #{year}
 		AND MONTH(cash_date) = #{month}
 		AND member_id = #{memberId}
+		AND cashbook_no =#{cashbookNo}
 		GROUP BY DAY(cash_date)
 	</select>
 	<!-- 수입/지출 입력 -->
@@ -108,6 +114,7 @@
 		INSERT INTO cash
 		(
 			member_id, 
+			cashbook_no,
 			cash_date, 
 			cash_kind, 
 			category_name, 
@@ -115,7 +122,7 @@
 			cash_place, 
 			cash_memo
 		)
-		VALUES(#{memberId}, #{cashDate}, #{cashKind}, #{categoryName}, #{cashPrice}, #{cashPlace}, #{cashMemo})
+		VALUES(#{memberId}, #{cashbookNo}, #{cashDate}, #{cashKind}, #{categoryName}, #{cashPrice}, #{cashPlace}, #{cashMemo})
 	</insert>
 	<!-- 수입/지출 삭제 -->
 	<delete id="deleteCash" parameterType="int">
@@ -128,6 +135,7 @@
 			SUM(CASE WHEN cash_kind='지출' THEN cash_price*-1 ELSE cash_price END)
 		FROM cash
 		WHERE member_id = #{memberId}
+		AND cashbook_no =#{cashbookNo}
 		AND cash_date = #{cashDate}
 	</select>
 	<!--  
@@ -144,6 +152,7 @@
 	<select id="selectCashListByDate" resultType="com.gdu.cashbook.vo.Cash" parameterType="com.gdu.cashbook.vo.Cash">
 		SELECT
 			cash_no cashNo,
+			cashbook_no cashbookNo,
 			member_id memberId,
 			cash_kind cashKind,
 			category_name categoryName,
@@ -152,6 +161,7 @@
 			cash_memo cashMemo
 		FROM cash
 		WHERE member_id = #{memberId}
+		AND cashbook_no =#{cashbookNo}
 		AND cash_date = #{cashDate}
 		ORDER BY cash_no ASC
 	</select>

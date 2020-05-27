@@ -47,12 +47,10 @@
 		color: white;
 	}
 	.container {
-		margin-top: 50px;
-		margin-left: 600px;
-		padding: 40px;
+		width:900px;
+		text-align: center;
 	}
 	#table {
-		width: 700px;
 		border: 2px solid #cccccc;
 		text-align: center;
 	}
@@ -78,19 +76,12 @@
 		width: 170px;
 		height: 170px;
 	}
-	#container {
-		margin-top: 30px;
-		margin-left: 600px;
-		width: 700px;
-		
-	}
 	h1 {
-		margin-right: 200px;
-		padding-top: 50px;
+		
 		text-align: center;
 	}
 	#containerFooter {
-		width: 700px;
+		width: 870px;
 		display: flex;
 		justify-content: space-between;
 		
@@ -111,8 +102,11 @@
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
 	
-	<h1>회원정보</h1>
 	<div class="container container-fluid" id="container">
+		<br>
+		<br>
+		<h1>회원정보</h1>
+		<br>
 		<table id="table" class="table table-bordered">
 			<tr>
 				<th style="height:100px; padding-top: 55px;">사용자 이미지</th>

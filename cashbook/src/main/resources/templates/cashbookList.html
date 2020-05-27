@@ -49,7 +49,7 @@
 		color: white;
 	}
 	h1 {
-		margin-left: 200px;
+		text-align: center;
 		padding: 50px;
 	}
 	#container {
@@ -58,8 +58,8 @@
 		align-items:center; 
 	}
 	#addCashbook {
-		display: inline-block;
-		text-align: right;
+		display: flex;
+		flex-direction: row-reverse;
 		
 	}
 	#block {
@@ -69,21 +69,37 @@
 	#cashbookTitle {
 		text-align: center;
 	}
+	#preNext {
+		display: flex;
+		justify-content: space-around;
+	}
+	.preNext {
+		background-color: #e6e6e6;
+		width: 80px;
+		height: 40px;
+		border-radius: 20px;
+		font-weight: bold;
+		color: #838383;
+	}
 </style>
 </head>
 <body>
 	<div id="box">
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
+	<div class="container container-fluid">
 	<h1>가계부 리스트</h1>
-			<div id="addCashbook"><a th:href="@{/addCashbook}">가계부 생성</a></div>
+			<div id="addCashbook"><a th:href="@{/addCashbook}"><button class="btn btn-success">가계부 생성</button></a></div>
 		<div id="container">
 			<div id="block" th:each="cbl : ${cashbookList}">
-				<a th:href="@{/getCashListByDate(day=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')},year=${cbl.cashbookDate})}"><img th:src="@{${'/upload/' + cbl.cashbookImg}}"></a>
+				<a th:href="@{/getCashListByDate(day=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')},year=${cbl.cashbookDate},cashbookNo=${cbl.cashbookNo})}"><img th:src="@{${'/upload/' + cbl.cashbookImg}}"></a>
 				<div id="cashbookTitle" th:text="${cbl.cashbookTitle}"></div>
 			</div>
 		</div>
-		<div th:if="${currentPage} > 1"><a th:href="@{/cashbookList(currentPage=${currentPage}-1)}">이전</a></div>
-		<div th:if="${currentPage} < ${lastPage}"><a th:href="@{/cashbookList(currentPage=${currentPage}+1)}">다음</a></div>
+		<div id="preNext">
+			<a th:href="@{/cashbookList(currentPage=${currentPage}-1)}"><button class="btn preNext">이전</button></a>
+			<a th:href="@{/cashbookList(currentPage=${currentPage}+1)}"><button class="btn preNext">다음</button></a>
+		</div>
+	</div>
 </body>
 </html>

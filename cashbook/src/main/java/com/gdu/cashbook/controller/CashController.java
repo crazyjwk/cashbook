@@ -30,15 +30,19 @@ public class CashController {
 	
 	@GetMapping("/compareToMonth")
 	public String compareToMonth (Model model, HttpSession session, 
+			@RequestParam(value="cashbookNo", required = false) int cashbookNo,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
 		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
-		Map<String, Object> map = cashService.getTotalDaySumAndTotalMonthSum(memberId, day);
+		Map<String, Object> map = cashService.getTotalDaySumAndTotalMonthSum(memberId, day, cashbookNo);
 		
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("totalMonthSum", map.get("totalMonthSum"));
+		model.addAttribute("day", day);
+		model.addAttribute("cashbookNo", cashbookNo);
+		
 		System.out.println(map.get("totalMonthSum") + "<--- totalMonthSum");
 		return "compareToMonth";
 	}
@@ -48,9 +52,9 @@ public class CashController {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
-		
 		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
 		model.addAttribute("memberId", memberId);
+		
 		return "addCashbook";
 	}
 	
@@ -81,6 +85,7 @@ public class CashController {
 	}
 	@GetMapping("/modifyCash")
 	public String modifyCash(Model model, HttpSession session, @RequestParam(value="cashNo") int cashNo,
+			@RequestParam(value="cashbookNo", required = false) int cashbookNo,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
 		
 		if(session.getAttribute("loginMember") == null) {
@@ -93,6 +98,7 @@ public class CashController {
 		model.addAttribute("cashOne", cashOne);
 		model.addAttribute("day", day);
 		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("cashbookNo", cashbookNo);
 		return "modifyCash";
 	}
 	@PostMapping("/modifyCash")
@@ -100,12 +106,13 @@ public class CashController {
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
 		cash.setCashDate(day);
 		cashService.modifyCash(cash);
-		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day;
+		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day + "&cashbookNo="+cash.getCashbookNo();
 	}
 	
 	@GetMapping("/getCashListByMonth")
-	public String getCashListByMonth(Model model, HttpSession session, 
-			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
+	public String getCashListByMonth(Model model, HttpSession session, @RequestParam(value="cashbookNo", required = false) int cashbookNo,
+			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day,
+			@RequestParam(value="compareMonth", required = false) Integer compareMonth) {
 		
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
@@ -126,6 +133,13 @@ public class CashController {
 			calendarDay.set(day.getYear(), day.getMonthValue()-1, day.getDayOfMonth()); // 오늘 날짜에서 day값과 동일하게 변경
 			
 		}
+		if(compareMonth != null) {
+			System.out.println(compareMonth + " <-- compareMonth asdasdasd");
+			day= LocalDate.of(day.getYear(), compareMonth, day.getDayOfMonth());
+			calendarDay.set(day.getYear(), day.getMonthValue()-1, day.getDayOfMonth());
+			System.out.println(day.toString() + " <-- day.toString() asdasdasd");
+			
+		}
 		/*
 		 * 0. 오늘 LocalDate 타입
 		 * 1. 오늘 Calendar 타입
@@ -138,24 +152,19 @@ public class CashController {
 		int month = calendarDay.get(Calendar.MONTH)+1;
 		System.out.println(year + "<--- year     "  + month + "<--- month");
 		
-		List<dayAndMonthAndYearAndPrice> dayAndPriceList = cashService.getCashAndPriceList(memberId, year, month);
+		Map<String, Object> dayAndPriceList = cashService.getCashAndPriceList(memberId, year, month, cashbookNo);
 		
-		int monthSum = cashService.getCashMonthSum(memberId, year, month);
-		System.out.println(monthSum + "<-- monthSum");
-		
-		
+		System.out.println(day.toString() + " <-- day.toString() asdasdasd2222");
 		model.addAttribute("day", day); 
 		model.addAttribute("year", calendarDay.get(Calendar.YEAR));
 		model.addAttribute("month", calendarDay.get(Calendar.MONTH)+1); // 현재 월
 		model.addAttribute("lastDay", calendarDay.getActualMaximum(Calendar.DATE)); // 현재 월의 마지막 일
-		model.addAttribute("dayAndPriceList", dayAndPriceList);
-		model.addAttribute("monthSum", monthSum);
+		model.addAttribute("dayAndPrice", dayAndPriceList.get("dayAndPrice"));
+		model.addAttribute("totalDateSum", dayAndPriceList.get("totalDateSum"));
+		model.addAttribute("cashbookNo", cashbookNo);
 		
 		
 		System.out.println(dayAndPriceList);
-		for(dayAndMonthAndYearAndPrice dp : dayAndPriceList) {
-			System.out.println(dp);
-		}
 		
 		Calendar firstDay = calendarDay;// 오늘 날짜를 구하기 위한 firstDay변수
 		firstDay.set(Calendar.DATE, 1); // calendarDay DATE만 1로 변경
@@ -167,7 +176,7 @@ public class CashController {
 	
 	// 수입/지출 입력
 	@GetMapping("/addCash")
-	public String addCash(Model model, HttpSession session,
+	public String addCash(Model model, HttpSession session, @RequestParam(value="cashbookNo", required = false) int cashbookNo,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
@@ -178,6 +187,7 @@ public class CashController {
 		model.addAttribute("day", day);
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("memberId", memberId);
+		model.addAttribute("cashbookNo", cashbookNo);
 		return "addCash";
 	}
 	@PostMapping("/addCash")
@@ -197,7 +207,7 @@ public class CashController {
 		
 		cash.setCashDate(day);
 		cashService.addCash(cash);
-		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day;
+		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day + "&cashbookNo="+cash.getCashbookNo();
 	}
 	
 	// 수입/지출 삭제
@@ -209,11 +219,12 @@ public class CashController {
 		}
 		System.out.println(cash.getCashNo() + "<-- cashNo");
 		System.out.println(cash.getMemberId() + "<-- cashMemberId");
+		System.out.println(cash.getCashbookNo() + "<-- cashbookNo");
 		cashService.removeCash(cash.getCashNo());
-		return "redirect:/getCashListByDate?"+ cash.getMemberId() + "&day=" + day;
+		return "redirect:/getCashListByDate?"+ cash.getMemberId() + "&day=" + day + "&cashbookNo="+cash.getCashbookNo();
 	}
 	@GetMapping("/getCashListByDate")
-	public String getCashListByDate(Model model, HttpSession session, 
+	public String getCashListByDate(Model model, HttpSession session, @RequestParam(value="cashbookNo") int cashbookNo,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day,
 			@RequestParam(value="year", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate year) {
 			// RequestParam -> DateTimeFormat으로 자동 형변환
@@ -237,6 +248,7 @@ public class CashController {
 //		
 //		System.out.println(sdf.format(day) + " <-- today");
 		Cash cash = new Cash();
+		cash.setCashbookNo(cashbookNo);
 		cash.setMemberId(memberId);
 		cash.setCashDate(day);
 		
@@ -247,7 +259,7 @@ public class CashController {
 		model.addAttribute("day", day);
 		model.addAttribute("cashList", list.get("cashList"));
 		model.addAttribute("sumCash", sumCash);
-			
+		model.addAttribute("cashbookNo", cashbookNo);
 		return "getCashListByDate";
 	}
 }

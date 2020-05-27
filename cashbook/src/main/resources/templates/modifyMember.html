@@ -11,6 +11,58 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<style>
+	html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		margin-top: 0;
+		width: 200px;
+		float: left;
+		background-color: #3498db;
+	}
+	#list {
+		margin-top: 20px;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+	.item {
+		font-size: 1.25em;
+	}
+	.item a {
+		color: black;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	.item a:hover {
+		color: white;
+	}
+	#memberInfo a {
+		color: white;
+	}
+	.table {
+		width:800px;
+		text-align:center;
+	}
+	#defaultImg {
+		width: 170px;
+		height: 170px;
+	}
+	
+	input {
+		width: 300px;
+	}
+	h1 {
+		text-align: center;
+	}
+	
+</style>
 <script>
 	$(document).ready(function(){
 		$('#modiBtn').click(function(){
@@ -21,43 +73,47 @@
 </script>
 </head>
 <body>
-	<h1>정보수정</h1>
-		<div th:include="/include/menu::sidemenu"></div>
-		<form id="modifyForm" th:action="@{/modifyMemberInfo}" method="post" enctype="multipart/form-data">
-			<table class="table">
-				<tr>
-					<th>사진</th>
-					<td>
-						<img th:src="@{${'/upload/'+member.memberPic}}">
-						<input type="file" th:value="${member.memberPic}" name="memberPic" id="memberPic">
-					</td>
-				</tr>
-				<tr>
-					<th>아이디</th>
-					<td><input type="text" th:value="${member.memberId}" name="memberId" readonly="readonly"></td>
-				</tr> 
-				<tr>
-					<th>이름</th>
-					<td><input type="text" th:value="${member.memberName}" name="memberName" id="memberName"></td>
-				</tr>
-				<tr>
-					<th>주소</th>
-					<td><input type="text" th:value="${member.memberAddr}" name="memberAddr" id="memberAddr"></td>
-				</tr>
-				<tr>
-					<th>전화번호</th>
-					<td><input type="text" th:value="${member.memberPhone}" name="memberPhone" id="memberPhone"></td>
-				</tr>
-				<tr>
-					<th>이메일</th>
-					<td><input type="text" th:value="${member.memberEmail}" name="memberEmail" id="memberEmail"></td>
-				</tr>
-				<tr>
-					<th>가입날짜</th>
-					<td><input type="text" th:value="${member.memberDate}" readonly="readonly"></td>
-				</tr>
-			</table>
-		</form>
-			<button id="modiBtn" class="btn btn-primary">정보수정</button>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
+	<div class="container container-fluid">
+		<h1>정보수정</h1>
+			<form id="modifyForm" th:action="@{/modifyMemberInfo}" method="post" enctype="multipart/form-data">
+				<table class="table">
+					<tr>
+						<th>사진</th>
+						<td>
+							<img id="defaultImg" th:src="@{${'/upload/'+member.memberPic}}">
+							<input type="file" th:value="${member.memberPic}" name="memberPic" id="memberPic">
+						</td>
+					</tr>
+					<tr>
+						<th>아이디</th>
+						<td><input type="text" th:value="${member.memberId}" name="memberId" readonly="readonly"></td>
+					</tr> 
+					<tr>
+						<th>이름</th>
+						<td><input type="text" th:value="${member.memberName}" name="memberName" id="memberName"></td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td><input type="text" th:value="${member.memberAddr}" name="memberAddr" id="memberAddr"></td>
+					</tr>
+					<tr>
+						<th>전화번호</th>
+						<td><input type="text" th:value="${member.memberPhone}" name="memberPhone" id="memberPhone"></td>
+					</tr>
+					<tr>
+						<th>이메일</th>
+						<td><input type="text" th:value="${member.memberEmail}" name="memberEmail" id="memberEmail"></td>
+					</tr>
+					<tr>
+						<th>가입날짜</th>
+						<td><input type="text" th:value="${member.memberDate}" readonly="readonly"></td>
+					</tr>
+				</table>
+			</form>
+				<button id="modiBtn" class="btn btn-primary">정보수정</button>
+	</div>
 </body>
 </html>

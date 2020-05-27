@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gdu.cashbook.mapper.BoardMapper;
+import com.gdu.cashbook.mapper.CashMapper;
 import com.gdu.cashbook.mapper.MemberMapper;
 import com.gdu.cashbook.mapper.MemberidMapper;
 import com.gdu.cashbook.vo.LoginMember;
@@ -22,13 +24,12 @@ import com.gdu.cashbook.vo.Memberid;
 @Service
 @Transactional
 public class MemberService {
-	@Autowired
-	private MemberMapper memberMapper;
-	@Autowired
-	private MemberidMapper memberidMapper;
-	@Autowired
-	private JavaMailSender javaMailSender; //bean생성 -> @Component
+	@Autowired private MemberMapper memberMapper;
+	@Autowired private MemberidMapper memberidMapper;
+	@Autowired private JavaMailSender javaMailSender; //bean생성 -> @Component
 	
+	@Autowired private CashMapper cashMapper;
+	@Autowired private BoardMapper boardMapeer;
 //	@Value("C:\\java\\SPRING_WORK\\maven.1590293548484\\cashbook\\src\\main\\resources\\static\\upload")
 //	private String path;
 	
@@ -108,14 +109,15 @@ public class MemberService {
 		}
 		
 		// 수정한 사진을 업로드
-		MultipartFile mf = memberForm.getMemberPic();
-		String originName = mf.getOriginalFilename();
+			MultipartFile mf = memberForm.getMemberPic();
+			String originName = mf.getOriginalFilename();
+			
+			int lastDot = originName.lastIndexOf(".");
+			String extension = originName.substring(lastDot);
+			
+			String memberPic = memberForm.getMemberId() + extension;
+			System.out.println(memberPic + " <--memberPic modifyMemberInfo");
 		
-		int lastDot = originName.lastIndexOf(".");
-		String extension = originName.substring(lastDot);
-		
-		String memberPic = memberForm.getMemberId() + extension;
-		System.out.println(memberPic + " <--memberPic modifyMemberInfo");
 		
 		Member member = new Member();
 		member.setMemberId(memberForm.getMemberId());

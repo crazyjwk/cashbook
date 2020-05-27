@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style>
+	html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		width: 200px;
+		float: left;
+		background-color: #3498db;
+	}
+	#list {
+		margin-top: 20px;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+	.item {
+		font-size: 1.25em;
+	}
+	.item a {
+		color: #212121;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	.item a:hover {
+		color: white;
+	}
+	h1 {
+		text-align: center;
+	}
+	.btnPreNext {
+		background-color: #e6e6e6;
+		margin: 0;
+		margin-bottom: 10px;
+		width: 80px;
+		height: 40px;
+		border: 0;
+		border-radius: 20px;
+		font-size: 17px;
+		font-weight: bold;
+		color: #838383;
+	}
+	.btnPreNext:hover {
+		color: black;
+	}
+	#viewHeader {
+		display: flex;
+		justify-content: space-between;
+	}
+	#viewFooter {
+		display: flex;
+		justify-content: space-between;
+	}
+	.container-fluid {
+		width: 800px;
+	}
+	.idAndDate {
+		width: 370px;
+	}
+	.inputBox {
+		width: 770px;
+	}
+	#content {
+		height: 400px;
+		text-align: inherit;
+	}
+	#commentBar {
+		width: 300px;
+	}
+	td {
+		padding: 0;
+	}
+	#commentPreNext {
+		display: flex;
+		justify-content: space-around;
+	}
+	.commentPreNextBtn {
+		background-color: #e6e6e6;
+		height: 35px;
+		border-radius: 20px;
+		font-weight: bold;
+		color: #838383;
+	}
+</style>
+</head>
+<body>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
+	<div class="container container-fluid">
+		<br>
+		<br>
+		<h1>상세보기</h1>
+		<br>
+		<div id="viewHeader">
+			<div><a th:href="@{/}"><button class="btnPreNext">이전 글</button></a></div>
+			<div><a th:href="@{/}"><button class="btnPreNext">다음 글</button></a></div>
+		</div>
+		<br>
+		<div><input class="inputBox form-control" type="text" th:value="${boardOne.boardTitle}" readonly="readonly"></div>
+		<br>
+		<div class="row">
+			<span class="col">
+				<input class="idAndDate form-control" type="text" th:value="${boardOne.memberId}" readonly="readonly">
+			</span>	
+			<span class="col">
+				<input class="idAndDate form-control" type="text" th:value="${boardOne.boardDate}" readonly="readonly">
+			</span>	
+		</div>
+		<br>
+		<div><textarea class="form-control" rows="10" cols="106" th:text="${boardOne.boardContent}" readonly="readonly"></textarea></div>
+		<br>
+		<div id="viewFooter">
+			<div><a th:href="@{/boardList}"><button class="btn btn-primary">목록</button></a></div>
+			<div th:if="${boardOne.memberId} == ${memberId}">
+				<span> </span>
+				<span> </span>
+			</div>
+			<div th:unless="${boardOne.memberId} != ${memberId}">
+				<span><a th:href="@{/modifyPost(boardNo=${boardNo},memberId=${memberId})}"><button class="btn btn-warning">수정</button></a></span>
+				<span><a th:href="@{/removePost(boardNo=${boardNo},memberId=${memberId})}"><button class="btn btn-danger">삭제</button></a></span>
+			</div>	
+		</div>
+		<br>
+		<form th:action="@{/addComment(boardNo=${boardNo},memberId=${memberId})}" method="post">
+			<table>
+				<tr>
+					<td><input style="width:150px;" class="form-control" type="text" th:value="${memberId}" readonly="readonly"></td>
+					<td><input style="width:500px;" class="form-control" type="text" name="comment" placeholder="댓글 작성"></td>
+					<td><button style="width:120px;" type="submit" class="btn btn-secondary">작성</button></td>
+				</tr>
+			</table>
+		</form> 
+		<br>
+		<table>
+			<tr th:each="cl : ${commentList}">
+				<td><input style="width:150px;" class="form-control" type="text" th:value="${cl.memberId}" readonly="readonly"></td>
+				<td><input style="width:500px;" class="form-control" type="text" th:value="${cl.comment}" readonly="readonly"></td>
+				<td><a th:href="@{/}"><button class="btn btn-warning">수정</button></a></td>
+				<td><a th:href="@{/removeComment(boardNo=${boardNo},memberId=${memberId},commentNo=${cl.commentNo})}"><button class="btn btn-danger">삭제</button></a></td>
+			</tr>
+		</table>
+		<br>
+		<div id="commentPreNext">
+			<div><a th:href="@{/detailView(currentPage=${currentPage-1},boardNo=${boardNo})}"><button class="btn commentPreNextBtn">이전</button></a></div>
+			<div><a th:href="@{/detailView(currentPage=${currentPage+1} ,boardNo=${boardNo})}"><button class="btn commentPreNextBtn">다음</button></a></div>
+		</div>
+	</div>
+	
+</body>
+</html>

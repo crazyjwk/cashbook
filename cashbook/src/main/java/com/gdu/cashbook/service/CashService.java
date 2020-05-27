@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gdu.cashbook.mapper.CashMapper;
 import com.gdu.cashbook.vo.Cash;
@@ -21,10 +22,11 @@ public class CashService {
 	@Autowired
 	private CashMapper cashMapper;
 
-	public Map<String, Object> getTotalDaySumAndTotalMonthSum(String memberId, LocalDate day) {
+	public Map<String, Object> getTotalDaySumAndTotalMonthSum(String memberId, LocalDate day, int cashbookNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("memberId", memberId);
 		map.put("day", day);
+		map.put("cashbookNo", cashbookNo);
 		List<dayAndMonthAndYearAndPrice> list = cashMapper.selectDaySum(map);
 		Integer totalMonthSum = cashMapper.selectTotalMonthSum(map);
 		if(totalMonthSum == null) {
@@ -57,17 +59,6 @@ public class CashService {
 		return lastPage;
 	}
 	
-	public Integer getCashMonthSum(String memberId, int year, int month) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("memberId", memberId);
-		map.put("year", year);
-		map.put("month", month);
-		Integer monthSum = cashMapper.selectTotalDateSum(map);
-		if(monthSum == null) {
-			monthSum = 0;
-		}
-		return monthSum;
-	}
 	public int modifyCash(Cash cash) {
 		return cashMapper.updateCash(cash);
 	}
@@ -79,12 +70,21 @@ public class CashService {
 	public List<Category> getCategoryList() {
 		return cashMapper.selectCategoryList();
 	}
-	public List<dayAndMonthAndYearAndPrice> getCashAndPriceList(String memberId, int year, int month) {
+	public Map<String, Object> getCashAndPriceList(String memberId, int year, int month, int cashbookNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("memberId", memberId);
 		map.put("year", year);
 		map.put("month", month);
-		return cashMapper.selectDayAndPrice(map);
+		map.put("cashbookNo", cashbookNo);
+		List<dayAndMonthAndYearAndPrice> list = cashMapper.selectDayAndPrice(map);
+		Integer totalDateSum = cashMapper.selectTotalDateSum(map);
+		if(totalDateSum == null) {
+			totalDateSum = 0;
+		}
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map2.put("dayAndPrice", list);
+		map2.put("totalDateSum", totalDateSum);		
+		return  map2;
 	}
 	
 	public int addCash(Cash cash) {
@@ -98,6 +98,7 @@ public class CashService {
 	public Map<String, Object> getCashListByDate(Cash cash) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Cash> cashList = cashMapper.selectCashListByDate(cash);
+		System.out.println(cash.getCashbookNo() + "<--aslkdjaskljd");
 		Integer sumCash = cashMapper.selectSumCashByDate(cash);
 		if(sumCash == null) {
 			sumCash = 0;

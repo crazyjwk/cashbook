@@ -105,6 +105,7 @@
 		</div>
 		<form id="cashForm" th:action="@{/modifyCash(day=${day})}" method="post">
 			<input type="hidden" name="cashNo" th:value="${cashNo}">
+			<input type="hidden" name="cashbookNo" th:value="${cashbookNo}">
 			<table class="table table-bordered">
 				<tr>
 					<th>날짜</th>

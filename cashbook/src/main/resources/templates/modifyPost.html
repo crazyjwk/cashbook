@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <style>
-html, body {
+		html, body {
 		margin: 0;
 		height: 100%;
 	}
@@ -20,6 +20,7 @@ html, body {
 		text-align: center;
 		height: 100%;
 		margin: 0;
+		margin-top: 0;
 		width: 200px;
 		float: left;
 		background-color: #3498db;
@@ -35,56 +36,55 @@ html, body {
 		font-size: 1.25em;
 	}
 	.item a {
-		color: #212121;
+		color: black;
 		text-decoration: none;
 		font-weight: bold;
 	}
 	.item a:hover {
 		color: white;
 	}
-	#container {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
+	h1 {
+		text-align: center;
 	}
-	#deleteBtn {
+	.align {
+		text-align: center;
+	}
+	.boardTitle {
+		width: 725px;
+	}
+	.btn {
 		width: 100px;
 	}
+	.form-control {
+		width: 500px;
+	}
 </style>
-<script>
-	$(document).ready(function(){
-		$('#deleteBtn').click(function(){
-			$('#deleteForm').submit();
-		});
-	});
-</script>
 </head>
 <body>
 	<div id="box">
 		<div id="list" th:include="/include/menu::sidemenu"></div>
 	</div>
 	<div class="container container-fluid">
-		<div id="container">
+		<br>
+		<br>
+		<br>
+		<h1>게시글 작성</h1>
 			<br>
-			<br>
-			<br>
-			<br>
-			<br>
-			<br>
-			<br>
-			<h1>회원탈퇴</h1>
-			<br>
-			<br>
-			<form id="deleteForm" action="/removeMember" method="post">
-				<div>
-					<input type="password" name="memberPw" placeholder="비밀번호를 입력하세요.">
+			<form th:action="@{/modifyPost}" method="post">
+				<input type="hidden" name="boardNo" th:value="${boardNo}">
+				<input type="hidden" name="memberId" th:value="${memberId}">
+				<div class="align">
+					<input type="text" class="boardTitle" th:value="${postOne.boardTitle}" name="boardTitle" placeholder="제목">
+				</div>
+				<br>
+				<div class="align">
+					<textarea class="form" rows="10" cols="100" th:text="${postOne.boardContent}" name="boardContent" placeholder="내용"></textarea>
+				</div>
+				<br>
+				<div class="align">
+					<button type="submit" class="btn btn-primary">작성</button>
 				</div>
 			</form>
-			<br>
-			<br>
-			<div><button id="deleteBtn" class="btn btn-danger">삭제</button></div>
-		</div>
 	</div>
 </body>
 </html>

@@ -39,7 +39,7 @@
 		text-decoration: none;
 		font-weight: bold;
 	}
-	#cashbookDate a{
+	#cashbook a {
 		color: white;
 	}
 	.item a:hover {
@@ -81,12 +81,22 @@
 	.sum {
 		font-size: 1.5em;
 	}
-	#sumPlus {
+	.sumPlus {
 		font-size: 2em;
 		color: #4ea7e1;
 	}
-	#sumMinus {
+	.sumMinus {
 		font-size: 2em;
+		color: #e74c3c;
+	}
+	#sumPlus {
+		font-size: 1.2em;
+		font-weight: bold;
+		color: #4ea7e1;
+	}
+	#sumMinus {
+		font-size: 1.2em;
+		font-weight: bold;
 		color: #e74c3c;
 	}
 	.udLink:hover {
@@ -112,11 +122,11 @@
 	<h1 th:text="${year} + '년  가계부'"></h1>
 		<div id="calendarContainer">
 			<div id="calendarHeader">
-			<a th:href="@{/getCashListByDate(day=${day.plusMonths(-1)})}"><button class="btn btnPreNext">&#60;&#60;</button></a>
-				<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)})}"><button class="btn btnPreNext">&#60;</button></a>
-				<a id="day" th:href="@{/getCashListByMonth(day=${day})}"><h2 th:text="${day}"></h2></a>
-				<a th:href="@{/getCashListByDate(day=${day.plusDays(1)})}"><button class="btn btnPreNext">&#62;</button></a>
-				<a th:href="@{/getCashListByDate(day=${day.plusMonths(1)})}"><button class="btn btnPreNext">&#62;&#62;</button></a>
+			<a th:href="@{/getCashListByDate(day=${day.plusMonths(-1)},cashbookNo=${cashbookNo})}"><button class="btn btnPreNext">&#60;&#60;</button></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)},cashbookNo=${cashbookNo})}"><button class="btn btnPreNext">&#60;</button></a>
+				<a id="day" th:href="@{/getCashListByMonth(day=${day},cashbookNo=${cashbookNo})}"><h2 th:text="${day}"></h2></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusDays(1)},cashbookNo=${cashbookNo})}"><button class="btn btnPreNext">&#62;</button></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusMonths(1)},cashbookNo=${cashbookNo})}"><button class="btn btnPreNext">&#62;&#62;</button></a>
 			</div>
 			<table class="table table-bordered">
 				<thead>
@@ -133,23 +143,23 @@
 				<tbody>
 					<tr th:each="cash : ${cashList}">
 						<td th:text="${cash.categoryName}"></td>
-						<td th:if="${cash.cashKind} == '수입'" th:text="'+' + ${#numbers.formatInteger(cash.cashPrice, 0, 'COMMA')}"></td>
+						<td id="sumPlus" th:if="${cash.cashKind} == '수입'" th:text="'+' + ${#numbers.formatInteger(cash.cashPrice, 0, 'COMMA')}"></td>
 						<td th:unless="${cash.cashKind} == '수입'"></td>
-						<td th:if="${cash.cashKind} == '지출'" th:text="'-' + ${#numbers.formatInteger(cash.cashPrice, 0, 'COMMA')}"></td>
+						<td id="sumMinus" th:if="${cash.cashKind} == '지출'" th:text="'-' + ${#numbers.formatInteger(cash.cashPrice, 0, 'COMMA')}"></td>
 						<td th:unless="${cash.cashKind} == '지출'"></td>
 						<td th:text="${cash.cashPlace}"></td>
 						<td th:text="${cash.cashMemo}"></td>
-						<td><a class="update udLink" th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day})}">수정</a></td>
-						<td><a class="delete udLink" th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day})}">삭제</a></td>
+						<td><a class="update udLink" th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cashbookNo})}">수정</a></td>
+						<td><a class="delete udLink" th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cashbookNo})}">삭제</a></td>
 					</tr>
 				</tbody>
 			</table>
 			<div id="calendarFooter">
-				<span><a th:href="@{/addCash(day=${day})}"><button class="btn insBtn">입력</button></a></span>
+				<span><a th:href="@{/addCash(day=${day},cashbookNo=${cashbookNo})}"><button class="btn insBtn">입력</button></a></span>
 				<div>
 					<span class="sum">합계&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<span id="sumPlus" th:if="${sumCash} > 0" th:text="'+' + ${#numbers.formatInteger(sumCash, 0, 'COMMA')}"></span>
-					<span id="sumMinus" th:unless="${sumCash} > 0" th:text="${#numbers.formatInteger(sumCash, 0, 'COMMA')}"></span>
+					<span class="sumPlus" th:if="${sumCash} > 0" th:text="'+' + ${#numbers.formatInteger(sumCash, 0, 'COMMA')}"></span>
+					<span class="sumMinus" th:unless="${sumCash} > 0" th:text="${#numbers.formatInteger(sumCash, 0, 'COMMA')}"></span>
 					<span class="sum">원</span>
 				</div>
 			</div>

@@ -11,6 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 <style>
 	html, body {
 		margin: 0;
@@ -52,6 +53,37 @@
 	h1 {
 		text-align: center;
 	}
+	#tableHeader {
+		display: flex;
+		justify-content: space-between;
+	}
+	.searchBar {
+		width: 300px;
+		height: 35px;
+	}
+	.searchBtn {
+		width: 30px;
+		height: 35px;
+	}
+	
+	th, td {
+		text-align: center;
+	}
+	#boardPreNext {
+		display: flex;
+		justify-content: space-around;
+	}
+	.boardPreNextBtn {
+	background-color: #e6e6e6;
+	height: 35px;
+	border-radius: 20px;
+	font-weight: bold;
+	color: #838383;
+	}
+	#currentPage {
+		font-size: 1.5em;
+		fort-weight: bold;
+	}
 </style>
 </head>
 <body>
@@ -60,6 +92,13 @@
 	</div>
 	<div class="container container-fluid">
 		<h1>게시판</h1>
+			<div id="tableHeader">
+				<div><a th:href="@{/addPost}"><button class="btn btn-success">글쓰기</button></a></div>
+				<form th:action="@{/boardList}" method="post">
+					<span><input class="form-control searchBar" type="text" name="search">
+					<button class="searchBtn btn"><i class='fas fa-search' style='font-size:24px'></i></button></span>
+				</form>
+			</div>
 			<table class="table table-bordered">
 				<tr>
 					<th>글번호</th>
@@ -69,11 +108,16 @@
 				</tr>
 				<tr th:each="bl : ${boardList}">
 					<td th:text="${bl.boardNo}"></td>
-					<td th:text="${bl.boardTitle}"></td>
+					<td><a th:href="@{/detailView(boardNo=${bl.boardNo})}" th:text="${bl.boardTitle}"></a></td>
 					<td th:text="${bl.memberId}"></td>
 					<td th:text="${bl.boardDate}"></td>
 				</tr>
 			</table>
+		<div id="boardPreNext">
+			<div><a th:href="@{/boardList(currentPage=${currentPage-1})}"><button class="btn boardPreNextBtn">이전</button></a></div>
+			<div id="currentPage" th:text="'-' + ${currentPage} + '-'"></div>
+			<div><a th:href="@{/boardList(currentPage=${currentPage+1})}"><button class="btn boardPreNextBtn">다음</button></a></div>
+		</div>
 	</div>
 </body>
 </html>

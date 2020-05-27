@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class Cash {
 	private int cashNo;
+	private int cashbookNo;
 	private String memberId;
 	private LocalDate cashDate;
 	private String cashKind;
@@ -16,6 +17,12 @@ public class Cash {
 	}
 	public void setCashNo(int cashNo) {
 		this.cashNo = cashNo;
+	}
+	public int getCashbookNo() {
+		return cashbookNo;
+	}
+	public void setCashbookNo(int cashbookNo) {
+		this.cashbookNo = cashbookNo;
 	}
 	public String getMemberId() {
 		return memberId;
@@ -61,8 +68,8 @@ public class Cash {
 	}
 	@Override
 	public String toString() {
-		return "Cash [cashNo=" + cashNo + ", memberId=" + memberId + ", cashDate=" + cashDate + ", cashKind=" + cashKind
-				+ ", categoryName=" + categoryName + ", cashPrice=" + cashPrice + ", cashPlace=" + cashPlace
-				+ ", cashMemo=" + cashMemo + "]";
+		return "Cash [cashNo=" + cashNo + ", cashbookNo=" + cashbookNo + ", memberId=" + memberId + ", cashDate="
+				+ cashDate + ", cashKind=" + cashKind + ", categoryName=" + categoryName + ", cashPrice=" + cashPrice
+				+ ", cashPlace=" + cashPlace + ", cashMemo=" + cashMemo + "]";
 	}
 }

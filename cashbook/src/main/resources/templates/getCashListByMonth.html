@@ -42,7 +42,7 @@
 	.item a:hover {
 		color: white;
 	}
-	#cashbookMonth a {
+	#cashbook a {
 		color: white;
 	}
 	#calendarContainer {
@@ -113,10 +113,12 @@
 	.gd-blue {
 		color: #89d1f9;
 		font-size: 17px;
+		font-weight: bold;
 	}
 	.gd-red {
 		color: #e7524e;
 		font-size: 17px;
+		font-weight: bold;
 	}
 	.sum {
 		font-size: 1.5em;
@@ -150,18 +152,19 @@
 	<h1>월별 가계부 관리</h1>
 	<div id="calendarContainer">
 		<div id="calendarHeader">
-			<a th:href="@{/getCashListByMonth(day=${day.plusYears(-1)})}"><button class="btn">&#60;&#60;</button></a>
-			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(-1)})}"><button class="btn">&#60;</button></a>
+			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(-1)},cashbookNo=${cashbookNo})}"><button class="btn">&#60;</button></a>
 			<h2 th:text="${year} + '년 ' + ${month} + '월'"></h2>
-			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(1)})}"><button class="btn">&#62;</button></a>
-			<a th:href="@{/getCashListByMonth(day=${day.plusYears(1)})}"><button class="btn">&#62;&#62;</button></a>
+			<a th:href="@{/getCashListByMonth(day=${day.plusMonths(1)},cashbookNo=${cashbookNo})}"><button class="btn">&#62;</button></a>
 		</div>
 			<div id="calendarSum">
-			<div><a th:href="@{/compareToMonth(day=${day})}"><button class="compareBtn">월별비교</button></a></div>
+			<div>
+				<span><a th:href="@{/compareToMonth(day=${day},cashbookNo=${cashbookNo})}"><button class="compareBtn">월별비교</button></a></span>
+				<span><a th:href="@{/getCashListByDate(day=${day},cashbookNo=${cashbookNo})}"><button class="compareBtn">Date</button></a></span>
+			</div>
 			<div>
 				<span class="sum">합계&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				<span id="sumPlus" th:if="${monthSum} > 0" th:text="'+' + ${#numbers.formatInteger(monthSum, 0, 'COMMA')}"></span>
-				<span id="sumMinus" th:unless="${monthSum} > 0" th:text="${#numbers.formatInteger(monthSum, 0, 'COMMA')}"></span>
+				<span id="sumPlus" th:if="${totalDateSum} > 0" th:text="'+' + ${#numbers.formatInteger(totalDateSum, 0, 'COMMA')}"></span>
+				<span id="sumMinus" th:unless="${totalDateSum} > 0" th:text="${#numbers.formatInteger(totalDateSum, 0, 'COMMA')}"></span>
 				<span class="sum">원</span>
 			</div>
 		</div>
@@ -178,9 +181,9 @@
 			<div th:class="${index.index%7} == 0 ? 'gd-clear gd-left' : 'gd-left'" 
 				 th:each="i, index : ${#numbers.sequence(1, lastDay+firstDayOfWeek-1)}" >
 				 <div class="calendarIndex" th:text="${i-(firstDayOfWeek-1)} > 0 ? ${i-(firstDayOfWeek-1)} : ''"></div>
-				 <div id="price"  th:each="dp : ${dayAndPriceList}">
+				 <div id="price"  th:each="dp : ${dayAndPrice}">
 				 	<span th:if="${i-(firstDayOfWeek-1)} == ${dp.day}">
-				 		<a id="day" th:href="@{/getCashListByDate(day=${dp.date})}"><span th:class="${dp.price} >= 0 ? 'gd-blue' : 'gd-red'" th:text="${#numbers.formatInteger(dp.price, 0, 'COMMA')}"></span></a>
+				 		<a id="day" th:href="@{/getCashListByDate(day=${dp.date},cashbookNo=${cashbookNo})}"><span th:class="${dp.price} >= 0 ? 'gd-blue' : 'gd-red'" th:text="${#numbers.formatInteger(dp.price, 0, 'COMMA')}"></span></a>
 				 	</span>
 				 </div>
 			</div>

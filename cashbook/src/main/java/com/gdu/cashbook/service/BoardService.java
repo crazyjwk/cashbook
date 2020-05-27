@@ -7,15 +7,58 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.gdu.cashbook.mapper.BoardMapper;
 import com.gdu.cashbook.vo.Board;
+import com.gdu.cashbook.vo.Comment;
 
 @Service
 @Transactional
 public class BoardService {
 	@Autowired
 	private BoardMapper boardMapper;
+	
+	public int removePost(Comment comment) {
+		boardMapper.deletePostComment(comment);
+		return boardMapper.deletePost(comment);
+	}
+	
+	public int removeCommnet(Comment comment) {
+		return boardMapper.deleteComment(comment);
+	}
+	
+	public int addComment(Comment comment) {
+		return boardMapper.insertComment(comment);
+	}
+	
+	public int modifyPost(Board board) {
+		return boardMapper.updatePost(board);
+	}
+	
+	public Board getPostOne(Board board) {
+		return boardMapper.selectPostOne(board);
+	}
+	
+	public Map<String, Object> getDetailView(int boardNo, int currentPage) {
+		int rowPerPage = 5;
+		int beginRow = (currentPage - 1) * rowPerPage;
+		int lastPage = getLastPage(rowPerPage);
+		
+		List<Comment> commentList = boardMapper.selectComment(boardNo, beginRow, rowPerPage);
+		Board boardOne = boardMapper.selectDetailView(boardNo);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("lastPage", lastPage);
+		map.put("boardOne", boardOne);
+		map.put("commentList", commentList);
+		
+		return map; 
+	}
+	
+	public int addPost(Board board) {
+		return boardMapper.insertPost(board);
+	}
 	
 	public Map<String, Object> getBoardList(int currentPage) {
 		int rowPerPage = 10;
