@@ -10,7 +10,7 @@
 	<!-- fragments1 -->
 	<div th:fragment="sidemenu">
 		<div th:if="${'/upload/'+session.loginMember.memberId+'.png'}!=null">
-			<img id="pic" class="rounded-circle" th:src="${'/upload/'+session.loginMember.memberPic}" width="90" height="90">
+			<img id="pic" th:src="${'/upload/'+session.loginMember.memberPic}" width="90" height="90">
 		</div>
 		<div class="item" id="member"><span th:text="${session.loginMember.memberId}"></span>님</div>
 		<div class="item" id="home"><a th:href="@{/home}">홈</a></div>

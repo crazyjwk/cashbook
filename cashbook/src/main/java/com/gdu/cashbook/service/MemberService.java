@@ -33,7 +33,7 @@ public class MemberService {
 //	@Value("C:\\java\\SPRING_WORK\\maven.1590293548484\\cashbook\\src\\main\\resources\\static\\upload")
 //	private String path;
 	
-	@Value("D:\\git-cashbook\\maven.1590371000501\\cashbook\\src\\main\\resources\\static\\upload")
+	@Value("D:\\git-cashbook\\maven.1590631938256\\cashbook\\src\\main\\resources\\static\\upload")
 	private String path;
 	
 	public int getMemberPw(Member member) { // id & pw만 들어있다.

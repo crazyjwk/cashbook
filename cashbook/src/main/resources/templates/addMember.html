@@ -76,52 +76,54 @@
 </style>
 </head>
 <body>
-	<div id="flexContainer">
-		<h1>회원가입</h1>
-		<form id="idForm" action="/checkMemberId" method="post">
-			<div>
-				아이디 중복 확인: <input type="text" name="memberIdCk" id="memberIdCk" placeholder="아이디 입력">
-				<button id="ckBtn" class="btn btn-light" type="button">중복체크</button>
-				<span th:text="${msg}"></span>
-			</div>
-		</form>
-		<form id="myForm" action="/addMember" method="post" enctype="multipart/form-data">
-			<div>
-				<div>사진</div>  
-				<div><input type="file" name="memberPic" id=""></div>
-				<span th:text="${msg1}"></span>
-			</div>
-			<div>
-				아이디 : <input type="text" th:value="${memberIdCk}" name="memberId" id="memberId" placeholder="아이디 입력" readonly="readonly">
-				<span id="idHelper"></span>
-			</div>
-			<div>
-				비밀번호 : <input type="password" name="memberPw" id="memberPw" placeholder="비밀번호 입력">
-				<span id="pwHelper"></span>
-			</div>
-			<div>
-				비밀번호 확인 : <input type="password" id="memberPw2" placeholder="비밀번호 확인">
-			</div>
-			<div>
-				사용자 이름 : <input type="text" name="memberName" id="memberName" placeholder="사용자 이름">
-				<span id="nameHelper"></span>
-			</div>
-			<div>
-				주소 : <input type="text" name="memberAddr" id="memberAddr" placeholder="사용자 주소">
-				<span id="addrHelper"></span>
-			</div>
-			<div>
-				전화번호 : <input type="text" name="memberPhone" id="memberPhone" placeholder="사용자 전화번호">
-				<span id="phoneHelper"></span>
-			</div>
-			<div>
-				이메일 : <input type="text" name="memberEmail" id="memberEmail" placeholder="사용자 이메일">
-				<span id="emailHelper"></span>
-			</div>
-		</form>
-			<div>
-				<button id="btn" class="btn btn-primary">회원가입</button>
-			</div>
+	<div class="container container-fluid">
+		<div id="flexContainer">
+			<h1>회원가입</h1>
+			<form id="idForm" action="/checkMemberId" method="post">
+				<div>
+					아이디 중복 확인: <input type="text" name="memberIdCk" id="memberIdCk" placeholder="아이디 입력">
+					<button id="ckBtn" class="btn btn-light" type="button">중복체크</button>
+					<span th:text="${msg}"></span>
+				</div>
+			</form>
+			<form id="myForm" action="/addMember" method="post" enctype="multipart/form-data">
+				<div>
+					<div>사진</div>  
+					<div><input type="file" name="memberPic" id=""></div>
+					<span th:text="${msg1}"></span>
+				</div>
+				<div>
+					아이디 : <input type="text" th:value="${memberIdCk}" name="memberId" id="memberId" placeholder="아이디 입력" readonly="readonly">
+					<span id="idHelper"></span>
+				</div>
+				<div>
+					비밀번호 : <input type="password" name="memberPw" id="memberPw" placeholder="비밀번호 입력">
+					<span id="pwHelper"></span>
+				</div>
+				<div>
+					비밀번호 확인 : <input type="password" id="memberPw2" placeholder="비밀번호 확인">
+				</div>
+				<div>
+					사용자 이름 : <input type="text" name="memberName" id="memberName" placeholder="사용자 이름">
+					<span id="nameHelper"></span>
+				</div>
+				<div>
+					주소 : <input type="text" name="memberAddr" id="memberAddr" placeholder="사용자 주소">
+					<span id="addrHelper"></span>
+				</div>
+				<div>
+					전화번호 : <input type="text" name="memberPhone" id="memberPhone" placeholder="사용자 전화번호">
+					<span id="phoneHelper"></span>
+				</div>
+				<div>
+					이메일 : <input type="text" name="memberEmail" id="memberEmail" placeholder="사용자 이메일">
+					<span id="emailHelper"></span>
+				</div>
+			</form>
+				<div>
+					<button id="btn" class="btn btn-primary">회원가입</button>
+				</div>
+		</div>
 	</div>
 </body>
 <script>
