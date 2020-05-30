@@ -104,7 +104,7 @@ public class CashController {
 	@PostMapping("/modifyCash")
 	public String modifyCash(Model model, HttpSession session, Cash cash,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
-		cash.setCashDate(day);
+		cash.setCashDate(day.toString());
 		cashService.modifyCash(cash);
 		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day + "&cashbookNo="+cash.getCashbookNo();
 	}
@@ -173,7 +173,7 @@ public class CashController {
 		model.addAttribute("firstDayOfWeek", firstDay.get(Calendar.DAY_OF_WEEK));
 		return "getCashListByMonth";
 	}
-	
+	/*
 	// 수입/지출 입력
 	@GetMapping("/addCash")
 	public String addCash(Model model, HttpSession session, @RequestParam(value="cashbookNo", required = false) int cashbookNo,
@@ -205,11 +205,11 @@ public class CashController {
 		System.out.println(cash.getCashMemo());
 		System.out.println(cash.getCashDate());
 		
-		cash.setCashDate(day);
+		cash.setCashDate(day.toString());
 		cashService.addCash(cash);
 		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day + "&cashbookNo="+cash.getCashbookNo();
 	}
-	
+	*/
 	// 수입/지출 삭제
 	@GetMapping("/removeCash")
 	public String removeCash(HttpSession session, Cash cash,
@@ -250,11 +250,16 @@ public class CashController {
 		Cash cash = new Cash();
 		cash.setCashbookNo(cashbookNo);
 		cash.setMemberId(memberId);
-		cash.setCashDate(day);
+		cash.setCashDate(day.toString());
+		
+		String cashDate = day.toString();
+		System.out.println(cashDate +"<---- cashDate");
 		
 		Map<String, Object> list = cashService.getCashListByDate(cash);
 		int sumCash = (int)list.get("sumCash");
 		
+		model.addAttribute("cashDate", cashDate);
+		model.addAttribute("memberId", memberId);
 		model.addAttribute("year", day.getYear());
 		model.addAttribute("day", day);
 		model.addAttribute("cashList", list.get("cashList"));

@@ -2,6 +2,9 @@ package com.gdu.cashbook.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +33,32 @@ public class MemberService {
 	
 	@Autowired private CashMapper cashMapper;
 	@Autowired private BoardMapper boardMapeer;
-//	@Value("C:\\java\\SPRING_WORK\\maven.1590293548484\\cashbook\\src\\main\\resources\\static\\upload")
+	
+	@Value("C:\\javaweb\\SPRING_WORK\\maven.1590233389670\\cashbook\\src\\main\\resources\\static\\upload")
+	private String path;
+	
+//	@Value("D:\\git-cashbook\\maven.1590631938256\\cashbook\\src\\main\\resources\\static\\upload")
 //	private String path;
 	
-	@Value("D:\\git-cashbook\\maven.1590631938256\\cashbook\\src\\main\\resources\\static\\upload")
-	private String path;
+	public Map<String, Object> getAdminMemberInfoList(int currentPage) {
+		int rowPerPage = 7;
+		int beginRow = (currentPage - 1) * rowPerPage;
+		int lastPage = getLastPage(rowPerPage);
+		List<Member> list = memberMapper.selectAdminMemberInfoList(beginRow, rowPerPage);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("lastPage", lastPage);
+		map.put("list", list);
+		
+		return map;
+	}
+	public int getLastPage(int rowPerPage) {
+		int totalRow = memberMapper.selectAdminMemberInfoTotalRow();
+		int lastPage = totalRow / rowPerPage;
+		if(totalRow % rowPerPage != 0) {
+			lastPage += 1;
+		}
+		return lastPage;
+	}
 	
 	public int getMemberPw(Member member) { // id & pw만 들어있다.
 		// pw도 추가해주자(UUID 라이브러리 사용)

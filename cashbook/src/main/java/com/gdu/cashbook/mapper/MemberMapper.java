@@ -1,13 +1,16 @@
 package com.gdu.cashbook.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.gdu.cashbook.vo.LoginMember;
 import com.gdu.cashbook.vo.Member;
-import com.gdu.cashbook.vo.MemberForm;
 
 @Mapper
 public interface MemberMapper {
+	public List<Member> selectAdminMemberInfoList(int beginRow, int rowPerPage); // admin전용 회원정보 리스트
+	public int selectAdminMemberInfoTotalRow(); // admin전용 회원정보 총 개수
 	public String selectMemberPic(String memberId); // 이미지 삭제를 위해서 이미지 값을 받아 옴
 	public int updateMemberPw(Member member); // 찾은 비밀번호 수정
 	public Member selectMemberByIdAndEmail(Member member); // 비밀번호 찾기

@@ -10,24 +10,46 @@
 		1. 입력한 id와 email이 맞으면 사용자가 id의 pw를 랜덤문자열로 변경 update
 		2. 사용자가 입력한 id의 변경된 pw를 select
 		3. 2번에서 변경된 pw를 사용자의 이메일로 전송
-	 -->
-	 <!-- 회원탈퇴 전 가계부 삭제 -->
-	 <!-- 회원탈퇴 전 수입/지출 삭제 -->
-	 <!-- 회원탈퇴 전 게시글 삭제 -->
-	 <delete id="deleteMemberPost"></delete>
-	 <!-- 회원 사진을 가지고 오는 쿼리 -->
-	 <select id="selectMemberPic" resultType="String" parameterType="String">
+	-->
+	<!-- 회원탈퇴 전 가계부 삭제 -->
+	<!-- 회원탈퇴 전 수입/지출 삭제 -->
+	<!-- 회원탈퇴 전 게시글 삭제 -->
+	<delete id="deleteMemberPost"></delete>
+	<!-- 회원 사진을 가지고 오는 쿼리 -->
+	<select id="selectMemberPic" resultType="String" parameterType="String">
 	 	SELECT member_pic
 	 	FROM member
 	 	WHERE member_id = #{memberId}
-	 </select>
-	 <update id="updateMemberPw" parameterType="com.gdu.cashbook.vo.Member">
+	</select>
+	<update id="updateMemberPw" parameterType="com.gdu.cashbook.vo.Member">
 	 	UPDATE member 
 	 	SET
 	 		member_pw = PASSWORD(#{memberPw})
 	 	WHERE member_id = #{memberId}
 	 	AND member_email = #{memberEmail}
-	 </update>
+	</update>
+	<!-- admin 회원정보  -->
+	<select id="selectAdminMemberInfoList" resultType="com.gdu.cashbook.vo.Member" parameterType="int" >
+		SELECT 
+			member_id memberId,
+			member_name memberName,
+			member_addr memberAddr,
+			member_phone memberPhone,
+			member_email memberEmail,
+			member_date memberDate
+		FROM member
+		WHERE member_id
+		NOT IN('admin')
+		ORDER BY member_date DESC
+		LIMIT #{beginRow}, #{rowPerPage}
+	</select>
+	<select id="selectAdminMemberInfoTotalRow" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM member
+		WHERE member_id
+		NOT IN('admin')
+	</select>
 	<select id="selectMemberByIdAndEmail" resultType="com.gdu.cashbook.vo.Member" parameterType="com.gdu.cashbook.vo.Member">
 		SELECT
 			*

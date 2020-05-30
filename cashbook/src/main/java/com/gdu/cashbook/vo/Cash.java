@@ -1,12 +1,10 @@
 package com.gdu.cashbook.vo;
 
-import java.time.LocalDate;
-
 public class Cash {
 	private int cashNo;
 	private int cashbookNo;
 	private String memberId;
-	private LocalDate cashDate;
+	private String cashDate;
 	private String cashKind;
 	private String categoryName;
 	private int cashPrice;
@@ -30,10 +28,10 @@ public class Cash {
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
 	}
-	public LocalDate getCashDate() {
+	public String getCashDate() {
 		return cashDate;
 	}
-	public void setCashDate(LocalDate cashDate) {
+	public void setCashDate(String cashDate) {
 		this.cashDate = cashDate;
 	}
 	public String getCashKind() {

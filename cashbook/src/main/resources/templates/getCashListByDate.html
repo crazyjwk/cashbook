@@ -11,6 +11,68 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script>
+	$(document).ready(() => {
+		$('#addCashBtn').click(() => {
+			$.ajax({
+				url: '/getCategoryList',
+				type:'GET',
+				success:data => {
+					console.log("성공");
+					$('#addCash').before('<tr>');
+					$('#addCash').before('<td><select id="categoryName">');
+					$('#categoryName').append('<option value="">---선택---</option>');
+					$(data).each((key, value) => {
+						$('#categoryName').append('<option value="'+value.categoryName+'">'+value.categoryName+'</option>');
+					});
+					$('#addCash').before('</select></td>');
+					$('#addCash').before('<td><select id="cashKind">');
+					$('#cashKind').append('<option value="수입">수입</option>');
+					$('#cashKind').append('<option value="지출">지출</option>');
+					$('#addCash').before('</select></td>');
+					$('#addCash').before('<td><input type="text" id="cashPrice" placeholder="금액을 입력하세요."></td>');
+					$('#addCash').before('<td><input type="text" id="cashPlace" placeholder="장소를 입력하세요.(선택)"></td>');
+					$('#addCash').before('<td colspan="3"><input type="text" id="cashMemo" placeholder="메모를 입력하세요.(선택)"></td>');
+				}
+			});
+			$('#addCashBtn').css({'display' : 'none'});
+			$('#addBtn').css({'display' : 'inline'});
+			$('#cancleBtn').css({'display' : 'inline'});
+		});
+		$('#addBtn').click(()=>{
+			let memberId = $('#memberId').val();
+			let categoryName = $('#categoryName').val();
+			let cashKind = $('#cashKind').val();
+			let cashPrice = $('#cashPrice').val();
+			let cashPlace = $('#cashPlace').val();
+			let cashMemo = $('#cashMemo').val();
+			let cashbookNo = $('#cashbookNo').val();
+			let cashDate = $('#cashDate').val();
+			console.log(cashDate);
+			$.ajax({
+				url: '/addCash2',
+				type: 'POST',
+				data:{
+					'memberId':memberId,
+					'categoryName':categoryName,
+					'cashDate':cashDate,
+					'cashKind':cashKind,
+					'cashPrice':cashPrice,
+					'cashPlace':cashPlace,
+					'cashMemo':cashMemo,
+					'cashbookNo':cashbookNo
+				},
+				success:()=>{
+					console.log("성공");
+				}
+			});
+			history.go(0);
+		});
+		$('#cancleBtn').click(()=>{
+			history.go(0);
+		});
+	});
+</script>
 <style>
 	html, body {
 		margin: 0;
@@ -47,6 +109,7 @@
 	}
 	
 	h1 {
+		text-align: center;
 		padding-top: 50px;
 		padding-bottom: 50px;
 	}
@@ -66,7 +129,7 @@
 	}
 	#calendarFooter {
 		disPlay: flex;
-		justify-content: space-between;
+		justify-content: flex-end;
 	}
 	.table {
 		text-align: center;
@@ -111,6 +174,25 @@
 	#day:hover{
 		text-decoration: none;
 	}
+	.addCashBtn {
+	  font-size: 15px;
+	  font-weight: bold;
+	  width: 50px;
+	  height: 30px;
+	  background-color: #62C15B;
+	  border: none;
+	  padding: 0;
+	}
+	#addBtn {
+		display: none;
+		color: black;
+		font-weight: bold;
+	}
+	#cancleBtn {
+		display: none;
+		color: black;
+		font-weight: bold;
+	}
 </style>
 </head>
 <body>
@@ -140,7 +222,7 @@
 						<th>삭제</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody >
 					<tr th:each="cash : ${cashList}">
 						<td th:text="${cash.categoryName}"></td>
 						<td id="sumPlus" th:if="${cash.cashKind} == '수입'" th:text="'+' + ${#numbers.formatInteger(cash.cashPrice, 0, 'COMMA')}"></td>
@@ -152,11 +234,20 @@
 						<td><a class="update udLink" th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cashbookNo})}">수정</a></td>
 						<td><a class="delete udLink" th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cashbookNo})}">삭제</a></td>
 					</tr>
+					<tr id="addCash">
+						<td colspan="7"><button id="addCashBtn" class="btn addCashBtn">입력</button>
+							<button id="addBtn" class="btn btn-success">입력</button>
+							<button id="cancleBtn" class="btn btn-success">취소</button>
+						</td>
+					</tr>
 				</tbody>
 			</table>
+			<input type="hidden" id="cashDate" th:value="${cashDate}">
+			<input type="hidden" id="cashbookNo" th:value="${cashbookNo}">
+			<input type="hidden" id="memberId" th:value="${memberId}">
 			<div id="calendarFooter">
-				<span><a th:href="@{/addCash(day=${day},cashbookNo=${cashbookNo})}"><button class="btn insBtn">입력</button></a></span>
-				<div>
+				<!-- <span><a th:href="@{/addCash(day=${day},cashbookNo=${cashbookNo})}"><button class="btn insBtn">입력</button></a></span> -->
+				<div id="sum">
 					<span class="sum">합계&nbsp;&nbsp;&nbsp;&nbsp;</span>
 					<span class="sumPlus" th:if="${sumCash} > 0" th:text="'+' + ${#numbers.formatInteger(sumCash, 0, 'COMMA')}"></span>
 					<span class="sumMinus" th:unless="${sumCash} > 0" th:text="${#numbers.formatInteger(sumCash, 0, 'COMMA')}"></span>

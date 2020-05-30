@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<style>
+		html, body {
+		margin: 0;
+		height: 100%;
+	}
+	#box {
+		text-align: center;
+		height: 100%;
+		margin: 0;
+		margin-top: 0;
+		width: 200px;
+		float: left;
+		background-color: #3498db;
+	}
+	#list {
+		margin-top: 20px;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+	}
+	.item {
+		font-size: 1.25em;
+	}
+	.item a {
+		color: black;
+		text-decoration: none;
+		font-weight: bold;
+	}
+	.item a:hover {
+		color: white;
+	}
+	#memberInfo a {
+		color: white;
+	}
+	h1 {
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+	<div id="box">
+		<div id="list" th:include="/include/menu::sidemenu"></div>
+	</div>
+	<div class="container container-fluid">
+		<h1>회원정보</h1>
+			<form th:action="@{/boardList}" method="post">
+					<span><input class="form-control searchBar" type="text" name="search">
+					<button class="searchBtn btn"><i class='fas fa-search' style='font-size:24px'></i></button></span>
+			</form>
+			<table class="table table-bordered">
+				<tr>
+					<th>아이디</th>
+					<th>이름</th>
+					<th>주소</th>
+					<th>전화번호</th>
+					<th>이메일</th>
+					<th>가입날짜</th>
+				</tr>
+				<tr th:each="aml : ${memberInfoList}">
+					<td th:text="${aml.memberId}"></td>
+					<td th:text="${aml.memberName}"></td>
+					<td th:text="${aml.memberAddr}"></td>
+					<td th:text="${aml.memberPhone}"></td>
+					<td th:text="${aml.memberEmail}"></td>
+					<td th:text="${aml.memberDate}"></td>
+				</tr>
+			</table>
+	
+	</div>
+</body>
+</html>

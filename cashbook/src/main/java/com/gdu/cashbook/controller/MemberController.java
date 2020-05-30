@@ -1,5 +1,7 @@
 package com.gdu.cashbook.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.cashbook.service.MemberService;
 import com.gdu.cashbook.vo.LoginMember;
@@ -21,21 +22,6 @@ public class MemberController {
 	private MemberService memberService;
 	
 	
-	@GetMapping("adminMemberInfo")
-	public String adminMemberInfo(Model model, HttpSession session) {
-		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
-		if(session.getAttribute("loginMember") == null) {
-			return "redirect:/";
-		} else if(!(memberId.equals("admin"))) {
-			LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
-			Member member = memberService.getMemberOne(loginMember);
-			model.addAttribute("member", member);
-			model.addAttribute("loginMember", loginMember);
-			return "memberInfo";
-		}
-		
-		return "adminMemberInfo";
-	}
 	// 회원 비밀번호 찾기
 	@GetMapping("/findMemberPw")
 	public String findMemberPw(HttpSession session) {
@@ -141,11 +127,20 @@ public class MemberController {
 	
 	// 회원정보
 	@GetMapping("/memberInfo")
-	public String memberInfo(Model model, HttpSession session) {
+	public String memberInfo(Model model, HttpSession session,
+			@RequestParam(value="currentPage", defaultValue="1") int currentPage) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/";
 		}
 		LoginMember loginMember = (LoginMember)session.getAttribute("loginMember");
+		String admin = loginMember.getMemberId();
+		if(admin.equals("admin")) {
+			Map<String, Object> adminMemberInfo = memberService.getAdminMemberInfoList(currentPage);
+			model.addAttribute("memberInfoList", adminMemberInfo.get("list"));
+			model.addAttribute("lastPage", adminMemberInfo.get("lastPage"));
+			model.addAttribute("loginMember", loginMember);
+			return "adminMemberInfo";
+		}
 		Member member = memberService.getMemberOne(loginMember);
 		model.addAttribute("member", member);
 		model.addAttribute("loginMember", loginMember);
