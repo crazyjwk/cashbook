@@ -61,6 +61,9 @@
 	.form-control {
 		width: 500px;
 	}
+	.boardPic {
+		width: 740px;
+	}
 </style>
 </head>
 <body>
@@ -73,7 +76,7 @@
 		<br>
 		<h1>게시글 작성</h1>
 			<br>
-			<form th:action="@{/addPost}" method="post">
+			<form th:action="@{/addPost}" method="post" enctype="mutipart/form-data">
 				<input type="hidden" name="memberId" th:value="${memberId}">
 				<div class="align">
 					<input type="text" class="boardTitle" name="boardTitle" placeholder="제목">
@@ -81,6 +84,10 @@
 				<br>
 				<div class="align">
 					<textarea class="form" rows="10" cols="100" name="boardContent" placeholder="내용"></textarea>
+				</div>
+				<br>
+				<div class="align">
+					<input class="boardPic" type="file" name="boardPic">
 				</div>
 				<br>
 				<div class="align">

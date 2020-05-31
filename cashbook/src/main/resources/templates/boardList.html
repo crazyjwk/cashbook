@@ -81,8 +81,8 @@
 	color: #838383;
 	}
 	#currentPage {
-		font-size: 1.5em;
-		fort-weight: bold;
+		font-size: 1.2em;
+		font-weight: bold;
 	}
 </style>
 </head>
@@ -114,9 +114,11 @@
 				</tr>
 			</table>
 		<div id="boardPreNext">
-			<div><a th:href="@{/boardList(currentPage=${currentPage-1})}"><button class="btn boardPreNextBtn">이전</button></a></div>
-			<div id="currentPage" th:text="'-' + ${currentPage} + '-'"></div>
-			<div><a th:href="@{/boardList(currentPage=${currentPage+1})}"><button class="btn boardPreNextBtn">다음</button></a></div>
+			<div>
+				<a th:href="${currentPage} == 1 ? @{/boardList} : @{/boardList(currentPage=${currentPage-1})}"><button class="btn boardPreNextBtn">이전</button></a>
+				<span id="currentPage" th:text="'- ' + ${currentPage} + ' -'"></span>
+				<a th:href="${currentPage} == ${lastPage} ? @{/boardList(currentPage=${lastPage})} : @{/boardList(currentPage=${currentPage+1})}"><button class="btn boardPreNextBtn">다음</button></a>
+			</div>
 		</div>
 	</div>
 </body>

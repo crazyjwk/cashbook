@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import com.gdu.cashbook.mapper.BoardMapper;
 import com.gdu.cashbook.vo.Board;
@@ -24,7 +23,7 @@ public class BoardService {
 		return boardMapper.deletePost(comment);
 	}
 	
-	public int removeCommnet(Comment comment) {
+	public int removeComment(Comment comment) {
 		return boardMapper.deleteComment(comment);
 	}
 	
@@ -43,7 +42,11 @@ public class BoardService {
 	public Map<String, Object> getDetailView(int boardNo, int currentPage) {
 		int rowPerPage = 5;
 		int beginRow = (currentPage - 1) * rowPerPage;
-		int lastPage = getLastPage(rowPerPage);
+		int totalRow = boardMapper.selectCommentTotalRowByPost(boardNo);
+		int lastPage = totalRow / rowPerPage;
+		if(totalRow % rowPerPage != 0) {
+			lastPage += 1;
+		}
 		
 		List<Comment> commentList = boardMapper.selectComment(boardNo, beginRow, rowPerPage);
 		Board boardOne = boardMapper.selectDetailView(boardNo);
@@ -57,13 +60,21 @@ public class BoardService {
 	}
 	
 	public int addPost(Board board) {
-		return boardMapper.insertPost(board);
+	
+		int row = boardMapper.insertPost(board);
+
+		return row;
 	}
 	
 	public Map<String, Object> getBoardList(int currentPage) {
 		int rowPerPage = 10;
 		int beginRow = (currentPage - 1) * rowPerPage;
-		int lastPage = getLastPage(rowPerPage);
+		int totalRow = boardMapper.selectPostTotalRow();
+		int lastPage = totalRow / rowPerPage;
+		if(totalRow % rowPerPage != 0) {
+			lastPage += 1;
+		}
+		
 		System.out.println(lastPage + "<-- boardService lastPage");
 		List<Board> list = boardMapper.selectBoardList(beginRow, rowPerPage);
 		
@@ -71,14 +82,5 @@ public class BoardService {
 		map.put("lastPage", lastPage);
 		map.put("list", list);
 		return map;
-	}
-	// LastPage 구하는 메서드
-	public int getLastPage(int rowPerPage) {
-		int totalRow = boardMapper.selectTotalRow();
-		int lastPage = totalRow / rowPerPage;
-		if(totalRow % rowPerPage != 0) {
-			lastPage += 1;
-		}
-		return lastPage;
 	}
 }

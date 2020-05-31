@@ -128,6 +128,7 @@
 	<delete id="deleteCash" parameterType="int">
 		DELETE FROM cash
 		WHERE cash_no = #{cashNo}
+		AND cashbook_no = #{cashbookNo}
 	</delete>
 	<!-- 특정 회원, 날짜를 통해서 그날 수입/지출의 합계를 가지고 오는 쿼리 -->
 	<select id="selectSumCashByDate" resultType="Integer" parameterType="com.gdu.cashbook.vo.Cash">
@@ -159,7 +160,7 @@
 			cash_price cashPrice,
 			cash_place cashPlace,
 			cash_memo cashMemo
-		FROM cash
+		FROM cash 
 		WHERE member_id = #{memberId}
 		AND cashbook_no =#{cashbookNo}
 		AND cash_date = #{cashDate}

@@ -50,6 +50,28 @@
 	h1 {
 		text-align: center;
 	}
+	th {
+		text-align: center;
+		background-color: #eaeaea;
+	}
+	td {
+		text-align: center;
+	}
+	#preNext {
+		display: flex;
+		justify-content: space-around;
+	}
+	.preNextBtn {
+		background-color: #e6e6e6;
+		height: 35px;
+		border-radius: 20px;
+		font-weight: bold;
+		color: #838383;
+	}
+	span {
+		font-size: 1.2em;
+		font-weight: bold;
+	}
 </style>
 </head>
 <body>
@@ -80,7 +102,12 @@
 					<td th:text="${aml.memberDate}"></td>
 				</tr>
 			</table>
-	
+			<div id="preNext">
+				<div>
+					<a th:href="${currentPage} == 1 ? @{/memberInfo} : @{/memberInfo(currentPage=${currentPage-1})}"><button class="btn preNextBtn">이전</button></a>
+					<span th:text="'- ' + ${currentPage} + ' -'"></span>
+					<a th:href="${currentPage} == ${lastPage} ? @{/memberInfo(currentPage=${lastPage})} : @{/memberInfo(currentPage=${currentPage+1})}"><button class="btn preNextBtn">다음</button></a></div>
+				</div>
 	</div>
 </body>
 </html>

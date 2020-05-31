@@ -111,6 +111,10 @@
 	h1 {
 		text-align: center;
 		padding-top: 50px;
+	}
+	#year {
+		font-size: 30px;
+		text-align: center;
 		padding-bottom: 50px;
 	}
 	#calendarHeader{
@@ -201,14 +205,15 @@
 	</div>
 	
 	<div class="container container-fluid">
-	<h1 th:text="${year} + '년  가계부'"></h1>
+	<h1 th:text="${cb.cashbookTitle}"></h1>
+	<div id="year" th:text="'(' + ${year} + ')'"></div>
 		<div id="calendarContainer">
 			<div id="calendarHeader">
-			<a th:href="@{/getCashListByDate(day=${day.plusMonths(-1)},cashbookNo=${cashbookNo})}"><button class="btn btnPreNext">&#60;&#60;</button></a>
-				<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)},cashbookNo=${cashbookNo})}"><button class="btn btnPreNext">&#60;</button></a>
-				<a id="day" th:href="@{/getCashListByMonth(day=${day},cashbookNo=${cashbookNo})}"><h2 th:text="${day}"></h2></a>
-				<a th:href="@{/getCashListByDate(day=${day.plusDays(1)},cashbookNo=${cashbookNo})}"><button class="btn btnPreNext">&#62;</button></a>
-				<a th:href="@{/getCashListByDate(day=${day.plusMonths(1)},cashbookNo=${cashbookNo})}"><button class="btn btnPreNext">&#62;&#62;</button></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusMonths(-1)},cashbookNo=${cb.cashbookNo},cashbookTitle=${cb.cashbookTitle})}"><button class="btn btnPreNext">&#60;&#60;</button></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusDays(-1)},cashbookNo=${cb.cashbookNo},cashbookTitle=${cb.cashbookTitle})}"><button class="btn btnPreNext">&#60;</button></a>
+				<a id="day" th:href="@{/getCashListByMonth(day=${day},cashbookNo=${cb.cashbookNo},cashbookTitle=${cb.cashbookTitle})}"><h2 th:text="${day}"></h2></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusDays(1)},cashbookNo=${cb.cashbookNo},cashbookTitle=${cb.cashbookTitle})}"><button class="btn btnPreNext">&#62;</button></a>
+				<a th:href="@{/getCashListByDate(day=${day.plusMonths(1)},cashbookNo=${cb.cashbookNo},cashbookTitle=${cb.cashbookTitle})}"><button class="btn btnPreNext">&#62;&#62;</button></a>
 			</div>
 			<table class="table table-bordered">
 				<thead>
@@ -231,8 +236,8 @@
 						<td th:unless="${cash.cashKind} == '지출'"></td>
 						<td th:text="${cash.cashPlace}"></td>
 						<td th:text="${cash.cashMemo}"></td>
-						<td><a class="update udLink" th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cashbookNo})}">수정</a></td>
-						<td><a class="delete udLink" th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cashbookNo})}">삭제</a></td>
+						<td><a class="update udLink" th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cb.cashbookNo})}">수정</a></td>
+						<td><a class="delete udLink" th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cb.cashbookNo})}">삭제</a></td>
 					</tr>
 					<tr id="addCash">
 						<td colspan="7"><button id="addCashBtn" class="btn addCashBtn">입력</button>

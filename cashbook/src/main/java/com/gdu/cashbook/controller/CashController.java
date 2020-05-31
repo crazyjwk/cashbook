@@ -220,25 +220,26 @@ public class CashController {
 		System.out.println(cash.getCashNo() + "<-- cashNo");
 		System.out.println(cash.getMemberId() + "<-- cashMemberId");
 		System.out.println(cash.getCashbookNo() + "<-- cashbookNo");
-		cashService.removeCash(cash.getCashNo());
+		cashService.removeCash(cash.getCashNo(), cash.getCashbookNo());
 		return "redirect:/getCashListByDate?"+ cash.getMemberId() + "&day=" + day + "&cashbookNo="+cash.getCashbookNo();
 	}
 	@GetMapping("/getCashListByDate")
-	public String getCashListByDate(Model model, HttpSession session, @RequestParam(value="cashbookNo") int cashbookNo,
+	public String getCashListByDate(Model model, HttpSession session, Cashbook cashbook,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day,
 			@RequestParam(value="year", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate year) {
 			// RequestParam -> DateTimeFormat으로 자동 형변환
 		
-		System.out.println(year + " <-- year asdasdasdasd");
 		if(day == null) {
 			day = LocalDate.now();
 		}
 		if(year != null) {
-			day= LocalDate.of(year.getYear(), day.getMonth(), day.getDayOfMonth());
+			day = LocalDate.of(year.getYear(), day.getMonth(), day.getDayOfMonth());
 		}
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
+		
+		 
 		// memberId
 		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
 		
@@ -247,8 +248,10 @@ public class CashController {
 //		String strToday = sdf.format(day);
 //		
 //		System.out.println(sdf.format(day) + " <-- today");
+		System.out.println(cashbook.getCashbookTitle() + " <-- cashbookTitle");
+		
 		Cash cash = new Cash();
-		cash.setCashbookNo(cashbookNo);
+		cash.setCashbookNo(cashbook.getCashbookNo());
 		cash.setMemberId(memberId);
 		cash.setCashDate(day.toString());
 		
@@ -264,7 +267,7 @@ public class CashController {
 		model.addAttribute("day", day);
 		model.addAttribute("cashList", list.get("cashList"));
 		model.addAttribute("sumCash", sumCash);
-		model.addAttribute("cashbookNo", cashbookNo);
+		model.addAttribute("cb", cashbook);
 		return "getCashListByDate";
 	}
 }

@@ -10,6 +10,8 @@ public class Cash {
 	private int cashPrice;
 	private String cashPlace;
 	private String cashMemo;
+	private String cashbookTitle;
+	private String cashbookGoal;
 	public int getCashNo() {
 		return cashNo;
 	}
@@ -64,10 +66,23 @@ public class Cash {
 	public void setCashMemo(String cashMemo) {
 		this.cashMemo = cashMemo;
 	}
+	public String getCashbookTitle() {
+		return cashbookTitle;
+	}
+	public void setCashbookTitle(String cashbookTitle) {
+		this.cashbookTitle = cashbookTitle;
+	}
+	public String getCashbookGoal() {
+		return cashbookGoal;
+	}
+	public void setCashbookGoal(String cashbookGoal) {
+		this.cashbookGoal = cashbookGoal;
+	}
 	@Override
 	public String toString() {
 		return "Cash [cashNo=" + cashNo + ", cashbookNo=" + cashbookNo + ", memberId=" + memberId + ", cashDate="
 				+ cashDate + ", cashKind=" + cashKind + ", categoryName=" + categoryName + ", cashPrice=" + cashPrice
-				+ ", cashPlace=" + cashPlace + ", cashMemo=" + cashMemo + "]";
+				+ ", cashPlace=" + cashPlace + ", cashMemo=" + cashMemo + ", cashbookTitle=" + cashbookTitle
+				+ ", cashbookGoal=" + cashbookGoal + "]";
 	}
 }

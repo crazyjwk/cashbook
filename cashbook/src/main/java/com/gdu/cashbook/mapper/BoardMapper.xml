@@ -47,7 +47,8 @@
 	<select id="selectPostOne" resultType="com.gdu.cashbook.vo.Board" parameterType="com.gdu.cashbook.vo.Board">
 		SELECT
 			board_title boardTitle,
-			board_content boardContent
+			board_content boardContent,
+			board_pic boardPic
 		FROM board
 		WHERE member_id = #{memberId}
 		AND board_no = #{boardNo}
@@ -62,7 +63,7 @@
 			comment_date commentDate
 		FROM comment
 		WHERE board_no=#{boardNo}
-		ORDER BY board_no DESC
+		ORDER BY comment_date DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
 	<!-- 게시글 상세보기 -->
@@ -86,8 +87,15 @@
 		)
 		VALUES(#{memberId}, #{boardTitle}, #{boardContent}, NOW())
 	</insert>
+	<!-- 게시글 당 총 댓글 수 구하는 쿼리 -->
+	<select id="selectCommentTotalRowByPost" resultType="int" parameterType="int">
+		SELECT 
+			COUNT(*)
+		FROM comment
+		WHERE board_no=#{boardNo}
+	</select>
 	<!-- 총 게시글 수를 구하는 쿼리 -->
-	<select id="selectTotalRow" resultType="int" parameterType="int">
+	<select id="selectPostTotalRow" resultType="int" parameterType="int">
 		SELECT
 			COUNT(*)
 		FROM board

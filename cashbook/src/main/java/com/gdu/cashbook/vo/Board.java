@@ -41,4 +41,5 @@ public class Board {
 		return "Board [boardNo=" + boardNo + ", memberId=" + memberId + ", boardTitle=" + boardTitle + ", boardContent="
 				+ boardContent + ", boardDate=" + boardDate + "]";
 	}
+
 }

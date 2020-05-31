@@ -23,7 +23,7 @@ public interface CashMapper {
 	public List<Category> selectCategoryList();
 	public List<dayAndMonthAndYearAndPrice> selectDayAndPrice(Map<String, Object> day);
 	public int insertCash(Cash cash);
-	public void deleteCash(int cashNo);
+	public void deleteCash(int cashNo, int cashbookNo);
 	public Integer selectSumCashByDate(Cash cash);
 	public List<Cash> selectCashListByDate(Cash cash);
 }

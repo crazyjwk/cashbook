@@ -81,6 +81,10 @@
 		font-weight: bold;
 		color: #838383;
 	}
+	span {
+		font-size: 1.2em;
+		font-weight: bold;
+	}
 </style>
 </head>
 <body>
@@ -92,13 +96,16 @@
 			<div id="addCashbook"><a th:href="@{/addCashbook}"><button class="btn btn-success">가계부 생성</button></a></div>
 		<div id="container">
 			<div id="block" th:each="cbl : ${cashbookList}">
-				<a th:href="@{/getCashListByDate(day=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')},year=${cbl.cashbookDate},cashbookNo=${cbl.cashbookNo})}"><img th:src="@{${'/upload/' + cbl.cashbookImg}}"></a>
+				<a th:href="@{/getCashListByDate(day=${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')},year=${cbl.cashbookDate},cashbookNo=${cbl.cashbookNo},cashbookTitle=${cbl.cashbookTitle},cashbookGoal=${cbl.cashbookGoal})}"><img th:src="@{${'/upload/' + cbl.cashbookImg}}"></a>
 				<div id="cashbookTitle" th:text="${cbl.cashbookTitle}"></div>
 			</div>
 		</div>
 		<div id="preNext">
-			<a th:href="@{/cashbookList(currentPage=${currentPage}-1)}"><button class="btn preNext">이전</button></a>
-			<a th:href="@{/cashbookList(currentPage=${currentPage}+1)}"><button class="btn preNext">다음</button></a>
+			<div>
+				<a th:href="${currentPage} == 1 ? @{/cashbookList} : @{/cashbookList(currentPage=${currentPage}-1)}"><button class="btn preNext">이전</button></a>
+				<span th:text="'- ' + ${currentPage} + ' -'"></span>
+				<a th:href="${currentPage} == ${lastPage} ? @{/cashbookList(currentPage=${lastPage})} : @{/cashbookList(currentPage=${currentPage}+1)}"><button class="btn preNext">다음</button></a>
+			</div>
 		</div>
 	</div>
 </body>

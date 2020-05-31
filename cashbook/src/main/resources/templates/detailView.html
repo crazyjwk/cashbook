@@ -132,14 +132,17 @@
 		<br>
 		<div id="viewFooter">
 			<div><a th:href="@{/boardList}"><button class="btn btn-primary">목록</button></a></div>
-			<div th:if="${boardOne.memberId} == ${memberId}">
-				<span> </span>
-				<span> </span>
+			<div th:switch="${memberId}">
+				<div th:case="${boardOne.memberId}">
+					<span><a th:href="@{/modifyPost(boardNo=${boardNo},memberId=${memberId})}"><button class="btn btn-warning">수정</button></a></span>
+					<span><a th:href="@{/removePost(boardNo=${boardNo},memberId=${memberId})}"><button class="btn btn-danger">삭제</button></a></span>
+				</div>
+				<div th:case="'admin'">
+					<span><a th:href="@{/removePost(boardNo=${boardNo},memberId=${memberId},boardId=${boardOne.memberId})}"><button class="btn btn-danger">삭제</button></a></span>
+				</div>
+				<div th:case="*">
+				</div>
 			</div>
-			<div th:unless="${boardOne.memberId} != ${memberId}">
-				<span><a th:href="@{/modifyPost(boardNo=${boardNo},memberId=${memberId})}"><button class="btn btn-warning">수정</button></a></span>
-				<span><a th:href="@{/removePost(boardNo=${boardNo},memberId=${memberId})}"><button class="btn btn-danger">삭제</button></a></span>
-			</div>	
 		</div>
 		<br>
 		<form th:action="@{/addComment(boardNo=${boardNo},memberId=${memberId})}" method="post">
@@ -157,13 +160,15 @@
 				<td><input style="width:150px;" class="form-control" type="text" th:value="${cl.memberId}" readonly="readonly"></td>
 				<td><input style="width:500px;" class="form-control" type="text" th:value="${cl.comment}" readonly="readonly"></td>
 				<td><a th:href="@{/}"><button class="btn btn-warning">수정</button></a></td>
-				<td><a th:href="@{/removeComment(boardNo=${boardNo},memberId=${memberId},commentNo=${cl.commentNo})}"><button class="btn btn-danger">삭제</button></a></td>
+				<td><a th:href="@{/removeComment(boardNo=${boardNo},memberId=${memberId},commentNo=${cl.commentNo},commentId=${cl.memberId})}"><button class="btn btn-danger">삭제</button></a></td>
 			</tr>
 		</table>
 		<br>
 		<div id="commentPreNext">
-			<div><a th:href="@{/detailView(currentPage=${currentPage-1},boardNo=${boardNo})}"><button class="btn commentPreNextBtn">이전</button></a></div>
-			<div><a th:href="@{/detailView(currentPage=${currentPage+1} ,boardNo=${boardNo})}"><button class="btn commentPreNextBtn">다음</button></a></div>
+			<div>
+				<a th:href="${currentPage} == 1 ? @{/detailView(boardNo=${boardNo})} : @{/detailView(currentPage=${currentPage-1},boardNo=${boardNo})}"><button class="btn commentPreNextBtn">이전</button></a>
+				<a th:href="${currentPage} == ${lastPage} ? @{/detailView(currentPage=${lastPage},boardNo=${boardNo})} : @{/detailView(currentPage=${currentPage+1},boardNo=${boardNo})}"><button class="btn commentPreNextBtn">다음</button></a>
+			</div>
 		</div>
 	</div>
 	

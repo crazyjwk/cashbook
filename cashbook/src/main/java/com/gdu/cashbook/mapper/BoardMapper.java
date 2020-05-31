@@ -16,8 +16,9 @@ public interface BoardMapper {
 	public int updatePost(Board board);
 	public Board selectPostOne(Board board);
 	public List<Comment> selectComment(int boardNo, int beginRow, int rowPerPage);
+	public int selectCommentTotalRowByPost(int boardNo);
 	public Board selectDetailView(int boardNo);
 	public int insertPost(Board board);
-	public int selectTotalRow();
+	public int selectPostTotalRow();
 	public List<Board> selectBoardList(int beginRow, int rowPerPage);
 }

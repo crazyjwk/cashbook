@@ -22,25 +22,51 @@ public class BoardController {
 	private BoardService boardService;
 	
 	@GetMapping("/removePost")
-	public String removePost(HttpSession session, Comment comment) {
+	public String removePost(HttpSession session, Comment comment,
+			@RequestParam(value="boardId", required = false) String boardId) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/";
 		}
+		
+		String adminCheck = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
+		if(adminCheck.equals("admin")) {
+			comment.setMemberId(boardId);
+			int result = boardService.removePost(comment);
+			if(result == 0) {
+				System.out.println("admin 게시글 삭제 실패");
+			} else {
+				System.out.println("admin 게시글 삭제 성공");
+			}
+			return "redirect:/boardList";
+		}
+		
 		int result = boardService.removePost(comment);
 		if(result == 0) {
 			System.out.println("게시글 삭제 실패");
 		} else {
 			System.out.println("게시글 삭제 성공");
 		}
-		return "redirect:/boardList?comment=" + comment.getCommentNo();
+		return "redirect:/boardList";
 	}
 	
 	@GetMapping("/removeComment")
-	public String removeCommen(HttpSession session, Comment comment) {
+	public String removeCommen(HttpSession session, Comment comment,
+			@RequestParam(value="commentId", required = false) String commentId) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/";
 		}
-		int result = boardService.removeCommnet(comment);
+		String adminCheck = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
+		if(adminCheck.equals("admin")) {
+			comment.setMemberId(commentId);
+			int result = boardService.removeComment(comment);
+			if(result == 0) {
+				System.out.println("admin 댓글 삭제 실패");
+			} else {
+				System.out.println("admin 댓글 삭제 성공");
+			}
+			return "redirect:/detailView?boardNo=" + comment.getBoardNo();
+		}
+		int result = boardService.removeComment(comment);
 		
 		if(result == 0) {
 			System.out.println("댓글 삭제 실패");
@@ -140,9 +166,9 @@ public class BoardController {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/";
 		}
-		
+	
 		int result = boardService.addPost(board);
-		
+	
 		if(result == 1) {
 			System.out.println("작성 성공");
 		} else {

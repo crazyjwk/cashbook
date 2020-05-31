@@ -136,6 +136,7 @@ public class MemberController {
 		String admin = loginMember.getMemberId();
 		if(admin.equals("admin")) {
 			Map<String, Object> adminMemberInfo = memberService.getAdminMemberInfoList(currentPage);
+			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("memberInfoList", adminMemberInfo.get("list"));
 			model.addAttribute("lastPage", adminMemberInfo.get("lastPage"));
 			model.addAttribute("loginMember", loginMember);

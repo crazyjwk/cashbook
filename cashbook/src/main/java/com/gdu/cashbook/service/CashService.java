@@ -91,8 +91,8 @@ public class CashService {
 		return cashMapper.insertCash(cash);
 	}
 	
-	public void removeCash(int cashNo) {
-		cashMapper.deleteCash(cashNo);
+	public void removeCash(int cashNo, int cashbookNo) {
+		cashMapper.deleteCash(cashNo, cashbookNo);
 	}
 	
 	public Map<String, Object> getCashListByDate(Cash cash) {
