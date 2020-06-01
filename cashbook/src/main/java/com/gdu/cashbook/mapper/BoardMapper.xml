@@ -47,8 +47,7 @@
 	<select id="selectPostOne" resultType="com.gdu.cashbook.vo.Board" parameterType="com.gdu.cashbook.vo.Board">
 		SELECT
 			board_title boardTitle,
-			board_content boardContent,
-			board_pic boardPic
+			board_content boardContent
 		FROM board
 		WHERE member_id = #{memberId}
 		AND board_no = #{boardNo}

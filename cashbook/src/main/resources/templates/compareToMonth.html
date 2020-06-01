@@ -99,7 +99,7 @@
 			<br>
 			<table class="table table-bordered">
 				<tr>
-					<th th:each="i: ${#numbers.sequence(1, 12)}"><a th:href="@{/getCashListByMonth(day=${day},compareMonth=${i},cashbookNo=${cashbookNo})}" th:text="${i +'월'}"></a></th>
+					<th th:each="i: ${#numbers.sequence(1, 12)}"><a th:href="@{/getCashListByMonth(day=${day},compareMonth=${i},cashbookNo=${cb.cashbookNo},cashbookTitle=${cb.cashbookTitle})}" th:text="${i +'월'}"></a></th>
 				</tr>
 				<tr>
 					<td th:each="index: ${#numbers.sequence(1, 12)}">

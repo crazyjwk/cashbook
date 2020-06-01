@@ -11,10 +11,10 @@
 		2. 사용자가 입력한 id의 변경된 pw를 select
 		3. 2번에서 변경된 pw를 사용자의 이메일로 전송
 	-->
-	<!-- 회원탈퇴 전 가계부 삭제 -->
-	<!-- 회원탈퇴 전 수입/지출 삭제 -->
-	<!-- 회원탈퇴 전 게시글 삭제 -->
-	<delete id="deleteMemberPost"></delete>
+	<delete id="deleteMemberOut" parameterType="String">
+		DELETE FROM member
+		WHERE member_id=#{memberId}  
+	</delete>
 	<!-- 회원 사진을 가지고 오는 쿼리 -->
 	<select id="selectMemberPic" resultType="String" parameterType="String">
 	 	SELECT member_pic

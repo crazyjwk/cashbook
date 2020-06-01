@@ -29,19 +29,18 @@ public class CashController {
 	
 	
 	@GetMapping("/compareToMonth")
-	public String compareToMonth (Model model, HttpSession session, 
-			@RequestParam(value="cashbookNo", required = false) int cashbookNo,
+	public String compareToMonth (Model model, HttpSession session, Cashbook cashbook,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
 		String memberId = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
-		Map<String, Object> map = cashService.getTotalDaySumAndTotalMonthSum(memberId, day, cashbookNo);
+		Map<String, Object> map = cashService.getTotalDaySumAndTotalMonthSum(memberId, day, cashbook.getCashbookNo());
 		
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("totalMonthSum", map.get("totalMonthSum"));
 		model.addAttribute("day", day);
-		model.addAttribute("cashbookNo", cashbookNo);
+		model.addAttribute("cb", cashbook);
 		
 		System.out.println(map.get("totalMonthSum") + "<--- totalMonthSum");
 		return "compareToMonth";
@@ -110,13 +109,17 @@ public class CashController {
 	}
 	
 	@GetMapping("/getCashListByMonth")
-	public String getCashListByMonth(Model model, HttpSession session, @RequestParam(value="cashbookNo", required = false) int cashbookNo,
+	public String getCashListByMonth(Model model, HttpSession session, Cashbook cashbook,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day,
 			@RequestParam(value="compareMonth", required = false) Integer compareMonth) {
+		
+		System.out.println(cashbook.getCashbookTitle() + "<--cashbookTitle");
+		System.out.println(cashbook.getCashbookNo() + "<--cashbookNo");
 		
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/index";
 		}
+		
 		
 		Calendar calendarDay = Calendar.getInstance(); // Calendar 타입
 		// System.out.println(calendarDay.get(Calendar.MONTH)+1);
@@ -152,7 +155,7 @@ public class CashController {
 		int month = calendarDay.get(Calendar.MONTH)+1;
 		System.out.println(year + "<--- year     "  + month + "<--- month");
 		
-		Map<String, Object> dayAndPriceList = cashService.getCashAndPriceList(memberId, year, month, cashbookNo);
+		Map<String, Object> dayAndPriceList = cashService.getCashAndPriceList(memberId, year, month, cashbook.getCashbookNo());
 		
 		System.out.println(day.toString() + " <-- day.toString() asdasdasd2222");
 		model.addAttribute("day", day); 
@@ -161,7 +164,7 @@ public class CashController {
 		model.addAttribute("lastDay", calendarDay.getActualMaximum(Calendar.DATE)); // 현재 월의 마지막 일
 		model.addAttribute("dayAndPrice", dayAndPriceList.get("dayAndPrice"));
 		model.addAttribute("totalDateSum", dayAndPriceList.get("totalDateSum"));
-		model.addAttribute("cashbookNo", cashbookNo);
+		model.addAttribute("cb", cashbook);
 		
 		
 		System.out.println(dayAndPriceList);

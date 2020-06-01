@@ -3,6 +3,16 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gdu.cashbook.mapper.CashMapper">
+	<!-- 회원탈퇴 전 가계부 삭제  -->
+	<delete id="deleteCashbookBeforeOut" parameterType="String">
+		DELETE FROM cashbook
+		WHERE member_id=#{memberId}
+	</delete>
+	<!-- 회원탈퇴 전 수입/지출 삭제 -->
+	<delete id="deleteCashBeforeOut" parameterType="String">
+		DELETE FROM cash
+		WHERE member_id=#{memberId}
+	</delete>
 	<!-- 월별비교 월의 총 합계 구하는 쿼리 -->
 	<select id="selectTotalMonthSum" resultType="Integer" parameterType="HashMap">
 		SELECT 

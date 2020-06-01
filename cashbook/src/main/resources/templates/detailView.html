@@ -101,6 +101,9 @@
 		font-weight: bold;
 		color: #838383;
 	}
+	.admin {
+		color: #FF5A5A;
+	}
 </style>
 </head>
 <body>
@@ -157,8 +160,8 @@
 		<br>
 		<table>
 			<tr th:each="cl : ${commentList}">
-				<td><input style="width:150px;" class="form-control" type="text" th:value="${cl.memberId}" readonly="readonly"></td>
-				<td><input style="width:500px;" class="form-control" type="text" th:value="${cl.comment}" readonly="readonly"></td>
+				<td><input style="width:150px;" th:class="${cl.memberId} == 'admin' ? 'form-control admin' : 'form-control'" type="text" th:value="${cl.memberId}" readonly="readonly"></td>
+				<td><input style="width:503px;" th:class="${cl.memberId} == 'admin' ? 'form-control admin' : 'form-control'" type="text" th:value="${cl.comment}" readonly="readonly"></td>
 				<td><a th:href="@{/}"><button class="btn btn-warning">수정</button></a></td>
 				<td><a th:href="@{/removeComment(boardNo=${boardNo},memberId=${memberId},commentNo=${cl.commentNo},commentId=${cl.memberId})}"><button class="btn btn-danger">삭제</button></a></td>
 			</tr>

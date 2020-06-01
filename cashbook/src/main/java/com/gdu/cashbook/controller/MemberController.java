@@ -21,6 +21,20 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	@GetMapping("/removeMemberOut")
+	public String removeMemberOut(HttpSession session, @RequestParam(value="memberId") String memberId) {
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/";
+		}
+	
+		int result = memberService.removeMemberOut(memberId);
+		if(result == 1) {
+			System.out.println("강퇴 성공");
+		} else {
+			System.out.println("강퇴 실패");
+		}
+		return "redirect:/memberInfo";
+	}
 	
 	// 회원 비밀번호 찾기
 	@GetMapping("/findMemberPw")

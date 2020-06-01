@@ -188,14 +188,18 @@
 	  padding: 0;
 	}
 	#addBtn {
+		background-color: #62c15b;
 		display: none;
 		color: black;
 		font-weight: bold;
+		border: 0;
 	}
 	#cancleBtn {
+		background-color: #62c15b;
 		display: none;
 		color: black;
 		font-weight: bold;
+		border: 0;
 	}
 </style>
 </head>
@@ -236,8 +240,8 @@
 						<td th:unless="${cash.cashKind} == '지출'"></td>
 						<td th:text="${cash.cashPlace}"></td>
 						<td th:text="${cash.cashMemo}"></td>
-						<td><a class="update udLink" th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cb.cashbookNo})}">수정</a></td>
-						<td><a class="delete udLink" th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cb.cashbookNo})}">삭제</a></td>
+						<td><a class="update udLink" th:href="@{/modifyCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cb.cashbookNo},cashbookTitle=${cb.cashbookTitle})}">수정</a></td>
+						<td><a class="delete udLink" th:href="@{/removeCash(cashNo=${cash.cashNo},day=${day},cashbookNo=${cb.cashbookNo},cashbookTitle=${cb.cashbookTitle})}">삭제</a></td>
 					</tr>
 					<tr id="addCash">
 						<td colspan="7"><button id="addCashBtn" class="btn addCashBtn">입력</button>
@@ -248,7 +252,7 @@
 				</tbody>
 			</table>
 			<input type="hidden" id="cashDate" th:value="${cashDate}">
-			<input type="hidden" id="cashbookNo" th:value="${cashbookNo}">
+			<input type="hidden" id="cashbookNo" th:value="${cb.cashbookNo}">
 			<input type="hidden" id="memberId" th:value="${memberId}">
 			<div id="calendarFooter">
 				<!-- <span><a th:href="@{/addCash(day=${day},cashbookNo=${cashbookNo})}"><button class="btn insBtn">입력</button></a></span> -->

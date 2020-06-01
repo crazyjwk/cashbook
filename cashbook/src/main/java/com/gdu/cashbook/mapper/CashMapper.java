@@ -12,6 +12,8 @@ import com.gdu.cashbook.vo.dayAndMonthAndYearAndPrice;
 
 @Mapper
 public interface CashMapper {
+	public int deleteCashbookBeforeOut(String memberId);
+	public int deleteCashBeforeOut(String memberId);
 	public Integer selectTotalMonthSum(Map<String, Object> map);
 	public List<dayAndMonthAndYearAndPrice> selectDaySum(Map<String, Object> map);
 	public int insertCashBook(Cashbook cashbook);

@@ -9,6 +9,7 @@ import com.gdu.cashbook.vo.Member;
 
 @Mapper
 public interface MemberMapper {
+	public int deleteMemberOut(String memberId);
 	public List<Member> selectAdminMemberInfoList(int beginRow, int rowPerPage); // admin전용 회원정보 리스트
 	public int selectAdminMemberInfoTotalRow(); // admin전용 회원정보 총 개수
 	public String selectMemberPic(String memberId); // 이미지 삭제를 위해서 이미지 값을 받아 옴

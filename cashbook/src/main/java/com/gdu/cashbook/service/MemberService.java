@@ -15,10 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.gdu.cashbook.mapper.BoardMapper;
 import com.gdu.cashbook.mapper.CashMapper;
 import com.gdu.cashbook.mapper.MemberMapper;
 import com.gdu.cashbook.mapper.MemberidMapper;
+import com.gdu.cashbook.vo.Cash;
+import com.gdu.cashbook.vo.Cashbook;
 import com.gdu.cashbook.vo.LoginMember;
 import com.gdu.cashbook.vo.Member;
 import com.gdu.cashbook.vo.MemberForm;
@@ -32,13 +33,32 @@ public class MemberService {
 	@Autowired private JavaMailSender javaMailSender; //bean생성 -> @Component
 	
 	@Autowired private CashMapper cashMapper;
-	@Autowired private BoardMapper boardMapeer;
 	
-	@Value("C:\\javaweb\\SPRING_WORK\\maven.1590233389670\\cashbook\\src\\main\\resources\\static\\upload")
+//	@Value("C:\\javaweb\\SPRING_WORK\\maven.1590233389670\\cashbook\\src\\main\\resources\\static\\upload")
+//	private String path;
+	
+	@Value("D:\\git-cashbook\\maven.1590631938256\\cashbook\\src\\main\\resources\\static\\upload")
 	private String path;
 	
-//	@Value("D:\\git-cashbook\\maven.1590631938256\\cashbook\\src\\main\\resources\\static\\upload")
-//	private String path;
+	public int removeMemberOut (String memberId) {
+		int deleteCashResult = cashMapper.deleteCashBeforeOut(memberId);
+		if(deleteCashResult == 1) {
+			System.out.println("수입/지출 삭제 성공");
+		} else {
+			System.out.println("수입/지출 삭제 실패");
+		}
+		int deleteCashbookResult = cashMapper.deleteCashbookBeforeOut(memberId);
+		if(deleteCashbookResult == 1) {
+			System.out.println("가계부 삭제 성공");
+		} else {
+			System.out.println("가계부 삭제 실패");
+		}
+		int deleteMember = memberMapper.deleteMemberOut(memberId);
+		Memberid memberid = new Memberid();
+		memberid.setMemberId(memberId);
+		memberidMapper.insertMemberid(memberid);
+		return deleteMember;
+	}
 	
 	public Map<String, Object> getAdminMemberInfoList(int currentPage) {
 		int rowPerPage = 7;
@@ -125,50 +145,59 @@ public class MemberService {
 		return memberMapper.selectLoginMember(loginMember);
 	}
 	public int modifyMemberInfo(MemberForm memberForm, LoginMember loginMember) {
-		// 기존에 있던 프로필 사진을 삭제(만약 사진 수정을 안 한다면?)
-		String deleteMemberPic = memberMapper.selectMemberPic(loginMember.getMemberId());
-		File deleteFile = new File(path +"\\"+ deleteMemberPic);
-		if(deleteFile.exists()) {
-			deleteFile.delete();
-		}
-		
-		// 수정한 사진을 업로드
-			MultipartFile mf = memberForm.getMemberPic();
-			String originName = mf.getOriginalFilename();
-			
-			int lastDot = originName.lastIndexOf(".");
-			String extension = originName.substring(lastDot);
-			
-			String memberPic = memberForm.getMemberId() + extension;
-			System.out.println(memberPic + " <--memberPic modifyMemberInfo");
-		
-		
-		Member member = new Member();
-		member.setMemberId(memberForm.getMemberId());
-		member.setMemberName(memberForm.getMemberName());
-		member.setMemberAddr(memberForm.getMemberAddr());
-		member.setMemberPhone(memberForm.getMemberPhone());
-		member.setMemberEmail(memberForm.getMemberEmail());
-		member.setMemberPic(memberPic);
-		
-		System.out.println(member.getMemberName());
-		System.out.println(member.getMemberAddr());
-		System.out.println(member.getMemberPhone());
-		System.out.println(member.getMemberEmail());
-		System.out.println(member.getMemberPic());
-		
-		File file = new File(path +"\\"+ memberPic);
-		try {
-			mf.transferTo(file);
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-		
-		return memberMapper.updateMemberInfo(member);
-	}
+	      // 기존에 있던 프로필 사진을 삭제(만약 사진 수정을 안 한다면?)
+	      String memberPic = memberMapper.selectMemberPic(loginMember.getMemberId());
+	      System.out.println(memberForm.getMemberPic().toString() + "<-- memberPic");
+	      // 수정한 사진을 업로드
+	      MultipartFile mf = memberForm.getMemberPic();
+	      String originName = mf.getOriginalFilename();
+	      String newMemberPic = null;
+	      if(originName.equals("")) {
+	         newMemberPic = memberPic;
+	      } else {
+	         File originFile = new File(path+memberPic);
+	         // 새로운 파일 입력되면 그 전 파일 삭제
+	         if(originFile.exists() && !memberPic.equals("default.jpg")) {
+	            originFile.delete();
+	         }
+	         int lastDot = originName.lastIndexOf(".");
+	         String extension = originName.substring(lastDot);
+	         System.out.println(extension);
+	         newMemberPic = memberForm.getMemberId()+extension;
+	         System.out.println(newMemberPic);
+	      }
+	      System.out.println(newMemberPic + " <--memberPic modifyMemberInfo");
+	   
+	      Member member = new Member();
+	      member.setMemberId(memberForm.getMemberId());
+	      member.setMemberName(memberForm.getMemberName());
+	      member.setMemberAddr(memberForm.getMemberAddr());
+	      member.setMemberPhone(memberForm.getMemberPhone());
+	      member.setMemberEmail(memberForm.getMemberEmail());
+	      member.setMemberPic(newMemberPic);
+	      
+	      System.out.println(member.getMemberName());
+	      System.out.println(member.getMemberAddr());
+	      System.out.println(member.getMemberPhone());
+	      System.out.println(member.getMemberEmail());
+	      System.out.println(member.getMemberPic());
+	      
+	      int row =  memberMapper.updateMemberInfo(member);
+	      
+	   
+	      File file = new File(path +"\\"+ newMemberPic);
+	      try {
+	         mf.transferTo(file);
+	      } catch (IllegalStateException e) {
+	         e.printStackTrace();
+	      } catch (IOException e) {
+	         e.printStackTrace();
+	         throw new RuntimeException();
+	      }
+	      
+	      
+	      return row;
+	   }
 	
 	public int addMember(MemberForm memberForm) {
 		// MemberForm -> member

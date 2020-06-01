@@ -100,6 +100,7 @@
 					<td th:text="${aml.memberPhone}"></td>
 					<td th:text="${aml.memberEmail}"></td>
 					<td th:text="${aml.memberDate}"></td>
+					<td><a th:href="@{/removeMemberOut(memberId=${aml.memberId})}"><button class="btn btn-dark">강제탈퇴</button></a></td>
 				</tr>
 			</table>
 			<div id="preNext">
