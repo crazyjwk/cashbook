@@ -115,6 +115,8 @@ public class MemberService {
 			file.delete();
 		}
 		// 2.
+		cashMapper.deleteCashBeforeSignout(loginMember);
+		cashMapper.deleteCashbookBeforeSignout(loginMember);
 		memberMapper.deleteMember(loginMember);
 		
 		Memberid memberid = new Memberid();
