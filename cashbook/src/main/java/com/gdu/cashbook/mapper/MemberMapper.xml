@@ -12,17 +12,17 @@
 		3. 2번에서 변경된 pw를 사용자의 이메일로 전송
 	-->
 	<delete id="deleteMemberOut" parameterType="String">
-		DELETE FROM member
+		DELETE FROM cashbook_member
 		WHERE member_id=#{memberId}  
 	</delete>
 	<!-- 회원 사진을 가지고 오는 쿼리 -->
 	<select id="selectMemberPic" resultType="String" parameterType="String">
 	 	SELECT member_pic
-	 	FROM member
+	 	FROM cashbook_member
 	 	WHERE member_id = #{memberId}
 	</select>
 	<update id="updateMemberPw" parameterType="com.gdu.cashbook.vo.Member">
-	 	UPDATE member 
+	 	UPDATE cashbook_member 
 	 	SET
 	 		member_pw = PASSWORD(#{memberPw})
 	 	WHERE member_id = #{memberId}
@@ -37,7 +37,7 @@
 			member_phone memberPhone,
 			member_email memberEmail,
 			member_date memberDate
-		FROM member
+		FROM cashbook_member
 		WHERE member_id
 		NOT IN('admin')
 		ORDER BY member_date DESC
@@ -46,28 +46,28 @@
 	<select id="selectAdminMemberInfoTotalRow" resultType="int">
 		SELECT
 			COUNT(*)
-		FROM member
+		FROM cashbook_member
 		WHERE member_id
 		NOT IN('admin')
 	</select>
 	<select id="selectMemberByIdAndEmail" resultType="com.gdu.cashbook.vo.Member" parameterType="com.gdu.cashbook.vo.Member">
 		SELECT
 			*
-		FROM member
+		FROM cashbook_member
 		WHERE member_id = #{memberId}
 		AND member_email = #{memberEmail}
 	</select>
 	<select id="selectMemberIdBymember" resultType="String" parameterType="com.gdu.cashbook.vo.Member">
 		SELECT 
 			CONCAT(SUBSTRING(member_id, 1, 3), '*****')
-		FROM member
+		FROM cashbook_member
 		WHERE member_name = #{memberName}
 		AND member_phone = #{memberPhone}
 		AND member_email = #{memberEmail}
 	</select>
 	<!-- 회원정보를 수정하는 쿼리 -->
 	<update id="updateMemberInfo" parameterType="com.gdu.cashbook.vo.Member">
-		UPDATE member
+		UPDATE cashbook_member
 		SET
 			member_addr = #{memberAddr},
 			member_name = #{memberName},
@@ -80,7 +80,7 @@
 	<select id="updatePwCk" resultType="String" parameterType="int">
 		SELECT
 			PASSWORD(member_pw)
-		FROM member
+		FROM cashbook_member
 		WHERE member_pw = PASSWORD(#{memberPw})
 	</select>
 	<!-- 회원수정을 위해 특정 memberId의 데이터를 받아오는 쿼리 -->
@@ -94,13 +94,13 @@
 			member_email memberEmail,
 			member_date memberDate,
 			member_pic memberPic
-		FROM member
+		FROM cashbook_member
 		WHERE member_id = #{memberId}
 	</select>
 	<!-- 회원 탈퇴 -->
 	<delete id="deleteMember" parameterType="com.gdu.cashbook.vo.LoginMember">
 		DELETE 
-		FROM member
+		FROM cashbook_member
 		WHERE member_id = ${memberId}
 		AND member_pw = PASSWORD(${memberPw})
 	</delete>
@@ -114,7 +114,7 @@
 			member_email memberEmail,
 			member_date memberDate,
 			member_pic memberPic
-		FROM member
+		FROM cashbook_member
 		WHERE member_id = #{memberId}
 	</select>
 	<!-- 중복체크를 위해 member_id를 가져오는 쿼리  -->
@@ -123,9 +123,9 @@
 			member_id
 		FROM 
 		(	
-			SELECT member_id FROM member
+			SELECT member_id FROM cashbook_member
 			UNION
-			SELECT member_id FROM memberid
+			SELECT member_id FROM cashbook_memberid
 		) t
 		WHERE member_id=#{memberIdCk}
 	</select>
@@ -135,13 +135,13 @@
 	 		member_id memberId, 
 	 		member_pw memberPw,
 	 		member_pic memberPic
-	 	FROM member
+	 	FROM cashbook_member
 	 	WHERE member_id = #{memberId}
 	 	AND member_pw = PASSWORD(#{memberPw})
 	</select>
 	<!-- 회원가입 쿼리 -->
 	<insert id="insertMember" parameterType="com.gdu.cashbook.vo.Member">
-		INSERT INTO member
+		INSERT INTO cashbook_member
 		(
 			member_id, 
 			member_pw,

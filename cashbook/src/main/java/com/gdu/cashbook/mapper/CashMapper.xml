@@ -5,29 +5,29 @@
 <mapper namespace="com.gdu.cashbook.mapper.CashMapper">
 	<!-- 강제탈퇴 전 가계부 삭제  -->
 	<delete id="deleteCashbookBeforeOut" parameterType="String">
-		DELETE FROM cashbook
+		DELETE FROM cashbook_cashbook
 		WHERE member_id=#{memberId}
 	</delete>
 	<!-- 강제탈퇴 전 수입/지출 삭제 -->
 	<delete id="deleteCashBeforeOut" parameterType="String">
-		DELETE FROM cash
+		DELETE FROM cashbook_cash
 		WHERE member_id=#{memberId}
 	</delete>
 	<!-- 회원탈퇴 전 가계부 삭제  -->
 	<delete id="deleteCashbookBeforeSignout" parameterType="com.gdu.cashbook.vo.LoginMember">
-		DELETE FROM cashbook
+		DELETE FROM cashbook_cashbook
 		WHERE member_id=#{memberId}
 	</delete>
 	<!-- 회원탈퇴 전 수입/지출 삭제 -->
 	<delete id="deleteCashBeforeSignout" parameterType="com.gdu.cashbook.vo.LoginMember">
-		DELETE FROM cash
+		DELETE FROM cashbook_cash
 		WHERE member_id=#{memberId}
 	</delete>
 	<!-- 월별비교 월의 총 합계 구하는 쿼리 -->
 	<select id="selectTotalMonthSum" resultType="Integer" parameterType="HashMap">
 		SELECT 
 			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END)
-		FROM cash
+		FROM cashbook_cash
 		WHERE member_id=#{memberId}
 		AND cashbook_no =#{cashbookNo}
 		AND YEAR(cash_date) = YEAR(#{day})
@@ -35,7 +35,7 @@
 	</select>
 	<!-- 가계부 생성 쿼리 -->
 	<insert id="insertCashBook" parameterType="com.gdu.cashbook.vo.Cashbook">
-		INSERT INTO cashbook
+		INSERT INTO cashbook_cashbook
 		(
 			member_id,
 			cashbook_title,
@@ -48,7 +48,7 @@
 	<select id="cashbookTotalRow" resultType="int" parameterType="String">
 		SELECT 
 			COUNT(*)
-		FROM cashbook
+		FROM cashbook_cashbook
 		WHERE member_id=#{memberId}
 	</select>
 	<!-- 가계부 리스트 쿼리 -->
@@ -60,7 +60,7 @@
 			cashbook_date cashbookDate,
 			cashbook_goal cashbookGoal,
 			cashbook_img cashbookImg
-		FROM cashbook
+		FROM cashbook_cashbook
 		WHERE member_id=#{memberId}
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
@@ -69,7 +69,7 @@
 		SELECT 
 			MONTH(cash_date) month, 
 			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END) price
-		FROM cash
+		FROM cashbook_cash
 		WHERE member_id=#{memberId} 
 		AND cashbook_no =#{cashbookNo}
 		AND YEAR(cash_date)= YEAR(#{day})
@@ -80,7 +80,7 @@
 	<select id="selectTotalDateSum" resultType="Integer" parameterType="HashMap">
 		SELECT 
 			sum(case when cash_kind='지출' then cash_price*-1 ELSE cash_price END)
-		FROM cash
+		FROM cashbook_cash
 		WHERE member_id=#{memberId}
 		AND cashbook_no =#{cashbookNo}
 		AND YEAR(cash_date)=#{year}
@@ -88,7 +88,7 @@
 	</select>
 	<!-- 수입/지출 수정 쿼리 -->
 	<update id="updateCash" parameterType="com.gdu.cashbook.vo.Cash">
-		UPDATE cash 
+		UPDATE cashbook_cash 
 		SET 
 			category_name=#{categoryName},
 			cash_date=#{cashDate}, 
@@ -108,13 +108,13 @@
 			cash_price cashPrice,
 			cash_place cashPlace,
 			cash_memo cashMemo
-		FROM cash
+		FROM cashbook_cash
 		WHERE cash_no=#{cashNo}
 	</select>
 	<select id="selectCategoryList" resultType="com.gdu.cashbook.vo.Category" parameterType="com.gdu.cashbook.vo.Category">
 		SELECT
 			category_name categoryName
-		FROM category
+		FROM cashbook_category
 	</select>
 	<!-- 달력에 일별 합계 -->
 	<select id="selectDayAndPrice" resultType="com.gdu.cashbook.vo.dayAndMonthAndYearAndPrice" parameterType="java.util.Map">
@@ -122,7 +122,7 @@
 			DAY(cash_date) AS day, 
 			SUM(CASE WHEN cash_kind='지출' THEN cash_price*-1 ELSE cash_price END) AS price,
 			cash_date AS date
-		FROM cash
+		FROM cashbook_cash
 		WHERE YEAR(cash_date) = #{year}
 		AND MONTH(cash_date) = #{month}
 		AND member_id = #{memberId}
@@ -131,7 +131,7 @@
 	</select>
 	<!-- 수입/지출 입력 -->
 	<insert id="insertCash" parameterType="com.gdu.cashbook.vo.Cash">
-		INSERT INTO cash
+		INSERT INTO cashbook_cash
 		(
 			member_id, 
 			cashbook_no,
@@ -146,7 +146,7 @@
 	</insert>
 	<!-- 수입/지출 삭제 -->
 	<delete id="deleteCash" parameterType="int">
-		DELETE FROM cash
+		DELETE FROM cashbook_cash
 		WHERE cash_no = #{cashNo}
 		AND cashbook_no = #{cashbookNo}
 	</delete>
@@ -154,7 +154,7 @@
 	<select id="selectSumCashByDate" resultType="Integer" parameterType="com.gdu.cashbook.vo.Cash">
 		SELECT 
 			SUM(CASE WHEN cash_kind='지출' THEN cash_price*-1 ELSE cash_price END)
-		FROM cash
+		FROM cashbook_cash
 		WHERE member_id = #{memberId}
 		AND cashbook_no =#{cashbookNo}
 		AND cash_date = #{cashDate}
@@ -180,7 +180,7 @@
 			cash_price cashPrice,
 			cash_place cashPlace,
 			cash_memo cashMemo
-		FROM cash 
+		FROM cashbook_cash 
 		WHERE member_id = #{memberId}
 		AND cashbook_no =#{cashbookNo}
 		AND cash_date = #{cashDate}

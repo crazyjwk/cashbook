@@ -83,8 +83,7 @@ public class CashController {
 		return "cashbookList";
 	}
 	@GetMapping("/modifyCash")
-	public String modifyCash(Model model, HttpSession session, @RequestParam(value="cashNo") int cashNo,
-			@RequestParam(value="cashbookNo", required = false) int cashbookNo,
+	public String modifyCash(Model model, HttpSession session, @RequestParam(value="cashNo") int cashNo, Cashbook cashbook,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
 		
 		if(session.getAttribute("loginMember") == null) {
@@ -97,15 +96,16 @@ public class CashController {
 		model.addAttribute("cashOne", cashOne);
 		model.addAttribute("day", day);
 		model.addAttribute("categoryList", categoryList);
-		model.addAttribute("cashbookNo", cashbookNo);
+		model.addAttribute("cashbookNo", cashbook.getCashbookNo());
+		model.addAttribute("cashbookTitle", cashbook.getCashbookTitle());
 		return "modifyCash";
 	}
 	@PostMapping("/modifyCash")
-	public String modifyCash(Model model, HttpSession session, Cash cash,
+	public String modifyCash(Model model, HttpSession session, Cash cash, Cashbook cashbook,
 			@RequestParam(value="day", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate day) {
 		cash.setCashDate(day.toString());
 		cashService.modifyCash(cash);
-		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day + "&cashbookNo="+cash.getCashbookNo();
+		return "redirect:/getCashListByDate?" + cash.getMemberId() + "&day=" + day + "&cashbookNo="+cash.getCashbookNo() +"&cashbookTitle="+cashbook.getCashbookTitle();
 	}
 	
 	@GetMapping("/getCashListByMonth")

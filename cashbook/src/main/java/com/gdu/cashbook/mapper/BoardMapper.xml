@@ -5,18 +5,18 @@
 <mapper namespace="com.gdu.cashbook.mapper.BoardMapper">
 	<!-- 게시글 삭제 -->
 	<delete id="deletePost" parameterType="com.gdu.cashbook.vo.Comment">
-		DELETE FROM board
+		DELETE FROM cashbook_board
 		WHERE board_no = #{boardNo}
 		AND member_id = #{memberId}
 	</delete>
 	<!-- 게시글 삭제 전 댓글 삭제 -->
 	<delete id="deletePostComment" parameterType="com.gdu.cashbook.vo.Comment">
-		DELETE FROM comment
+		DELETE FROM cashbook_comment
 		WHERE board_no = #{boardNo}
 	</delete> 
 	<!-- 댓글 삭제 -->
 	<delete id="deleteComment" parameterType="com.gdu.cashbook.vo.Comment">
-		DELETE FROM comment
+		DELETE FROM cashbook_comment
 		WHERE member_id = #{memberId}
 		AND board_no = #{boardNo}
 		AND comment_no = #{commentNo}
@@ -24,7 +24,7 @@
 	
 	<!-- 댓글 작성 -->
 	<insert id="insertComment" parameterType="com.gdu.cashbook.vo.Comment">
-		INSERT INTO comment
+		INSERT INTO cashbook_comment
 		(
 			board_no,
 			member_id,
@@ -36,7 +36,7 @@
 	
 	<!-- 게시글 수정 -->
 	<update id="updatePost" parameterType="com.gdu.cashbook.vo.Board">
-		UPDATE board
+		UPDATE cashbook_board
 		SET 
 			board_title = #{boardTitle},
 			board_content = #{boardContent}
@@ -48,7 +48,7 @@
 		SELECT
 			board_title boardTitle,
 			board_content boardContent
-		FROM board
+		FROM cashbook_board
 		WHERE member_id = #{memberId}
 		AND board_no = #{boardNo}
 	</select>
@@ -60,7 +60,7 @@
 			board_no boardNo,
 			comment,
 			comment_date commentDate
-		FROM comment
+		FROM cashbook_comment
 		WHERE board_no=#{boardNo}
 		ORDER BY comment_date DESC
 		LIMIT #{beginRow}, #{rowPerPage}
@@ -72,12 +72,12 @@
 			member_id memberId,
 			board_content boardContent,
 			board_date boardDate
-		FROM board
+		FROM cashbook_board
 		WHERE board_no = #{boardNo}
 	</select>
 	<!-- 게시글 추가 -->
 	<insert id="insertPost" parameterType="com.gdu.cashbook.vo.Board">
-		INSERT INTO board
+		INSERT INTO cashbook_board
 		(
 			member_id, 
 			board_title, 
@@ -90,14 +90,14 @@
 	<select id="selectCommentTotalRowByPost" resultType="int" parameterType="int">
 		SELECT 
 			COUNT(*)
-		FROM comment
+		FROM cashbook_comment
 		WHERE board_no=#{boardNo}
 	</select>
 	<!-- 총 게시글 수를 구하는 쿼리 -->
 	<select id="selectPostTotalRow" resultType="int" parameterType="int">
 		SELECT
 			COUNT(*)
-		FROM board
+		FROM cashbook_board
 	</select>	
 	<!-- 전체 게시글을 가져오는 쿼리 -->
 	<select id="selectBoardList" resultType="com.gdu.cashbook.vo.Board" parameterType="int">
@@ -106,7 +106,7 @@
 			member_id memberId,
 			board_title boardTitle,
 			board_date boardDate
-		FROM board
+		FROM cashbook_board
 		ORDER BY board_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>

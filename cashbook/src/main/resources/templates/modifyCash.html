@@ -101,9 +101,9 @@
 	</div>
 	<div id="container">
 		<div id="flexContainer">
-			<h2>수입/지출 입력</h2>
+			<h2>수입/지출 수정</h2>
 		</div>
-		<form id="cashForm" th:action="@{/modifyCash(day=${day})}" method="post">
+		<form id="cashForm" th:action="@{/modifyCash(day=${day},cashbookTitle=${cashbookTitle})}" method="post">
 			<input type="hidden" name="cashNo" th:value="${cashNo}">
 			<input type="hidden" name="cashbookNo" th:value="${cashbookNo}">
 			<table class="table table-bordered">
