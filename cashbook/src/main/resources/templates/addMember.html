@@ -89,7 +89,7 @@
 			<div id="flexContainer">
 				<h1>회원가입</h1>
 				<br>
-				<form id="idForm" action="/checkMemberId" method="post">
+				<form id="idForm" th:action="@{/checkMemberId}" method="post">
 					<div>
 						아이디 중복 확인: <input type="text" name="memberIdCk" id="memberIdCk" placeholder="아이디 입력">
 						<button id="ckBtn" class="btn btn-light" type="button">중복체크</button>
@@ -97,11 +97,11 @@
 					</div>
 				</form>
 				<br>
-				<form id="myForm" action="/addMember" method="post" enctype="multipart/form-data">
+				<form id="myForm" th:action="@{/addMember}" method="post" enctype="multipart/form-data">
 					<table class="table">
 						<tr>
 							<td>사진</td>
-							<td><input class="signInput" type="file" name="memberPic" id=""><span th:text="${msg1}"></span></td>
+							<td><input class="signInput" type="file" name="memberPic" th:value="default.png"><span th:text="${msg1}"></span></td>
 						</tr>
 						<tr>
 							<td>아이디</td>

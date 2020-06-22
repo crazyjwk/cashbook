@@ -25,7 +25,7 @@ public class BoardController {
 	public String removePost(HttpSession session, Comment comment,
 			@RequestParam(value="boardId", required = false) String boardId) {
 		if(session.getAttribute("loginMember") == null) {
-			return "redirect:/";
+			return "redirect:/index";
 		}
 		
 		String adminCheck = ((LoginMember)session.getAttribute("loginMember")).getMemberId();
@@ -81,7 +81,7 @@ public class BoardController {
 	@PostMapping("/addComment")
 	public String addComment(HttpSession session, Comment comment) {
 		if(session.getAttribute("loginMember") == null) {
-			return "redirect:/";
+			return "redirect:/cashbook/";
 		}
 		int result = boardService.addComment(comment);
 		

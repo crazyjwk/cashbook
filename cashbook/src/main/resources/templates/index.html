@@ -44,12 +44,16 @@
 <body>
 	<div id="flexContainer">
 		<h1>가계부</h1>
+			<div>test 아이디</div>
+			<div>
+				ID: test PW: 1234
+			</div>
 			<div id="flexItem" th:if="${session.loginMember != null}">
-				<a id="btn" href="/logout"><button id="btn" class="btn btn-primary">로그아웃</button></a>
+				<a id="btn" th:href="@{/logout}"><button id="btn" class="btn btn-primary">로그아웃</button></a>
 			</div>
 			<div id="flexItem" th:if="${session.loginMember == null}">
-				<a href="/login"><button id="btn" class="btn btn-primary">로그인</button></a><br><br><br>
-				<a href="/addMember"><button id="btn" class="btn btn-primary">회원가입</button></a>	
+				<a th:href="@{/login}"><button id="btn" class="btn btn-primary">로그인</button></a><br><br><br>
+				<a th:href="@{/addMember}"><button id="btn" class="btn btn-primary">회원가입</button></a>	
 			</div>
 			<div id="flexItem">
 				<div id="copyRight1">본 콘텐츠의 저작권은 제공처에 있으며, 이를 무단 이용하는 경우 저작권법 등에 따라 법적 책임을 질 수 있습니다.</div>

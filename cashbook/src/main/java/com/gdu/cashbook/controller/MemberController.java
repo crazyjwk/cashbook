@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.gdu.cashbook.service.MemberService;
 import com.gdu.cashbook.vo.LoginMember;
@@ -203,7 +204,7 @@ public class MemberController {
 	}
 	
 	// logout GET
-	@GetMapping("logout")
+	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/";
@@ -225,6 +226,9 @@ public class MemberController {
 		if(session.getAttribute("loginMember") != null) {
 			return "redirect:/";
 		}
+		System.out.println(memberForm.getMemberPic().toString() + "<--toString");
+		MultipartFile mf = memberForm.getMemberPic();
+		System.out.println(mf.getOriginalFilename() + "<-- file name");
 		// 이미지 파일만 업로드 할 수 있음
 		if(memberForm.getMemberPic() != null) {
 			if(memberForm.getMemberPic().getContentType().equals("image/png") || 
@@ -232,7 +236,7 @@ public class MemberController {
 				memberForm.getMemberPic().getContentType().equals("image/gif")) 
 			{ // 입력과 저장타입의 불일치로 service에서 memberForm -> member + 폴더에 파일 저장
 				memberService.addMember(memberForm);
-				return "redirect:/index";
+				return "redirect:/";
 			}
 		}
 		System.out.println(memberForm + "<-- addMember memberForm");
